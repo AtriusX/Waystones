@@ -1,0 +1,9 @@
+wait-time: 3000
+max-warp-size: 25
+jump-worlds: true
+warp-animations: true
+base-distance: 100
+max-boost: 50
+limit-distance: true
+require-power: INTER_DIMENSION
+world-ratio: 8
