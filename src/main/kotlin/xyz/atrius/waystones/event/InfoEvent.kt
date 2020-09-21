@@ -9,7 +9,6 @@ import xyz.atrius.waystones.data.Config
 import xyz.atrius.waystones.service.WarpNameService
 import xyz.atrius.waystones.utility.range
 import xyz.atrius.waystones.utility.sendActionMessage
-import java.awt.Color
 
 class InfoEvent(private val names: WarpNameService, private val config: Config) : Listener {
 
@@ -29,7 +28,7 @@ class InfoEvent(private val names: WarpNameService, private val config: Config) 
                     if (config.limitDistance) "| Range: ${
                         block.location.range(config)
                     }" else ""
-                }", Color.ORANGE
+                }", "#FF6600"
             )
             event.isCancelled = true
         }
