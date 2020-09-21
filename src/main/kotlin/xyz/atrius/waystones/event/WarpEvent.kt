@@ -20,7 +20,6 @@ import xyz.atrius.waystones.Power.INTER_DIMENSION
 import xyz.atrius.waystones.data.Config
 import xyz.atrius.waystones.service.WarpNameService
 import xyz.atrius.waystones.utility.*
-import java.awt.Color
 import kotlin.math.ceil
 import kotlin.math.cos
 import kotlin.math.round
@@ -104,15 +103,23 @@ class WarpEvent(
         var timer = config.waitTime
         val wait = {
             val time = (System.currentTimeMillis() / 3).toDouble()
-            player.world.spawnParticle(
+            player.run {
+                world.spawnParticle(
                     Particle.ASH, player.location.add(Vector(cos(time), 2.0, sin(time))), 50
-            )
-            player.sendActionMessage("Warping to $name in ${ceil(timer-- / 20.0).toInt()} second(s)", Color.GREEN)
+                )
+                sendActionMessage("Warping to $name in ${ceil(timer-- / 20.0).toInt()} second(s)", "#00FF00")
+                playSound(player.location, Sound.BLOCK_PORTAL_AMBIENT, 1f, 0.3f)
+            }
         }
         // This code will run at the end of the timer
         val finish = Runnable {
-            player.sendActionMessage("Warped to $name", Color.ORANGE)
-            player.teleport(location.UP.center)
+            player.run {
+                stopSound(Sound.BLOCK_PORTAL_AMBIENT)
+                sendActionMessage("Warped to $name", "#FF6600")
+                teleport(location.UP.center)
+                playSound(player.location, Sound.ENTITY_STRAY_DEATH, 0.5f, 0f)
+                playSound(player.location, Sound.BLOCK_BELL_RESONATE, 10f, 0f)
+            }
             scheduler.cancelTask(queuedTeleports[player] ?: -1)
             val powerBlock = location.powerBlock ?: return@Runnable
             when (config.requirePower) {

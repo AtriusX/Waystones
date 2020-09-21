@@ -2,13 +2,13 @@ package xyz.atrius.waystones.event
 
 import org.bukkit.GameMode
 import org.bukkit.Material
+import org.bukkit.Sound
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK
 import org.bukkit.event.player.PlayerInteractEvent
 import xyz.atrius.waystones.service.WarpNameService
 import xyz.atrius.waystones.utility.sendActionMessage
-import java.awt.Color
 
 class WaystoneNameEvent(private val names: WarpNameService) : Listener {
 
@@ -29,7 +29,8 @@ class WaystoneNameEvent(private val names: WarpNameService) : Listener {
             return
 
         names.add(block.location, meta.displayName)
-        player.sendActionMessage("Waystone name set to ${meta.displayName}", Color.CYAN)
+        player.sendActionMessage("Waystone name set to ${meta.displayName}", "#00FFFF")
+        player.playSound(player.location, Sound.BLOCK_RESPAWN_ANCHOR_SET_SPAWN, 1f, 2f)
         if (player.gameMode != GameMode.CREATIVE)
             item.amount--
         event.isCancelled = true
