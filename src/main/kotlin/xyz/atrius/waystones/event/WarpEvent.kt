@@ -93,13 +93,15 @@ class WarpEvent(
             val seconds = ceil(timer / 20.0).toInt()
             val period  = (System.currentTimeMillis() / 3).toDouble()
             player.run {
-                world.spawnParticle(
-                    Particle.ASH, this.location.rotateY(period), 50
-                )
                 sendActionMessage("Warping to $name in $seconds second(s)", ChatColor.GREEN)
-                if (timer < 7) world.spawnParticle(
-                    Particle.SMOKE_LARGE, this.location.UP, 100, 0.2, 0.5, 0.2, 0.0
-                )
+                if (config.warpAnimations) {
+                    world.spawnParticle(
+                            Particle.ASH, this.location.rotateY(period), 50
+                    )
+                    if (timer < 7) world.spawnParticle(
+                            Particle.SMOKE_LARGE, this.location.UP, 100, 0.2, 0.5, 0.2, 0.0
+                    )
+                }
             }
         }
         // This code will run at the end of the timer

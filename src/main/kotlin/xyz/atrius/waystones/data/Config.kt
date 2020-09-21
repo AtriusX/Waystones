@@ -23,7 +23,7 @@ class Config(
     var jumpWorlds: Boolean by property("jump-worlds", true)
 
     // Play animations during teleport sequence
-    var teleportAnimations: Boolean by property("warp-animations", true)
+    var warpAnimations: Boolean by property("warp-animations", true)
 
     // The minimum base range a waystone can have
     var baseDistance: Int by property("base-distance", 100)
