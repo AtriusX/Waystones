@@ -1,5 +1,6 @@
 package xyz.atrius.waystones.event
 
+import net.md_5.bungee.api.ChatColor
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.Particle
@@ -59,7 +60,7 @@ class WarpEvent(
         )
         // Check the power requirements
         when (config.requirePower) {
-            ALL -> if (!location.isPowered) player.sendActionError(
+            ALL -> if (!location.isPowered) return player.sendActionError(
                 "$name does not currently have power"
             )
             INTER_DIMENSION ->  if (interDimension && !location.isPowered) return player.sendActionError(
@@ -95,25 +96,34 @@ class WarpEvent(
                 world.spawnParticle(
                     Particle.ASH, this.location.rotateY(period), 50
                 )
-                sendActionMessage("Warping to $name in $seconds second(s)", "#00FF00")
+                sendActionMessage("Warping to $name in $seconds second(s)", ChatColor.GREEN)
+                if (timer < 7) world.spawnParticle(
+                    Particle.SMOKE_LARGE, this.location.UP, 100, 0.2, 0.5, 0.2, 0.0
+                )
             }
         }
         // This code will run at the end of the timer
         val finish = Runnable {
             player.run {
                 stopSound(Sound.BLOCK_PORTAL_AMBIENT)
-                sendActionMessage("Warped to $name", "#FF6600")
-                teleport(location.UP.center)
+                sendActionMessage("Warped to $name", ChatColor.GOLD)
+                teleport(location.UP.center.also {
+                    it.yaw   = this.location.yaw
+                    it.pitch = this.location.pitch
+                })
                 playSound(Sound.ENTITY_STRAY_DEATH, 0.5f, 0f)
                 playSound(Sound.BLOCK_BELL_RESONATE, 20f, 0f)
             }
-            scheduler.cancelTask(queuedTeleports[player] ?: -1)
+            scheduler.cancelTask(queuedTeleports.remove(player) ?: -1)
             val powerBlock = location.powerBlock ?: return@Runnable
             when (config.requirePower) {
                 ALL             -> deplete(player, powerBlock)
                 INTER_DIMENSION -> if (interDimension) deplete(player, powerBlock)
                 else            -> Unit
             }
+            scheduler.scheduleSyncDelayedTask(plugin, {
+                player.sendActionMessage("You feel a chill in your bones...", ChatColor.DARK_GRAY)
+            }, 80)
         }
         // Queue the task and store the task id if we need to cancel sooner
         queuedTeleports[player] = scheduler.scheduleRepeatingAutoCancelTask(plugin, 1, config.waitTime.toLong(), wait, finish)
