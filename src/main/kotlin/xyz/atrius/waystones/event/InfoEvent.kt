@@ -1,5 +1,6 @@
 package xyz.atrius.waystones.event
 
+import net.md_5.bungee.api.ChatColor
 import org.bukkit.Material
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -28,7 +29,7 @@ class InfoEvent(private val names: WarpNameService, private val config: Config) 
                     if (config.limitDistance) "| Range: ${
                         block.location.range(config)
                     }" else ""
-                }", "#FF6600"
+                }", ChatColor.GOLD
             )
             event.isCancelled = true
         }

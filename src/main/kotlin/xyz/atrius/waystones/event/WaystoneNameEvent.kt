@@ -1,5 +1,6 @@
 package xyz.atrius.waystones.event
 
+import net.md_5.bungee.api.ChatColor
 import org.bukkit.GameMode
 import org.bukkit.Material
 import org.bukkit.Sound
@@ -29,7 +30,7 @@ class WaystoneNameEvent(private val names: WarpNameService) : Listener {
             return
 
         names.add(block.location, meta.displayName)
-        player.sendActionMessage("Waystone name set to ${meta.displayName}", "#00FFFF")
+        player.sendActionMessage("Waystone name set to ${meta.displayName}", ChatColor.AQUA)
         player.playSound(player.location, Sound.BLOCK_RESPAWN_ANCHOR_SET_SPAWN, 1f, 2f)
         if (player.gameMode != GameMode.CREATIVE)
             item.amount--
