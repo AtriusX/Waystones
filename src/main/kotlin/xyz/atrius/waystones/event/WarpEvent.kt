@@ -14,16 +14,13 @@ import org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerMoveEvent
 import org.bukkit.inventory.meta.CompassMeta
-import org.bukkit.util.Vector
 import xyz.atrius.waystones.Power.ALL
 import xyz.atrius.waystones.Power.INTER_DIMENSION
 import xyz.atrius.waystones.data.Config
 import xyz.atrius.waystones.service.WarpNameService
 import xyz.atrius.waystones.utility.*
 import kotlin.math.ceil
-import kotlin.math.cos
 import kotlin.math.round
-import kotlin.math.sin
 
 class WarpEvent(
         private val plugin: KotlinPlugin,
@@ -48,67 +45,57 @@ class WarpEvent(
         // Prevent warping if no stone is connected
         if (!meta.hasLodestone()) {
             // Tell the player if the stone was destroyed
-            if (meta.isLodestoneTracked)
-                player.sendActionError("The link to this warpstone has been severed")
-            return
+            if (meta.isLodestoneTracked) return player.sendActionError(
+                "The link to this warpstone has been severed"
+            )
         }
         val location       = meta.lodestone ?: return
-        val interDimension = location.world?.name != player.location.world?.name ?: false
+        val playerLocation = player.location
+        val interDimension = !location.sameDimension(playerLocation)
         val name           = names[location] ?: "Warpstone"
         // Prevent travel between worlds if world jumping is disabled
-        if (!config.jumpWorlds && interDimension) {
-            player.sendActionError("Cannot locate $name due to dimensional interference")
-            return
-        }
+        if (!config.jumpWorlds && interDimension) return player.sendActionError(
+            "Cannot locate $name due to dimensional interference"
+        )
         // Check the power requirements
         when (config.requirePower) {
-            ALL -> {
-                if (!location.isPowered) {
-                    player.sendActionError("$name does not currently have power")
-                    return
-                }
-            }
-            INTER_DIMENSION -> {
-                if (interDimension && !location.isPowered) {
-                    player.sendActionError("$name does not currently have power")
-                    return
-                }
-            }
+            ALL -> if (!location.isPowered) player.sendActionError(
+                "$name does not currently have power"
+            )
+            INTER_DIMENSION ->  if (interDimension && !location.isPowered) return player.sendActionError(
+                "$name does not currently have power"
+            )
             else -> Unit
         }
         // Block the warp if teleportation is not safe
-        if (!location.isSafe) {
-            player.sendActionError("$name is obstructed and cannot be used.")
-            return
-        }
+        if (!location.isSafe) return player.sendActionError(
+            "$name is obstructed and cannot be used."
+        )
         // Extra conditions if the plugin has set a distance limit
         if (config.limitDistance) {
             // Get the distance to the warpstone and the stone's range
             val ratio    = if (interDimension) config.worldRatio else 1
-            val distance = player.location.toVector().distance(location.toVector()) / ratio
+            val distance = playerLocation.toVector().distance(location.toVector()) / ratio
             val range    = location.range(config)
             // Prevent warping if the distance is too great
-            if (distance > range) {
-                player.sendActionError(
-                    "$name is out of warp range [${round(distance - range).toInt()} block(s)]"
-                )
-                return
-            }
+            if (distance > range) return player.sendActionError(
+                "$name is out of warp range [${round(distance - range).toInt()} block(s)]"
+            )
         }
         // Cancel the event and any previous incomplete tasks
         event.isCancelled = true
         if (queuedTeleports[player] != null)
             scheduler.cancelTask(queuedTeleports[player] ?: -1)
+        player.playSound(Sound.BLOCK_PORTAL_AMBIENT, pitch = 0f)
         // This code will run for the duration of the timer period
-        var timer = config.waitTime
-        val wait = {
-            val time = (System.currentTimeMillis() / 3).toDouble()
+        val wait = { timer: Long ->
+            val seconds = ceil(timer / 20.0).toInt()
+            val period  = (System.currentTimeMillis() / 3).toDouble()
             player.run {
                 world.spawnParticle(
-                    Particle.ASH, player.location.add(Vector(cos(time), 2.0, sin(time))), 50
+                    Particle.ASH, this.location.rotateY(period), 50
                 )
-                sendActionMessage("Warping to $name in ${ceil(timer-- / 20.0).toInt()} second(s)", "#00FF00")
-                playSound(player.location, Sound.BLOCK_PORTAL_AMBIENT, 1f, 0.3f)
+                sendActionMessage("Warping to $name in $seconds second(s)", "#00FF00")
             }
         }
         // This code will run at the end of the timer
@@ -117,8 +104,8 @@ class WarpEvent(
                 stopSound(Sound.BLOCK_PORTAL_AMBIENT)
                 sendActionMessage("Warped to $name", "#FF6600")
                 teleport(location.UP.center)
-                playSound(player.location, Sound.ENTITY_STRAY_DEATH, 0.5f, 0f)
-                playSound(player.location, Sound.BLOCK_BELL_RESONATE, 10f, 0f)
+                playSound(Sound.ENTITY_STRAY_DEATH, 0.5f, 0f)
+                playSound(Sound.BLOCK_BELL_RESONATE, 20f, 0f)
             }
             scheduler.cancelTask(queuedTeleports[player] ?: -1)
             val powerBlock = location.powerBlock ?: return@Runnable
@@ -129,21 +116,22 @@ class WarpEvent(
             }
         }
         // Queue the task and store the task id if we need to cancel sooner
-        queuedTeleports[player] = scheduler.scheduleRepeatingAutoCancelTask(plugin, 1, timer.toLong(), wait, finish)
+        queuedTeleports[player] = scheduler.scheduleRepeatingAutoCancelTask(plugin, 1, config.waitTime.toLong(), wait, finish)
     }
 
     @EventHandler
     fun onMove(event: PlayerMoveEvent) {
-        if (event.from.toVector().toBlockVector() == event.to?.toVector()?.toBlockVector())
+        if (!event.hasMovedBlock())
             return
-        if (event.player in queuedTeleports) {
+        val player = event.player
+        if (player in queuedTeleports) {
             scheduler.cancelTask(queuedTeleports.remove(event.player) ?: return)
-            event.player.sendActionMessage("")
+            player.sendActionMessage("")
         }
     }
 
     private fun deplete(player: Player, powerBlock: Block) = powerBlock.update<RespawnAnchor> {
-        player.playSound(player.location, Sound.BLOCK_RESPAWN_ANCHOR_DEPLETE, 1f, 1f)
-        it.charges--
+        player.playSound(Sound.BLOCK_RESPAWN_ANCHOR_DEPLETE)
+        charges--
     }
 }
