@@ -4,9 +4,12 @@ import org.bukkit.Location
 import org.bukkit.Material.*
 import org.bukkit.block.Block
 import org.bukkit.block.data.type.RespawnAnchor
+import org.bukkit.util.Vector
 import xyz.atrius.waystones.data.Config
 import xyz.atrius.waystones.data.FloodFill
+import kotlin.math.cos
 import kotlin.math.floor
+import kotlin.math.sin
 
 val Location.UP: Location
     get() = this.clone().add(0.0, 1.0, 0.0)
@@ -54,9 +57,9 @@ val Location.isPowered: Boolean
     }
 
 fun Location.range(
-        config  : Config
+    config  : Config
 ) = config.baseDistance + FloodFill(
-        this, config.maxWarpSize, NETHERITE_BLOCK, EMERALD_BLOCK, DIAMOND_BLOCK, GOLD_BLOCK, IRON_BLOCK
+    this, config.maxWarpSize, NETHERITE_BLOCK, EMERALD_BLOCK, DIAMOND_BLOCK, GOLD_BLOCK, IRON_BLOCK
 ).breakdown.entries.sumBy {
     it.value * when(it.key) {
         NETHERITE_BLOCK -> config.netheriteBoost
@@ -67,3 +70,9 @@ fun Location.range(
         else            -> 1
     }
 }
+
+fun Location.rotateY(angle: Double) =
+    add(Vector(cos(angle), 2.0, sin(angle)))
+
+fun Location.sameDimension(other: Location) =
+    world != other.world ?: false
