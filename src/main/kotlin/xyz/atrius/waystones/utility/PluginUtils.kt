@@ -16,10 +16,11 @@ fun BukkitScheduler.scheduleRepeatingAutoCancelTask(
         plugin: KotlinPlugin,
         period: Long,
         delay : Long,
-        task  : Runnable,
+        task  : (Long) -> Unit,
         finish: Runnable
 ): Int {
-    val id = scheduleSyncRepeatingTask(plugin, task, 0, period)
+    var timer = delay
+    val id = scheduleSyncRepeatingTask(plugin, { task(timer).also { timer-- } }, 0, period)
     scheduleSyncDelayedTask(plugin, {
         if (isQueued(id)) cancelTask(id).also {
             finish.run()
