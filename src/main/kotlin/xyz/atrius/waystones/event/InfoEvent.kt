@@ -6,9 +6,10 @@ import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
 import xyz.atrius.waystones.data.Config
+import xyz.atrius.waystones.service.WarpNameService
 import xyz.atrius.waystones.utility.range
 import xyz.atrius.waystones.utility.sendActionMessage
-import xyz.atrius.waystones.service.WarpNameService
+import java.awt.Color
 
 class InfoEvent(private val names: WarpNameService, private val config: Config) : Listener {
 
@@ -28,7 +29,7 @@ class InfoEvent(private val names: WarpNameService, private val config: Config) 
                     if (config.limitDistance) "| Range: ${
                         block.location.range(config)
                     }" else ""
-                }"
+                }", Color.ORANGE
             )
             event.isCancelled = true
         }
