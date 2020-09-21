@@ -1,8 +1,8 @@
 package xyz.atrius.waystones.data
 
 import org.bukkit.configuration.file.FileConfiguration
-import xyz.atrius.waystones.utility.KotlinPlugin
 import xyz.atrius.waystones.Power
+import xyz.atrius.waystones.utility.KotlinPlugin
 import xyz.atrius.waystones.utility.valueOfOrDefault
 import kotlin.properties.Delegates
 import kotlin.reflect.KProperty
