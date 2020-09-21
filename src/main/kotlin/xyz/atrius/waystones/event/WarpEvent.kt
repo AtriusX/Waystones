@@ -3,6 +3,8 @@ package xyz.atrius.waystones.event
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.Particle
+import org.bukkit.Sound
+import org.bukkit.block.Block
 import org.bukkit.block.data.type.RespawnAnchor
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -18,6 +20,7 @@ import xyz.atrius.waystones.Power.INTER_DIMENSION
 import xyz.atrius.waystones.data.Config
 import xyz.atrius.waystones.service.WarpNameService
 import xyz.atrius.waystones.utility.*
+import java.awt.Color
 import kotlin.math.ceil
 import kotlin.math.cos
 import kotlin.math.round
@@ -47,7 +50,7 @@ class WarpEvent(
         if (!meta.hasLodestone()) {
             // Tell the player if the stone was destroyed
             if (meta.isLodestoneTracked)
-                player.sendActionMessage("The link to this warpstone has been severed")
+                player.sendActionError("The link to this warpstone has been severed")
             return
         }
         val location       = meta.lodestone ?: return
@@ -55,20 +58,20 @@ class WarpEvent(
         val name           = names[location] ?: "Warpstone"
         // Prevent travel between worlds if world jumping is disabled
         if (!config.jumpWorlds && interDimension) {
-            player.sendActionMessage("Cannot locate $name due to dimensional interference")
+            player.sendActionError("Cannot locate $name due to dimensional interference")
             return
         }
         // Check the power requirements
         when (config.requirePower) {
             ALL -> {
                 if (!location.isPowered) {
-                    player.sendActionMessage("$name does not currently have power")
+                    player.sendActionError("$name does not currently have power")
                     return
                 }
             }
             INTER_DIMENSION -> {
                 if (interDimension && !location.isPowered) {
-                    player.sendActionMessage("$name does not currently have power")
+                    player.sendActionError("$name does not currently have power")
                     return
                 }
             }
@@ -76,7 +79,7 @@ class WarpEvent(
         }
         // Block the warp if teleportation is not safe
         if (!location.isSafe) {
-            player.sendActionMessage("$name is obstructed and cannot be used.")
+            player.sendActionError("$name is obstructed and cannot be used.")
             return
         }
         // Extra conditions if the plugin has set a distance limit
@@ -87,7 +90,7 @@ class WarpEvent(
             val range    = location.range(config)
             // Prevent warping if the distance is too great
             if (distance > range) {
-                player.sendActionMessage(
+                player.sendActionError(
                     "$name is out of warp range [${round(distance - range).toInt()} block(s)]"
                 )
                 return
@@ -104,34 +107,23 @@ class WarpEvent(
             player.world.spawnParticle(
                     Particle.ASH, player.location.add(Vector(cos(time), 2.0, sin(time))), 50
             )
-            player.sendActionMessage("Warping to $name in ${ceil(timer-- / 20.0).toInt()} second(s)")
+            player.sendActionMessage("Warping to $name in ${ceil(timer-- / 20.0).toInt()} second(s)", Color.GREEN)
         }
         // This code will run at the end of the timer
         val finish = Runnable {
-            player.sendActionMessage("Warped to $name")
+            player.sendActionMessage("Warped to $name", Color.ORANGE)
             player.teleport(location.UP.center)
             scheduler.cancelTask(queuedTeleports[player] ?: -1)
             val powerBlock = location.powerBlock ?: return@Runnable
-            val power = powerBlock.blockData as RespawnAnchor
             when (config.requirePower) {
-                ALL -> {
-                    power.charges--
-                    powerBlock.blockData = power
-                    powerBlock.state.update(true)
-                }
-                INTER_DIMENSION -> if (interDimension) {
-                    power.charges--
-                    powerBlock.blockData = power
-                    powerBlock.state.update(true)
-                } else Unit
-                else -> Unit
+                ALL             -> deplete(player, powerBlock)
+                INTER_DIMENSION -> if (interDimension) deplete(player, powerBlock)
+                else            -> Unit
             }
-            Unit
         }
         // Queue the task and store the task id if we need to cancel sooner
         queuedTeleports[player] = scheduler.scheduleRepeatingAutoCancelTask(plugin, 1, timer.toLong(), wait, finish)
     }
-
 
     @EventHandler
     fun onMove(event: PlayerMoveEvent) {
@@ -141,5 +133,10 @@ class WarpEvent(
             scheduler.cancelTask(queuedTeleports.remove(event.player) ?: return)
             event.player.sendActionMessage("")
         }
+    }
+
+    private fun deplete(player: Player, powerBlock: Block) = powerBlock.update<RespawnAnchor> {
+        player.playSound(player.location, Sound.BLOCK_RESPAWN_ANCHOR_DEPLETE, 1f, 1f)
+        it.charges--
     }
 }
