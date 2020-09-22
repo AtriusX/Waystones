@@ -1,8 +1,8 @@
 package xyz.atrius.waystones.service
 
 import org.bukkit.Location
-import xyz.atrius.waystones.utility.KotlinPlugin
 import xyz.atrius.waystones.data.JsonFile
+import xyz.atrius.waystones.utility.KotlinPlugin
 import xyz.atrius.waystones.utility.locationCode
 import java.io.FileReader
 import java.nio.file.Files
@@ -28,5 +28,5 @@ class WarpNameService(plugin: KotlinPlugin) : JsonFile(plugin, "warpnames") {
     }
 
     operator fun get(location: Location?) =
-        names[location?.locationCode]
+        names[location?.locationCode] as String?
 }
