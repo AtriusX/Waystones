@@ -11,3 +11,5 @@ require-power: INTER_DIMENSION
 world-ratio: 8
 enable-portal-sickness: true
 portal-sickness-chance: 0.05
+portal-sickness-warping: DAMAGE_ON_TELEPORT
+portal-sickness-damage: 5.0

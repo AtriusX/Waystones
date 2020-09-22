@@ -2,6 +2,7 @@ package xyz.atrius.waystones.data
 
 import org.bukkit.configuration.file.FileConfiguration
 import xyz.atrius.waystones.Power
+import xyz.atrius.waystones.SicknessOption
 import xyz.atrius.waystones.utility.KotlinPlugin
 import xyz.atrius.waystones.utility.valueOfOrDefault
 import kotlin.properties.Delegates
@@ -47,10 +48,14 @@ class Config(
     var worldRatio: Int by property("world-ratio", 8)
 
     // Whether or not debuff effects are enabled
-    var debuffs: Boolean by property("enable-portal-sickness", true)
+    var portalSickness: Boolean by property("enable-portal-sickness", true)
 
     // The chance at which debuff effects can occur (default is 5%)
-    var debuffChance: Double by property("portal-sickness-chance", 0.05)
+    var portalSicknessChance: Double by property("portal-sickness-chance", 0.05)
+
+    var portalSickWarping: SicknessOption by enumProp("portal-sickness-warping", SicknessOption.DAMAGE_ON_TELEPORT)
+
+    var portalSicknessDamage: Double by property("portal-sickness-damage", 2.5)
 
     // Netherite grants the max amount of boost per block
     val netheriteBoost: Int
