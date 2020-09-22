@@ -7,6 +7,8 @@ import org.bukkit.block.data.type.RespawnAnchor
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
+import org.bukkit.event.block.Action.RIGHT_CLICK_AIR
+import org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK
 import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerMoveEvent
@@ -35,11 +37,11 @@ class WarpEvent(
     @EventHandler
     fun onClick(event: PlayerInteractEvent) {
         val player = event.player
-        val inv    = player.inventory
-        // Player is not able to warp while flying with elytra
-        if (player.isGliding)
+        // Player is not able to warp while flying with elytra or if action isn't a right click
+        if (player.isGliding || event.action !in listOf(RIGHT_CLICK_AIR, RIGHT_CLICK_BLOCK))
             return
         // Get the item that was used in the event
+        val inv  = player.inventory
         val item = inv.itemInMainHand.takeIf {
             event.hand == EquipmentSlot.HAND || it.type == Material.COMPASS
         } ?: inv.itemInOffHand
@@ -64,13 +66,11 @@ class WarpEvent(
         )
         val block = location.block
         // Check the power requirements
-        when (config.requirePower) {
-            ALL -> if (!block.isPowered)
-                return player.sendActionError("$name does not currently have power")
-            INTER_DIMENSION ->  if (interDimension && !block.isPowered)
-                return player.sendActionError("$name does not currently have power")
-            else -> Unit
-        }
+        if (!when (config.requirePower) {
+            ALL             -> block.isPowered(player, name)
+            INTER_DIMENSION -> if (interDimension) block.isPowered(player, name) else false
+            else -> false
+        }) return
         // Block the warp if teleportation is not safe
         if (!location.isSafe) return player.sendActionError(
             "$name is obstructed and cannot be used."
@@ -118,6 +118,11 @@ class WarpEvent(
         scheduler.cancelTask(queuedTeleports.remove(entity) ?: -1)
         entity.sendActionMessage("")
     }
+
+    private fun Block.isPowered(player: Player, name: String): Boolean = if (!isPowered) {
+        if (!isInhibited()) player.sendActionError("$name does not currently have power")
+        false
+    } else true
 
     private fun wait(player: Player, name: String) = { timer: Long ->
         val seconds = ceil(timer / 20.0).toInt()
