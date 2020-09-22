@@ -2,8 +2,6 @@ package xyz.atrius.waystones.utility
 
 import org.bukkit.Location
 import org.bukkit.Material.*
-import org.bukkit.block.Block
-import org.bukkit.block.data.type.RespawnAnchor
 import org.bukkit.util.Vector
 import xyz.atrius.waystones.data.Config
 import xyz.atrius.waystones.data.FloodFill
@@ -45,16 +43,6 @@ val Location.locationCode
 // Determines if the selected block is safe to spawn on
 val Location.isSafe: Boolean
     get() = !listOf(UP, UP.UP).map { world?.getBlockAt(it)?.type?.isSolid ?: true }.any { it }
-
-val Location.powerBlock: Block?
-    get() = world?.getBlockAt(DOWN)?.takeIf { it.type == RESPAWN_ANCHOR }
-
-val Location.isPowered: Boolean
-    get() {
-        val block = powerBlock ?: return false
-        val meta = block.blockData as RespawnAnchor
-        return meta.charges > 0
-    }
 
 fun Location.range(
     config  : Config
