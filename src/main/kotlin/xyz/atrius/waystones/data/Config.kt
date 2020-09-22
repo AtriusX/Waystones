@@ -47,10 +47,10 @@ class Config(
     var worldRatio: Int by property("world-ratio", 8)
 
     // Whether or not debuff effects are enabled
-    var debuffs: Boolean by property("debuffs", true)
+    var debuffs: Boolean by property("enable-portal-sickness", true)
 
     // The chance at which debuff effects can occur (default is 5%)
-    var debuffChance: Double by property("debuff-chance", 0.05)
+    var debuffChance: Double by property("portal-sickness-chance", 0.05)
 
     // Netherite grants the max amount of boost per block
     val netheriteBoost: Int

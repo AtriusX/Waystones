@@ -9,5 +9,5 @@ max-boost: 50
 single-use: false
 require-power: INTER_DIMENSION
 world-ratio: 8
-debuffs: true
-debuff-chance: 0.05
+enable-portal-sickness: true
+portal-sickness-chance: 0.05
