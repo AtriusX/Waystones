@@ -6,7 +6,9 @@ import org.bukkit.block.data.BlockData
 import org.bukkit.block.data.type.RespawnAnchor
 
 val Block.powerBlock: Block?
-    get() = world.getBlockAt(location.DOWN).takeIf { it.type in listOf(Material.RESPAWN_ANCHOR, Material.BEDROCK, Material.OBSIDIAN) }
+    get() = world.getBlockAt(location.DOWN).takeIf {
+        it.type in listOf(Material.RESPAWN_ANCHOR, Material.COMMAND_BLOCK, Material.OBSIDIAN)
+    }
 
 val Block.isPowered: Boolean
     get() {
@@ -20,7 +22,7 @@ val Block.isPowered: Boolean
     }
 
 fun Block.hasInfinitePower(): Boolean =
-    powerBlock?.type == Material.BEDROCK
+    powerBlock?.type == Material.COMMAND_BLOCK
 
 fun Block.isInhibited(): Boolean =
     powerBlock?.type == Material.OBSIDIAN
