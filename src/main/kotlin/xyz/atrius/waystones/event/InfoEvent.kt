@@ -31,7 +31,7 @@ class InfoEvent(private val names: WarpNameService, private val config: Config) 
                     if (config.limitDistance && !block.hasInfinitePower()) "| Range: ${
                         block.location.range(config)
                     }" else ""
-                }", ChatColor.GOLD
+                }", ChatColor.DARK_AQUA
             )
             event.cancel()
         }

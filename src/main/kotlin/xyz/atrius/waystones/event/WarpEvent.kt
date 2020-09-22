@@ -39,7 +39,8 @@ class WarpEvent(
             return
         // Ignore the event if the item in hand isn't a compass or the clicked block is a lodestone
         val player = event.player
-        val item   = player.inventory.itemInMainHand
+        val inv    = player.inventory
+        val item   = inv.itemInMainHand.takeIf { it.type == Material.COMPASS } ?: inv.itemInOffHand
         if (item.type != Material.COMPASS || event.clickedBlock?.type == Material.LODESTONE)
             return
         // Prevent warping if no stone is connected
@@ -91,7 +92,7 @@ class WarpEvent(
         // Queue the task and store the task id for if we need to cancel sooner
         queuedTeleports[player] = scheduler.scheduleRepeatingAutoCancelTask(
                 plugin, 1, config.waitTime.toLong(), wait(player, name),
-                finish(player, location, block, interDimension, item)
+                finish(player, name, location, block, interDimension, item)
         )
     }
 
@@ -101,36 +102,37 @@ class WarpEvent(
             return
         val player = event.player
         if (player in queuedTeleports) {
-            scheduler.cancelTask(queuedTeleports.remove(event.player) ?: return)
+            scheduler.cancelTask(queuedTeleports.remove(player) ?: return)
             player.sendActionMessage("")
         }
     }
 
     private fun wait(player: Player, name: String) = { timer: Long ->
         val seconds = ceil(timer / 20.0).toInt()
-        player.sendActionMessage("Warping to $name in $seconds second(s)", ChatColor.GREEN)
+        player.sendActionMessage("Warping to $name in $seconds second(s)", ChatColor.DARK_GREEN)
         // Play warp animation if enabled
         if (config.warpAnimations) {
             val period   = (System.currentTimeMillis() / 3).toDouble()
             val world    = player.world
-            val location = player.location
-            world.spawnParticle(Particle.ASH, location.rotateY(period), 50)
+            world.spawnParticle(Particle.ASH, player.location.rotateY(period), 50)
             if (timer < 7) world.spawnParticle(
-                    Particle.SMOKE_LARGE, location, 100, 0.2, 0.5, 0.2, 0.0
+                    Particle.SMOKE_LARGE, player.location.UP, 100, 0.2, 0.5, 0.2, 0.0
             )
         }
     }
 
     private fun finish(
         player        : Player,
+        warpName      : String,
         warpLocation  : Location,
         block         : Block,
         interDimension: Boolean,
         item          : ItemStack
     ): () -> Unit = {
         player.run {
+            queuedTeleports.remove(this)
+            stopSound(Sound.BLOCK_PORTAL_AMBIENT)
             // Teleport and notify the player
-            sendActionMessage("Warped to $name", ChatColor.GOLD)
             teleport(warpLocation.UP.center.also {
                 it.yaw   = location.yaw
                 it.pitch = location.pitch
@@ -139,10 +141,12 @@ class WarpEvent(
             playSound(Sound.ENTITY_STRAY_DEATH, 0.5f, 0f)
             playSound(Sound.BLOCK_BELL_RESONATE, 20f, 0f)
             // Give debuff effects to the player
-            if (config.debuffs && Random.nextDouble() < config.debuffChance) {
+            if (config.debuffs && !block.hasInfinitePower() && Random.nextDouble() < config.debuffChance) {
                 addPotionEffect(PotionEffect(PotionEffectType.CONFUSION, 600, 9))
                 addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 100, 9))
                 sendActionMessage("You feel a chill in your bones...", ChatColor.DARK_GRAY)
+            } else {
+                sendActionMessage("Warped to $warpName", ChatColor.DARK_GREEN)
             }
         }
         // Determine how power is depleted from the warp
