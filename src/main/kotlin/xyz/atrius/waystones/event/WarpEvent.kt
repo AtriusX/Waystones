@@ -7,10 +7,10 @@ import org.bukkit.block.data.type.RespawnAnchor
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
-import org.bukkit.event.block.Action.RIGHT_CLICK_AIR
-import org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK
+import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerMoveEvent
+import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.CompassMeta
 import org.bukkit.potion.PotionEffect
@@ -34,13 +34,16 @@ class WarpEvent(
 
     @EventHandler
     fun onClick(event: PlayerInteractEvent) {
-        // Ignore any non-right-click actions
-        if (event.action !in listOf(RIGHT_CLICK_AIR, RIGHT_CLICK_BLOCK))
-            return
-        // Ignore the event if the item in hand isn't a compass or the clicked block is a lodestone
         val player = event.player
         val inv    = player.inventory
-        val item   = inv.itemInMainHand.takeIf { it.type == Material.COMPASS } ?: inv.itemInOffHand
+        // Player is not able to warp while flying with elytra
+        if (player.isGliding)
+            return
+        // Get the item that was used in the event
+        val item = inv.itemInMainHand.takeIf {
+            event.hand == EquipmentSlot.HAND || it.type == Material.COMPASS
+        } ?: inv.itemInOffHand
+        // Ignore the event if the item in hand isn't a compass or the clicked block is a lodestone
         if (item.type != Material.COMPASS || event.clickedBlock?.type == Material.LODESTONE)
             return
         // Prevent warping if no stone is connected
@@ -105,6 +108,15 @@ class WarpEvent(
             scheduler.cancelTask(queuedTeleports.remove(player) ?: return)
             player.sendActionMessage("")
         }
+    }
+
+    @EventHandler
+    fun onDamage(event: EntityDamageEvent) {
+        val entity = event.entity
+        if (!config.damageStopsWarping || entity !is Player)
+            return
+        scheduler.cancelTask(queuedTeleports.remove(entity) ?: -1)
+        entity.sendActionMessage("")
     }
 
     private fun wait(player: Player, name: String) = { timer: Long ->
