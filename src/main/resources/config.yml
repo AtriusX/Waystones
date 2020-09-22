@@ -1,9 +1,12 @@
-wait-time: 3000
+wait-time: 60
 max-warp-size: 25
 jump-worlds: true
 warp-animations: true
+limit-distance: true
 base-distance: 100
 max-boost: 50
-limit-distance: true
+single-use: false
 require-power: INTER_DIMENSION
 world-ratio: 8
+debuffs: true
+debuff-chance: 0.05
