@@ -73,14 +73,19 @@ class Config(
             property: String,
             default: T
     ) = Delegates.observable(
-        config.get(property) as T? ?: default, observe(property)
+        try {
+            config.get(property) as T? ?: default
+        } catch (e: Exception) {
+            plugin.logger.warning("Error occurred reading property $property, setting to default. Error: ${e.message}")
+            default
+        }, observe(property)
     )
 
     private inline fun <reified T : Enum<T>> enumProp(
             property: String,
             default: T
     ) = Delegates.observable(
-        valueOfOrDefault(config.getString(property), default), observe(property)
+        valueOfOrDefault(plugin, config.getString(property), default), observe(property)
     )
 
     private fun <T> observe(property: String) = { _: KProperty<*>, _: T, new: T ->

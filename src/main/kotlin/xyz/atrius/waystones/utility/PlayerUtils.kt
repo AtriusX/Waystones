@@ -11,7 +11,7 @@ val Player.immortal: Boolean
     get() = gameMode in listOf(GameMode.CREATIVE, GameMode.SPECTATOR)
 
 fun Player.sendActionMessage(message: String, color: ChatColor? = null) =
-    this.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent("${color ?: ""}$message"))
+    this.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent("${color ?: ""}${ChatColor.BOLD}$message"))
 
 fun Player.sendActionError(message: String) =
         sendActionMessage(message, ChatColor.RED)
