@@ -163,11 +163,11 @@ class WarpEvent(
             playSound(Sound.ENTITY_STRAY_DEATH, 0.5f, 0f)
             playSound(Sound.BLOCK_BELL_RESONATE, 20f, 0f)
             // Skip debuffs if the player is immortal
-            if (!player.immortal) {
-                val sick = player.hasPortalSickness()
+            if (!immortal) {
+                val sick = hasPortalSickness()
                 // Damage the player if damage is enabled and they aren't immortal
                 if (sick && config.portalSickWarping == DAMAGE_ON_TELEPORT)
-                    player.damage(config.portalSicknessDamage)
+                    damage(config.portalSicknessDamage)
                 // Give portal sickness to the player if they aren't immortal, are unlucky, or already are sick
                 if (config.portalSickness && !block.hasInfinitePower()
                     && (Random.nextDouble() < config.portalSicknessChance || sick)
@@ -178,7 +178,7 @@ class WarpEvent(
                 }
             }
             // Display warp message only if user does not get sick
-            if (!player.hasPortalSickness())
+            if (!hasPortalSickness())
                 sendActionMessage("Warped to $warpName", ChatColor.DARK_GREEN)
         }
         // Determine how power is depleted from the warp
