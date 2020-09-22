@@ -44,7 +44,7 @@ class WarpEvent(
             return
         // Check if the player has portal sickness
         if (config.portalSickWarping == PREVENT_TELEPORT && player.hasPortalSickness())
-            return
+            return player.sendActionError("You are too sick to warp")
         // Get the item that was used in the event
         val inv  = player.inventory
         val item = inv.itemInMainHand.takeIf {
