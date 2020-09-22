@@ -8,6 +8,8 @@ import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
 import xyz.atrius.waystones.data.Config
 import xyz.atrius.waystones.service.WarpNameService
+import xyz.atrius.waystones.utility.cancel
+import xyz.atrius.waystones.utility.hasInfinitePower
 import xyz.atrius.waystones.utility.range
 import xyz.atrius.waystones.utility.sendActionMessage
 
@@ -26,12 +28,12 @@ class InfoEvent(private val names: WarpNameService, private val config: Config) 
                 "Name: ${
                     names[block.location] ?: "None"
                 } ${
-                    if (config.limitDistance) "| Range: ${
+                    if (config.limitDistance && !block.hasInfinitePower()) "| Range: ${
                         block.location.range(config)
                     }" else ""
                 }", ChatColor.GOLD
             )
-            event.isCancelled = true
+            event.cancel()
         }
     }
 }
