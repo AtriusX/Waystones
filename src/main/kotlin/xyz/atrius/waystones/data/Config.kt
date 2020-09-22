@@ -13,7 +13,11 @@ class Config(
     private val config: FileConfiguration
         get() = plugin.config
 
+    // The amount of ticks to wait before teleporting
     var waitTime: Int by property("wait-time", 60)
+
+    // Whether or not the plauer receiving damage will force cancel the warp
+    var damageStopsWarping: Boolean by property("damage-stops-warping", true)
 
     // The max number of blocks allowed in warp structures
     var maxWarpSize: Int by property("max-warp-size", 25)

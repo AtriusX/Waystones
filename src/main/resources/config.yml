@@ -1,4 +1,5 @@
 wait-time: 60
+damage-stops-warping: true
 max-warp-size: 25
 jump-worlds: true
 warp-animations: true
