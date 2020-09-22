@@ -19,6 +19,8 @@ import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import xyz.atrius.waystones.Power.ALL
 import xyz.atrius.waystones.Power.INTER_DIMENSION
+import xyz.atrius.waystones.SicknessOption.DAMAGE_ON_TELEPORT
+import xyz.atrius.waystones.SicknessOption.PREVENT_TELEPORT
 import xyz.atrius.waystones.data.Config
 import xyz.atrius.waystones.service.WarpNameService
 import xyz.atrius.waystones.utility.*
@@ -39,6 +41,9 @@ class WarpEvent(
         val player = event.player
         // Player is not able to warp while flying with elytra or if action isn't a right click
         if (player.isGliding || event.action !in listOf(RIGHT_CLICK_AIR, RIGHT_CLICK_BLOCK))
+            return
+        // Check if the player has portal sickness
+        if (config.portalSickWarping == PREVENT_TELEPORT && player.hasPortalSickness())
             return
         // Get the item that was used in the event
         val inv  = player.inventory
@@ -157,14 +162,24 @@ class WarpEvent(
             // Warp sound effects
             playSound(Sound.ENTITY_STRAY_DEATH, 0.5f, 0f)
             playSound(Sound.BLOCK_BELL_RESONATE, 20f, 0f)
-            // Give debuff effects to the player
-            if (config.debuffs && !block.hasInfinitePower() && Random.nextDouble() < config.debuffChance) {
-                addPotionEffect(PotionEffect(PotionEffectType.CONFUSION, 600, 9))
-                addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 100, 9))
-                sendActionMessage("You feel a chill in your bones...", ChatColor.DARK_GRAY)
-            } else {
-                sendActionMessage("Warped to $warpName", ChatColor.DARK_GREEN)
+            // Skip debuffs if the player is immortal
+            if (!player.immortal) {
+                val sick = player.hasPortalSickness()
+                // Damage the player if damage is enabled and they aren't immortal
+                if (sick && config.portalSickWarping == DAMAGE_ON_TELEPORT)
+                    player.damage(config.portalSicknessDamage)
+                // Give portal sickness to the player if they aren't immortal, are unlucky, or already are sick
+                if (config.portalSickness && !block.hasInfinitePower()
+                    && (Random.nextDouble() < config.portalSicknessChance || sick)
+                ) {
+                    addPotionEffect(PotionEffect(PotionEffectType.CONFUSION, 600, 9))
+                    addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 100, 9))
+                    sendActionMessage("You feel a chill in your bones...", ChatColor.DARK_GRAY)
+                }
             }
+            // Display warp message only if user does not get sick
+            if (!player.hasPortalSickness())
+                sendActionMessage("Warped to $warpName", ChatColor.DARK_GREEN)
         }
         // Determine how power is depleted from the warp
         when (config.requirePower) {
