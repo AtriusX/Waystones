@@ -42,18 +42,16 @@ class WarpEvent(
         // Player is not able to warp while flying with elytra or if action isn't a right click
         if (player.isGliding || event.action !in listOf(RIGHT_CLICK_AIR, RIGHT_CLICK_BLOCK))
             return
-        if (event.item?.isWarpKey(plugin, config) == false)
+        // Get the item that was used in the event
+        val inv  = player.inventory
+        val item = inv.itemInMainHand.takeIf { event.hand == EquipmentSlot.HAND
+                || it.type == Material.COMPASS } ?: inv.itemInOffHand
+        // Ignore the event if the item in hand isn't a compass or the clicked block is a lodestone
+        if (!item.isWarpKey(plugin, config) || event.clickedBlock?.type == Material.LODESTONE)
             return
         // Check if the player has portal sickness
         if (config.portalSickWarping == PREVENT_TELEPORT && player.hasPortalSickness())
             return player.sendActionError("You are too sick to warp")
-        // Get the item that was used in the event
-        val inv  = player.inventory
-        val item = inv.itemInMainHand.takeIf { event.hand == EquipmentSlot.HAND
-            || it.type == Material.COMPASS } ?: inv.itemInOffHand
-        // Ignore the event if the item in hand isn't a compass or the clicked block is a lodestone
-        if (item.type != Material.COMPASS || event.clickedBlock?.type == Material.LODESTONE)
-            return
         // Prevent warping if no stone is connected
         val meta = item.itemMeta as CompassMeta
         if (!meta.hasLodestone()) {

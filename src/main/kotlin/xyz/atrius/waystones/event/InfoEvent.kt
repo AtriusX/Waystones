@@ -20,12 +20,10 @@ class InfoEvent(
     fun onClick(event: PlayerInteractEvent) {
         if (event.action != Action.LEFT_CLICK_BLOCK)
             return
-        if (event.item?.isWarpKey(plugin, config) == false)
-            return
         val block  = event.clickedBlock
         val player = event.player
         val item   = player.inventory.itemInMainHand
-        if (block?.type == Material.LODESTONE && item.type == Material.COMPASS) {
+        if (block?.type == Material.LODESTONE && item.isWarpKey(plugin, config)) {
             player.sendActionMessage(
                 "Name: ${
                     names[block.location] ?: "None"

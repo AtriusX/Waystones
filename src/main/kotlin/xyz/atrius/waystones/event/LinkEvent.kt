@@ -22,11 +22,9 @@ class LinkEvent(
     fun onSet(event: PlayerInteractEvent) {
         if (event.action != Action.RIGHT_CLICK_BLOCK)
             return
-        if (event.item?.isWarpKey(plugin, config) == false)
-            return
         val item  = event.item ?: return
         val block = event.clickedBlock ?: return
-        if (item.type != Material.COMPASS || block.type != Material.LODESTONE)
+        if (!item.isWarpKey(plugin, config) || block.type != Material.LODESTONE)
             return
         val player = event.player
         // Prevent linking if relinking is disabled
