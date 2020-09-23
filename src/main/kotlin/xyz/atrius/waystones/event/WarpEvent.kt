@@ -74,7 +74,7 @@ class WarpEvent(
         // Check the power requirements
         if (!when (config.requirePower) {
             ALL             -> block.isPowered(player, name)
-            INTER_DIMENSION -> if (interDimension) block.isPowered(player, name) else false
+            INTER_DIMENSION -> if (interDimension) block.isPowered(player, name) else true
             else -> false
         }) return
         // Block the warp if teleportation is not safe

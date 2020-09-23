@@ -63,4 +63,4 @@ fun Location.rotateY(angle: Double) =
     add(Vector(cos(angle), 2.0, sin(angle)))
 
 fun Location.sameDimension(other: Location) =
-    world != other.world ?: false
+    world == other.world ?: false
