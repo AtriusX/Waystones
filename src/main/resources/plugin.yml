@@ -2,7 +2,7 @@ name: Waystones
 version: 1.0-1.16.3
 main: xyz.atrius.waystones.Waystones
 api-version: 1.16
-prefix: Waystones
+prefix: Warpstones
 authors: [Atrius]
 description: Warp stones for survival
 website: https://atrius.xyz

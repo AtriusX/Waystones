@@ -23,7 +23,7 @@ dependencies {
 
 group = 'xyz.atrius'
 version = '0.1.0'
-description = 'Waystones'
+description = 'Warpstones'
 sourceCompatibility = '1.8'
 
 tasks.withType(JavaCompile) {
