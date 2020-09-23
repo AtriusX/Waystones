@@ -57,6 +57,9 @@ class Config(
 
     var portalSicknessDamage: Double by property("portal-sickness-damage", 2.5)
 
+    // Whether or not keys can be relinked to another warpstone after being linked once
+    var relinkableKeys: Boolean by property("relinkable-keys", true)
+
     // Netherite grants the max amount of boost per block
     val netheriteBoost: Int
         get() = maxBoost
