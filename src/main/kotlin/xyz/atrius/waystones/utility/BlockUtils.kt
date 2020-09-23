@@ -2,7 +2,6 @@ package xyz.atrius.waystones.utility
 
 import org.bukkit.Material
 import org.bukkit.block.Block
-import org.bukkit.block.data.BlockData
 import org.bukkit.block.data.type.RespawnAnchor
 
 val Block.powerBlock: Block?
@@ -26,10 +25,3 @@ fun Block.hasInfinitePower(): Boolean =
 
 fun Block.isInhibited(): Boolean =
     powerBlock?.type == Material.OBSIDIAN
-
-inline fun <reified T : BlockData> Block.update(scope: T.() -> Unit)  {
-    val data = this.blockData as T
-    scope(data)
-    this.blockData = data
-    this.state.update(true)
-}
