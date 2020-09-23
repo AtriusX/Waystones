@@ -1,10 +1,7 @@
 package xyz.atrius.waystones
 
 import xyz.atrius.waystones.data.Config
-import xyz.atrius.waystones.event.InfoEvent
-import xyz.atrius.waystones.event.WarpEvent
-import xyz.atrius.waystones.event.WarpstoneDestroyEvent
-import xyz.atrius.waystones.event.WaystoneNameEvent
+import xyz.atrius.waystones.event.*
 import xyz.atrius.waystones.service.WarpNameService
 import xyz.atrius.waystones.utility.KotlinPlugin
 import xyz.atrius.waystones.utility.registerEvents
@@ -24,7 +21,8 @@ class Waystones : KotlinPlugin() {
                 WarpEvent(this, names, configuration),
                 WaystoneNameEvent(names),
                 WarpstoneDestroyEvent(names),
-                InfoEvent(names, configuration)
+                InfoEvent(names, configuration),
+                LinkEvent(names, configuration)
         )
         logger.info("Waystones loaded!")
     }
