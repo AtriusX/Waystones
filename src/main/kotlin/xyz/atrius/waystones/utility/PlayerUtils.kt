@@ -25,19 +25,26 @@ fun Player.playSound(sound: Sound, volume: Float = 1f, pitch: Float = 1f) =
 fun Player.hasPortalSickness() =
     getPotionEffect(PotionEffectType.CONFUSION)?.amplifier ?: 0 >= 4
 
-fun PlayerInventory.addOrStackItem(original: ItemStack, new: ItemStack) {
+fun PlayerInventory.hasStackWithRoom(item: ItemStack) =
+    any { it?.isSimilar(item) == true && it.amount < it.maxStackSize }
+
+fun PlayerInventory.addItemNaturally(original: ItemStack, new: ItemStack) {
+    val player = holder as Player
     when {
-        holder is Player && (holder as Player).immortal ->
+        player.immortal ->
             addItem(new)
         original.amount == 1 ->
-            if (any { it?.isSimilar(new) == true && it.amount < it.maxStackSize }) {
+            if (hasStackWithRoom(new)) {
                 addItem(new)
                 original.amount--
             } else {
                 original.itemMeta = new.itemMeta
             }
         else -> {
-            addItem(new)
+            if (hasStackWithRoom(new))
+                addItem(new)
+            else
+                player.world.dropItem(player.location.UP, new)
             original.amount--
         }
     }

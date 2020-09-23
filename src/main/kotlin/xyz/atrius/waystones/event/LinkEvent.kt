@@ -44,7 +44,7 @@ class LinkEvent(private val names: WarpNameService, private val config: Config) 
             )
             setDisplayName("${ChatColor.of(Color.ORANGE)}Warpstone Key")
         }
-        player.inventory.addOrStackItem(item, key)
+        player.inventory.addItemNaturally(item, key)
         player.playSound(Sound.ITEM_LODESTONE_COMPASS_LOCK)
     }
 }
