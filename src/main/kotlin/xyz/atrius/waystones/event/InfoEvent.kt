@@ -10,11 +10,17 @@ import xyz.atrius.waystones.data.Config
 import xyz.atrius.waystones.service.WarpNameService
 import xyz.atrius.waystones.utility.*
 
-class InfoEvent(private val names: WarpNameService, private val config: Config) : Listener {
+class InfoEvent(
+    private val plugin: KotlinPlugin,
+    private val names : WarpNameService,
+    private val config: Config
+) : Listener {
 
     @EventHandler
     fun onClick(event: PlayerInteractEvent) {
         if (event.action != Action.LEFT_CLICK_BLOCK)
+            return
+        if (event.item?.isWarpKey(plugin, config) == false)
             return
         val block  = event.clickedBlock
         val player = event.player

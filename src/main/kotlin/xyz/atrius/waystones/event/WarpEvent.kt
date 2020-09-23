@@ -29,9 +29,9 @@ import kotlin.math.round
 import kotlin.random.Random
 
 class WarpEvent(
-        private val plugin: KotlinPlugin,
-        private val names : WarpNameService,
-        private val config: Config
+    private val plugin: KotlinPlugin,
+    private val names : WarpNameService,
+    private val config: Config
 ) : Listener {
     private val queuedTeleports = HashMap<Player, Int>()
     private val scheduler       = Bukkit.getScheduler()
@@ -41,6 +41,8 @@ class WarpEvent(
         val player = event.player
         // Player is not able to warp while flying with elytra or if action isn't a right click
         if (player.isGliding || event.action !in listOf(RIGHT_CLICK_AIR, RIGHT_CLICK_BLOCK))
+            return
+        if (event.item?.isWarpKey(plugin, config) == false)
             return
         // Check if the player has portal sickness
         if (config.portalSickWarping == PREVENT_TELEPORT && player.hasPortalSickness())

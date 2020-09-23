@@ -7,24 +7,28 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
-import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.CompassMeta
 import xyz.atrius.waystones.data.Config
 import xyz.atrius.waystones.service.WarpNameService
 import xyz.atrius.waystones.utility.*
-import java.awt.Color
 
-class LinkEvent(private val names: WarpNameService, private val config: Config) : Listener {
+class LinkEvent(
+    private val plugin: KotlinPlugin,
+    private val names : WarpNameService,
+    private val config: Config
+) : Listener {
 
     @EventHandler
     fun onSet(event: PlayerInteractEvent) {
         if (event.action != Action.RIGHT_CLICK_BLOCK)
             return
-        val item = event.item ?: return
-        if (item.type != Material.COMPASS || event.clickedBlock?.type != Material.LODESTONE)
+        if (event.item?.isWarpKey(plugin, config) == false)
+            return
+        val item  = event.item ?: return
+        val block = event.clickedBlock ?: return
+        if (item.type != Material.COMPASS || block.type != Material.LODESTONE)
             return
         val player = event.player
-        val block = event.clickedBlock!!
         // Prevent linking if relinking is disabled
         val meta = item.itemMeta as CompassMeta
         if (!config.relinkableKeys && meta.hasLodestone()) {
@@ -35,14 +39,12 @@ class LinkEvent(private val names: WarpNameService, private val config: Config) 
         if (!player.immortal && meta.lodestone == block.location)
             return event.cancel()
         event.cancel()
-        val key = ItemStack(Material.COMPASS)
-        key.update<CompassMeta> {
+        val key = defaultWarpKey(plugin).update<CompassMeta> {
             lodestone = block.location
             isLodestoneTracked = true
             lore = listOf(
-                    "${ChatColor.DARK_PURPLE}${names[block.location] ?: "Warpstone"}: [${block.location.locationCode}]"
+                "${ChatColor.DARK_PURPLE}${names[block.location] ?: "Warpstone"}: [${block.location.locationCode}]"
             )
-            setDisplayName("${ChatColor.of(Color.ORANGE)}Warpstone Key")
         }
         player.inventory.addItemNaturally(item, key)
         player.playSound(Sound.ITEM_LODESTONE_COMPASS_LOCK)
