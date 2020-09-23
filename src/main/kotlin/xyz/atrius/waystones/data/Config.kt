@@ -17,7 +17,7 @@ class Config(
     // The amount of ticks to wait before teleporting
     var waitTime: Int by property("wait-time", 60)
 
-    // Whether or not the plauer receiving damage will force cancel the warp
+    // Whether or not the player receiving damage will force cancel the warp
     var damageStopsWarping: Boolean by property("damage-stops-warping", true)
 
     // The max number of blocks allowed in warp structures
@@ -55,10 +55,12 @@ class Config(
 
     var portalSickWarping: SicknessOption by enumProp("portal-sickness-warping", SicknessOption.DAMAGE_ON_TELEPORT)
 
-    var portalSicknessDamage: Double by property("portal-sickness-damage", 2.5)
+    var portalSicknessDamage: Double by property("portal-sickness-damage", 5.0)
 
     // Whether or not keys can be relinked to another warpstone after being linked once
     var relinkableKeys: Boolean by property("relinkable-keys", true)
+
+    var keyItems: Boolean by property("enable-key-items", true)
 
     // Netherite grants the max amount of boost per block
     val netheriteBoost: Int

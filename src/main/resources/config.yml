@@ -14,3 +14,4 @@ portal-sickness-chance: 0.05
 portal-sickness-warping: DAMAGE_ON_TELEPORT
 portal-sickness-damage: 5.0
 relinkable-keys: true
+enable-key-items: true
