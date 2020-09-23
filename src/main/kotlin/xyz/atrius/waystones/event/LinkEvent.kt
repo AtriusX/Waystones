@@ -20,32 +20,31 @@ class LinkEvent(private val names: WarpNameService, private val config: Config) 
     fun onSet(event: PlayerInteractEvent) {
         if (event.action != Action.RIGHT_CLICK_BLOCK)
             return
-        val item   = event.item ?: return
+        val item = event.item ?: return
         if (item.type != Material.COMPASS || event.clickedBlock?.type != Material.LODESTONE)
             return
         val player = event.player
-        val block  = event.clickedBlock!!
-        if (!config.relinkableKeys && (item.itemMeta as CompassMeta).hasLodestone()) {
+        val block = event.clickedBlock!!
+        // Prevent linking if relinking is disabled
+        val meta = item.itemMeta as CompassMeta
+        if (!config.relinkableKeys && meta.hasLodestone()) {
             player.sendActionError("The destination for this key has been sealed")
             return event.cancel()
         }
+        // Prevent relinking if the location is the same
+        if (!player.immortal && meta.lodestone == block.location)
+            return event.cancel()
         event.cancel()
         val key = ItemStack(Material.COMPASS)
         key.update<CompassMeta> {
             lodestone = block.location
             isLodestoneTracked = true
             lore = listOf(
-                "${ChatColor.DARK_PURPLE}${names[block.location] ?: "Warpstone"}: [${block.location.locationCode}]"
+                    "${ChatColor.DARK_PURPLE}${names[block.location] ?: "Warpstone"}: [${block.location.locationCode}]"
             )
             setDisplayName("${ChatColor.of(Color.ORANGE)}Warpstone Key")
         }
-        if (item.amount > 1) {
-            player.inventory.addItem(key)
-            if (!player.immortal)
-                item.amount--
-        } else {
-            item.itemMeta = key.itemMeta
-        }
+        player.inventory.addOrStackItem(item, key)
         player.playSound(Sound.ITEM_LODESTONE_COMPASS_LOCK)
     }
 }
