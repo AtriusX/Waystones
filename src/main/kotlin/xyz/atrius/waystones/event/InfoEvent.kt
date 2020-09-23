@@ -14,8 +14,7 @@ class InfoEvent(private val names: WarpNameService, private val config: Config) 
 
     @EventHandler
     fun onClick(event: PlayerInteractEvent) {
-        val action = event.action
-        if (action != Action.LEFT_CLICK_BLOCK)
+        if (event.action != Action.LEFT_CLICK_BLOCK)
             return
         val block  = event.clickedBlock
         val player = event.player
