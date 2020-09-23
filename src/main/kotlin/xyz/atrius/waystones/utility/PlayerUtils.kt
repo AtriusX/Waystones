@@ -31,20 +31,19 @@ fun PlayerInventory.hasStackWithRoom(item: ItemStack) =
 fun PlayerInventory.addItemNaturally(original: ItemStack, new: ItemStack) {
     val player = holder as Player
     when {
-        player.immortal ->
+        // Add item to inventory
+        player.immortal -> {
             addItem(new)
-        original.amount == 1 ->
-            if (hasStackWithRoom(new)) {
-                addItem(new)
-                original.amount--
-            } else {
-                original.itemMeta = new.itemMeta
-            }
+        }
+        // Update item in slot if only one exists
+        original.amount == 1 && original.type == new.type -> {
+            original.itemMeta = new.itemMeta
+        }
+        // Add the item to the first similar stack or drop it
         else -> {
-            if (hasStackWithRoom(new))
-                addItem(new)
-            else
+            if (!hasStackWithRoom(new))
                 player.world.dropItem(player.location.UP, new)
+            else addItem(new)
             original.amount--
         }
     }
