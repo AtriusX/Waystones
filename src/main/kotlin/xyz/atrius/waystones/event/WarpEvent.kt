@@ -47,9 +47,8 @@ class WarpEvent(
             return player.sendActionError("You are too sick to warp")
         // Get the item that was used in the event
         val inv  = player.inventory
-        val item = inv.itemInMainHand.takeIf {
-            event.hand == EquipmentSlot.HAND || it.type == Material.COMPASS
-        } ?: inv.itemInOffHand
+        val item = inv.itemInMainHand.takeIf { event.hand == EquipmentSlot.HAND
+            || it.type == Material.COMPASS } ?: inv.itemInOffHand
         // Ignore the event if the item in hand isn't a compass or the clicked block is a lodestone
         if (item.type != Material.COMPASS || event.clickedBlock?.type == Material.LODESTONE)
             return
@@ -91,8 +90,6 @@ class WarpEvent(
                 "$name is out of warp range [${round(distance - range).toInt()} block(s)]"
             )
         }
-        // Cancel the event and any previous incomplete tasks
-        event.cancel()
         if (queuedTeleports[player] != null)
             scheduler.cancelTask(queuedTeleports[player] ?: -1)
         // Play an ambient effect to initiate the teleport
@@ -102,6 +99,7 @@ class WarpEvent(
                 plugin, 1, config.waitTime.toLong(), wait(player, name),
                 finish(player, name, location, block, interDimension, item)
         )
+        event.cancel()
     }
 
     @EventHandler
