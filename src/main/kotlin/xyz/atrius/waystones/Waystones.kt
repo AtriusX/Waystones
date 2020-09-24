@@ -36,10 +36,10 @@ class Waystones : KotlinPlugin() {
                 setIngredient('x', Material.REDSTONE_BLOCK)
             })
         }
-        logger.info("Waystones loaded!")
+        logger.info("Warpstones loaded!")
     }
 
     override fun onDisable() {
-        logger.info("Waystones disabled!")
+        logger.info("Warpstones disabled!")
     }
 }
