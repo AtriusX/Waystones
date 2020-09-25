@@ -24,7 +24,6 @@ import xyz.atrius.waystones.service.WarpNameService
 import xyz.atrius.waystones.utility.*
 import xyz.atrius.waystones.utility.WarpState.*
 import kotlin.math.ceil
-import kotlin.math.max
 import kotlin.math.round
 import kotlin.random.Random
 
@@ -120,12 +119,13 @@ class WarpEvent(private val names : WarpNameService) : Listener {
         player.sendActionMessage("Warping to $name in $seconds second(s)", ChatColor.DARK_GREEN)
         // Play warp animation if enabled
         if (configuration.warpAnimations) {
-            val ratio = max(timer * 4, 1).toInt()
+            val amp = configuration.waitTime - timer + 0.1
+            val ratio = timer * 2 + 1
             val period = (System.currentTimeMillis() / 3).toDouble()
             val world  = player.world
-            world.spawnParticle(Particle.ASH, player.location.rotateY(period), 200)
+            world.spawnParticle(Particle.ASH, player.location.rotateY(period, timer.toDouble() / amp), 200)
             world.spawnParticle(
-                Particle.SMOKE_LARGE, player.location.UP, 250 / ratio, 0.2, 0.5, 0.2, 0.0
+                Particle.SMOKE_LARGE, player.location, 250 / ratio.toInt(), 0.2, 0.5, 0.2, 0.0
             )
         }
     }
@@ -146,8 +146,8 @@ class WarpEvent(private val names : WarpNameService) : Listener {
                 it.yaw   = location.yaw
                 it.pitch = location.pitch
             })
-            world.spawnParticle(
-                Particle.SMOKE_LARGE, location.UP, 250 , 0.2, 0.5, 0.2, 0.1
+            warpLocation.world?.forceSpawnParticle(
+                Particle.SMOKE_LARGE, location.UP.center, 400, 0.2, 0.5, 0.2, 0.1
             )
             // Warp sound effects
             playSound(Sound.ENTITY_STRAY_DEATH, 0.5f, 0f)
