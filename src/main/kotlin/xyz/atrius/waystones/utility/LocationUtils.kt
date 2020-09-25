@@ -3,7 +3,7 @@ package xyz.atrius.waystones.utility
 import org.bukkit.Location
 import org.bukkit.Material.*
 import org.bukkit.util.Vector
-import xyz.atrius.waystones.data.Config
+import xyz.atrius.waystones.configuration
 import xyz.atrius.waystones.data.FloodFill
 import kotlin.math.cos
 import kotlin.math.floor
@@ -44,18 +44,19 @@ val Location.locationCode
 val Location.isSafe: Boolean
     get() = !listOf(UP, UP.UP).map { world?.getBlockAt(it)?.type?.isSolid ?: true }.any { it }
 
-fun Location.range(
-    config  : Config
-) = config.baseDistance + FloodFill(
-    this, config.maxWarpSize, NETHERITE_BLOCK, EMERALD_BLOCK, DIAMOND_BLOCK, GOLD_BLOCK, IRON_BLOCK
-).breakdown.entries.sumBy {
-    it.value * when(it.key) {
-        NETHERITE_BLOCK -> config.netheriteBoost
-        EMERALD_BLOCK   -> config.emeraldBoost
-        DIAMOND_BLOCK   -> config.diamondBoost
-        GOLD_BLOCK      -> config.goldBoost
-        IRON_BLOCK      -> config.ironBoost
-        else            -> 1
+fun Location.range(): Int {
+    val config = configuration
+    return config.baseDistance + FloodFill(
+            this, config.maxWarpSize, NETHERITE_BLOCK, EMERALD_BLOCK, DIAMOND_BLOCK, GOLD_BLOCK, IRON_BLOCK
+    ).breakdown.entries.sumBy {
+        it.value * when(it.key) {
+            NETHERITE_BLOCK -> config.netheriteBoost
+            EMERALD_BLOCK   -> config.emeraldBoost
+            DIAMOND_BLOCK   -> config.diamondBoost
+            GOLD_BLOCK      -> config.goldBoost
+            IRON_BLOCK      -> config.ironBoost
+            else            -> 1
+        }
     }
 }
 

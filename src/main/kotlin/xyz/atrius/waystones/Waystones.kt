@@ -10,11 +10,12 @@ import xyz.atrius.waystones.utility.defaultWarpKey
 import xyz.atrius.waystones.utility.keyValue
 import xyz.atrius.waystones.utility.registerEvents
 
+lateinit var configuration: Config
+
 @Suppress("unused")
 class Waystones : KotlinPlugin() {
 
-    lateinit var names        : WarpNameService
-    lateinit var configuration: Config
+    lateinit var names: WarpNameService
 
     override fun onEnable() {
         configuration = Config(this)
