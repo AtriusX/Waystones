@@ -89,7 +89,7 @@ class WarpEvent(private val names : WarpNameService) : Listener {
         // Queue the task and store the task id for if we need to cancel sooner
         queuedTeleports[player] = scheduler.scheduleRepeatingAutoCancelTask(
             configuration.waitTime.toLong(), wait(player, name),
-            finish(player, location, block, interDimension, item)
+            finish(player, location, name, block, interDimension, item)
         )
         event.cancel()
     }
@@ -129,11 +129,12 @@ class WarpEvent(private val names : WarpNameService) : Listener {
     }
 
     private fun finish(
-        player        : Player,
-        warpLocation  : Location,
-        block         : Block,
-        interDimension: Boolean,
-        item          : ItemStack
+            player        : Player,
+            warpLocation  : Location,
+            warpName      : String,
+            block         : Block,
+            interDimension: Boolean,
+            item          : ItemStack
     ): () -> Unit = {
         player.run {
             queuedTeleports.remove(this)
@@ -164,7 +165,7 @@ class WarpEvent(private val names : WarpNameService) : Listener {
             }
             // Display warp message only if user does not get sick
             if (!hasPortalSickness())
-                sendActionMessage("Warped to ${names[warpLocation]}", ChatColor.DARK_GREEN)
+                sendActionMessage("Warped to $warpName", ChatColor.DARK_GREEN)
         }
         // Determine how power is depleted from the warp
         val power = configuration.requirePower
