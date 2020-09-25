@@ -6,15 +6,11 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
-import xyz.atrius.waystones.data.Config
 import xyz.atrius.waystones.service.WarpNameService
 import xyz.atrius.waystones.utility.*
+import xyz.atrius.waystones.utility.WarpState.*
 
-class InfoEvent(
-    private val plugin: KotlinPlugin,
-    private val names : WarpNameService,
-    private val config: Config
-) : Listener {
+class InfoEvent(private val names : WarpNameService) : Listener {
 
     @EventHandler
     fun onClick(event: PlayerInteractEvent) {
@@ -23,13 +19,13 @@ class InfoEvent(
         val block  = event.clickedBlock
         val player = event.player
         val item   = player.inventory.itemInMainHand
-        if (block?.type == Material.LODESTONE && item.isWarpKey(plugin, config)) {
+        if (block?.type == Material.LODESTONE && item.isWarpKey()) {
             player.sendActionMessage(
                 "Name: ${
                     names[block.location] ?: "None"
                 } ${
                     when(block.getWarpState(player)) {
-                        Infinite   -> "| Range: Infinite"
+                        Infinite -> "| Range: Infinite"
                         Inhibited  -> "| Status: Inhibited"
                         Unpowered  -> "| Status: Unpowered"
                         Obstructed -> "| Status: Obstructed"

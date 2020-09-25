@@ -10,6 +10,7 @@ import xyz.atrius.waystones.utility.defaultWarpKey
 import xyz.atrius.waystones.utility.keyValue
 import xyz.atrius.waystones.utility.registerEvents
 
+lateinit var plugin       : KotlinPlugin
 lateinit var configuration: Config
 
 @Suppress("unused")
@@ -18,20 +19,21 @@ class Waystones : KotlinPlugin() {
     lateinit var names: WarpNameService
 
     override fun onEnable() {
+        plugin        = this
         configuration = Config(this)
         names         = WarpNameService(this)
 
         val events = server.pluginManager
-        events.registerEvents(this,
-                WarpEvent(this, names, configuration),
-                WaystoneNameEvent(names),
-                WarpstoneDestroyEvent(names),
-                InfoEvent(this, names, configuration),
-                LinkEvent(this, names, configuration)
+        events.registerEvents(
+                WarpEvent(names),
+                NameEvent(names),
+                DestroyEvent(names),
+                InfoEvent(names),
+                LinkEvent(names)
         )
         // Register warp key recipe if enabled
         if (configuration.keyItems) {
-            server.addRecipe(ShapedRecipe(keyValue(this), defaultWarpKey(this)).apply {
+            server.addRecipe(ShapedRecipe(keyValue(), defaultWarpKey()).apply {
                 shape(" * ", "*x*", " * ")
                 setIngredient('*', Material.IRON_INGOT)
                 setIngredient('x', Material.REDSTONE_BLOCK)
