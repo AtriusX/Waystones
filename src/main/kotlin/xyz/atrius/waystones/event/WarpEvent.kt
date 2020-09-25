@@ -20,7 +20,6 @@ import xyz.atrius.waystones.Power.ALL
 import xyz.atrius.waystones.Power.INTER_DIMENSION
 import xyz.atrius.waystones.SicknessOption.DAMAGE_ON_TELEPORT
 import xyz.atrius.waystones.configuration
-import xyz.atrius.waystones.plugin
 import xyz.atrius.waystones.service.WarpNameService
 import xyz.atrius.waystones.utility.*
 import xyz.atrius.waystones.utility.WarpState.*
@@ -147,11 +146,9 @@ class WarpEvent(private val names : WarpNameService) : Listener {
                 it.yaw   = location.yaw
                 it.pitch = location.pitch
             })
-            scheduler.scheduleSyncDelayedTask(plugin, {
-                world.spawnParticle(
-                    Particle.SMOKE_LARGE, location.UP, 250 , 0.2, 0.5, 0.2, 0.1
-                )
-            }, 1)
+            world.spawnParticle(
+                Particle.SMOKE_LARGE, location.UP, 250 , 0.2, 0.5, 0.2, 0.1
+            )
             // Warp sound effects
             playSound(Sound.ENTITY_STRAY_DEATH, 0.5f, 0f)
             playSound(Sound.BLOCK_BELL_RESONATE, 20f, 0f)
