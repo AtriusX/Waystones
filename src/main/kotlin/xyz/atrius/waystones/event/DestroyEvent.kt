@@ -9,7 +9,7 @@ import org.bukkit.event.block.BlockExplodeEvent
 import org.bukkit.event.entity.EntityExplodeEvent
 import xyz.atrius.waystones.service.WarpNameService
 
-class WarpstoneDestroyEvent(private val names: WarpNameService) : Listener {
+class DestroyEvent(private val names: WarpNameService) : Listener {
 
     @EventHandler
     fun onBreak(event: BlockBreakEvent) {

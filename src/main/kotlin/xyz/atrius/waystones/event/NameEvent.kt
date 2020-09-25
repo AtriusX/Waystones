@@ -12,7 +12,7 @@ import xyz.atrius.waystones.service.WarpNameService
 import xyz.atrius.waystones.utility.cancel
 import xyz.atrius.waystones.utility.sendActionMessage
 
-class WaystoneNameEvent(private val names: WarpNameService) : Listener {
+class NameEvent(private val names: WarpNameService) : Listener {
 
     @EventHandler
     fun onClick(event: PlayerInteractEvent) {
