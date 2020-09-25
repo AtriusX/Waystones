@@ -20,10 +20,12 @@ import xyz.atrius.waystones.Power.ALL
 import xyz.atrius.waystones.Power.INTER_DIMENSION
 import xyz.atrius.waystones.SicknessOption.DAMAGE_ON_TELEPORT
 import xyz.atrius.waystones.configuration
+import xyz.atrius.waystones.plugin
 import xyz.atrius.waystones.service.WarpNameService
 import xyz.atrius.waystones.utility.*
 import xyz.atrius.waystones.utility.WarpState.*
 import kotlin.math.ceil
+import kotlin.math.max
 import kotlin.math.round
 import kotlin.random.Random
 
@@ -119,22 +121,23 @@ class WarpEvent(private val names : WarpNameService) : Listener {
         player.sendActionMessage("Warping to $name in $seconds second(s)", ChatColor.DARK_GREEN)
         // Play warp animation if enabled
         if (configuration.warpAnimations) {
+            val ratio = max(timer * 4, 1).toInt()
             val period = (System.currentTimeMillis() / 3).toDouble()
             val world  = player.world
-            world.spawnParticle(Particle.ASH, player.location.rotateY(period), 50)
-            if (timer < 7) world.spawnParticle(
-                Particle.SMOKE_LARGE, player.location.UP, 100, 0.2, 0.5, 0.2, 0.0
+            world.spawnParticle(Particle.ASH, player.location.rotateY(period), 200)
+            world.spawnParticle(
+                Particle.SMOKE_LARGE, player.location.UP, 250 / ratio, 0.2, 0.5, 0.2, 0.0
             )
         }
     }
 
     private fun finish(
-            player        : Player,
-            warpLocation  : Location,
-            warpName      : String,
-            block         : Block,
-            interDimension: Boolean,
-            item          : ItemStack
+        player        : Player,
+        warpLocation  : Location,
+        warpName      : String,
+        block         : Block,
+        interDimension: Boolean,
+        item          : ItemStack
     ): () -> Unit = {
         player.run {
             queuedTeleports.remove(this)
@@ -144,6 +147,11 @@ class WarpEvent(private val names : WarpNameService) : Listener {
                 it.yaw   = location.yaw
                 it.pitch = location.pitch
             })
+            scheduler.scheduleSyncDelayedTask(plugin, {
+                world.spawnParticle(
+                    Particle.SMOKE_LARGE, location.UP, 250 , 0.2, 0.5, 0.2, 0.1
+                )
+            }, 1)
             // Warp sound effects
             playSound(Sound.ENTITY_STRAY_DEATH, 0.5f, 0f)
             playSound(Sound.BLOCK_BELL_RESONATE, 20f, 0f)
