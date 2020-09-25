@@ -14,66 +14,63 @@ import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerMoveEvent
 import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.inventory.ItemStack
-import org.bukkit.inventory.meta.CompassMeta
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import xyz.atrius.waystones.Power.ALL
 import xyz.atrius.waystones.Power.INTER_DIMENSION
 import xyz.atrius.waystones.SicknessOption.DAMAGE_ON_TELEPORT
-import xyz.atrius.waystones.SicknessOption.PREVENT_TELEPORT
-import xyz.atrius.waystones.data.Config
+import xyz.atrius.waystones.configuration
 import xyz.atrius.waystones.service.WarpNameService
 import xyz.atrius.waystones.utility.*
+import xyz.atrius.waystones.utility.WarpState.*
 import kotlin.math.ceil
 import kotlin.math.round
 import kotlin.random.Random
 
-class WarpEvent(
-    private val plugin: KotlinPlugin,
-    private val names : WarpNameService,
-    private val config: Config
-) : Listener {
+class WarpEvent(private val names : WarpNameService) : Listener {
     private val queuedTeleports = HashMap<Player, Int>()
     private val scheduler       = Bukkit.getScheduler()
 
     @EventHandler
     fun onClick(event: PlayerInteractEvent) {
         val player = event.player
-        // Player is not able to warp while flying with elytra or if action isn't a right click
-        if (player.isGliding || event.action !in listOf(RIGHT_CLICK_AIR, RIGHT_CLICK_BLOCK))
-            return
+        // Don't start warp while flying with elytra, not right-clicking, or a lodestone was clicked
+        if (player.isGliding
+            || event.action !in listOf(RIGHT_CLICK_AIR, RIGHT_CLICK_BLOCK)
+            || event.clickedBlock?.type == Material.LODESTONE
+        ) return
         // Get the item that was used in the event
         val inv  = player.inventory
         val item = inv.itemInMainHand.takeIf {
             event.hand == EquipmentSlot.HAND || it.type == Material.COMPASS
         } ?: inv.itemInOffHand
-        // Ignore the event if the item in hand isn't a compass or the clicked block is a lodestone
-        if (!item.isWarpKey(plugin, config) || event.clickedBlock?.type == Material.LODESTONE)
-            return
-        // Check if the player has portal sickness
-        if (config.portalSickWarping == PREVENT_TELEPORT && player.hasPortalSickness())
-            return player.sendActionError("You are too sick to warp")
-        // Prevent warping if no stone is connected
-        val meta = item.itemMeta as CompassMeta
-        // Tell the player if the stone was destroyed
-        if (!meta.hasLodestone() && meta.isLodestoneTracked) return player.sendActionError(
-            "The link to this warpstone has been severed"
-        )
-        val location       = meta.lodestone ?: return
+        // Determine the state of the warp key
+        val keyState = item.getKeyState(player)
+        val keyError = when (keyState) {
+            is KeyState.Blocked -> "You are too sick to warp"
+            is KeyState.Severed -> "The link to this warpstone has been severed"
+            else                -> null
+        }
+        keyError?.let {
+            return player.sendActionError(it)
+        }
+        // Determine the state of the warpstone
+        val location       = (keyState as? KeyState.Connected)?.warp ?: return
         val playerLocation = player.location
         val interDimension = !location.sameDimension(playerLocation)
         val name           = names[location] ?: "Warpstone"
         val block          = location.block
         val state          = block.getWarpState(player)
-        val error          = when {
+        val warpError      = when {
             state is Unpowered  ->
                 "$name does not currently have power"
             state is Obstructed ->
                 "$name is obstructed and cannot be used"
-            state is InterDimension && !config.jumpWorlds ->
+            state is InterDimension && !configuration.jumpWorlds ->
                 "Cannot locate $name due to dimensional interference"
-            state is Functional && config.limitDistance -> {
-                val range    = state.range / if (interDimension) config.worldRatio else 1
+            state is Functional && configuration.limitDistance -> {
+                // Calculate range and distance from warp
+                val range    = state.range / if (interDimension) configuration.worldRatio else 1
                 val distance = playerLocation.toVector().distance(location.toVector())
                 if (distance > range)
                     "$name is out of warp range [${round(distance - range).toInt()} block(s)]"
@@ -81,16 +78,18 @@ class WarpEvent(
             }
             else -> null
         }
-        if (error != null)
-            return player.sendActionError(error)
+        warpError?.let {
+            return player.sendActionError(it)
+        }
+        // Cancel any previous queues for this player
         if (queuedTeleports[player] != null)
             scheduler.cancelTask(queuedTeleports[player] ?: -1)
         // Play an ambient effect to initiate the teleport
         player.playSound(Sound.BLOCK_PORTAL_AMBIENT, pitch = 0f)
         // Queue the task and store the task id for if we need to cancel sooner
         queuedTeleports[player] = scheduler.scheduleRepeatingAutoCancelTask(
-                plugin, 1, config.waitTime.toLong(), wait(player, name),
-                finish(player, name, location, block, interDimension, item)
+            configuration.waitTime.toLong(), wait(player, name),
+            finish(player, location, block, interDimension, item)
         )
         event.cancel()
     }
@@ -109,7 +108,7 @@ class WarpEvent(
     @EventHandler
     fun onDamage(event: EntityDamageEvent) {
         val entity = event.entity
-        if (!config.damageStopsWarping || entity !is Player)
+        if (!configuration.damageStopsWarping || entity !is Player)
             return
         scheduler.cancelTask(queuedTeleports.remove(entity) ?: -1)
         entity.sendActionMessage("")
@@ -119,19 +118,18 @@ class WarpEvent(
         val seconds = ceil(timer / 20.0).toInt()
         player.sendActionMessage("Warping to $name in $seconds second(s)", ChatColor.DARK_GREEN)
         // Play warp animation if enabled
-        if (config.warpAnimations) {
-            val period   = (System.currentTimeMillis() / 3).toDouble()
-            val world    = player.world
+        if (configuration.warpAnimations) {
+            val period = (System.currentTimeMillis() / 3).toDouble()
+            val world  = player.world
             world.spawnParticle(Particle.ASH, player.location.rotateY(period), 50)
             if (timer < 7) world.spawnParticle(
-                    Particle.SMOKE_LARGE, player.location.UP, 100, 0.2, 0.5, 0.2, 0.0
+                Particle.SMOKE_LARGE, player.location.UP, 100, 0.2, 0.5, 0.2, 0.0
             )
         }
     }
 
     private fun finish(
         player        : Player,
-        warpName      : String,
         warpLocation  : Location,
         block         : Block,
         interDimension: Boolean,
@@ -152,11 +150,12 @@ class WarpEvent(
             if (!immortal) {
                 val sick = hasPortalSickness()
                 // Damage the player if damage is enabled and they aren't immortal
-                if (sick && config.portalSickWarping == DAMAGE_ON_TELEPORT)
-                    damage(config.portalSicknessDamage)
+                if (sick && configuration.portalSickWarping == DAMAGE_ON_TELEPORT)
+                    damage(configuration.portalSicknessDamage)
                 // Give portal sickness to the player if they aren't immortal, are unlucky, or already are sick
-                if (config.portalSickness && !block.hasInfinitePower()
-                    && (Random.nextDouble() < config.portalSicknessChance || sick)
+                if ((configuration.portalSickness
+                    && (sick || Random.nextDouble() < configuration.portalSicknessChance))
+                    && !block.hasInfinitePower()
                 ) {
                     addPotionEffect(PotionEffect(PotionEffectType.CONFUSION, 600, 9))
                     addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 100, 9))
@@ -165,24 +164,20 @@ class WarpEvent(
             }
             // Display warp message only if user does not get sick
             if (!hasPortalSickness())
-                sendActionMessage("Warped to $warpName", ChatColor.DARK_GREEN)
+                sendActionMessage("Warped to ${names[warpLocation]}", ChatColor.DARK_GREEN)
         }
         // Determine how power is depleted from the warp
-        when (config.requirePower) {
-            ALL             -> deplete(player, block)
-            INTER_DIMENSION -> if (interDimension) deplete(player, block)
-            else            -> Unit
+        val power = configuration.requirePower
+        if (power == ALL || (interDimension && power == INTER_DIMENSION)) {
+            // Only deplete power if the power is not infinite
+            if (!block.hasInfinitePower()) block.powerBlock?.update<RespawnAnchor> {
+                charges--
+            }
+            player.playSound(Sound.BLOCK_RESPAWN_ANCHOR_DEPLETE)
         }
         // Destroy the compass if single-use mode is enabled
-        if (config.singleUse && !player.immortal)
+        if (configuration.singleUse && !player.immortal)
             item.amount--
-    }
-
-    private fun deplete(player: Player, warp: Block) {
-        // Only deplete power if the power is not infinite
-        if (!warp.hasInfinitePower())
-            warp.powerBlock?.update<RespawnAnchor> { charges-- }
-        player.playSound(Sound.BLOCK_RESPAWN_ANCHOR_DEPLETE)
     }
 }
 
