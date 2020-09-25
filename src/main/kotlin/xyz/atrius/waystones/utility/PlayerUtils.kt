@@ -9,6 +9,8 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.PlayerInventory
 import org.bukkit.potion.PotionEffectType
+import xyz.atrius.waystones.SicknessOption
+import xyz.atrius.waystones.configuration
 
 val Player.immortal: Boolean
     get() = gameMode in listOf(GameMode.CREATIVE, GameMode.SPECTATOR)
@@ -48,3 +50,6 @@ fun PlayerInventory.addItemNaturally(original: ItemStack, new: ItemStack) {
         }
     }
 }
+
+fun Player.canWarp(): Boolean =
+    configuration.portalSickWarping == SicknessOption.PREVENT_TELEPORT && hasPortalSickness()

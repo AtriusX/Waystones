@@ -10,32 +10,27 @@ import org.bukkit.persistence.PersistentDataType
 import org.bukkit.plugin.PluginManager
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.scheduler.BukkitScheduler
-import xyz.atrius.waystones.data.Config
+import xyz.atrius.waystones.plugin
 
 // Just because I'm petty
 typealias KotlinPlugin =
-        JavaPlugin
+    JavaPlugin
 
-fun keyValue(plugin: KotlinPlugin) =
+fun keyValue() =
     NamespacedKey(plugin, "is_warp_key")
 
-fun defaultWarpKey(plugin: KotlinPlugin): ItemStack = ItemStack(Material.COMPASS).update<CompassMeta> {
-    persistentDataContainer[keyValue(plugin), PersistentDataType.INTEGER] = 1
+fun defaultWarpKey(): ItemStack = ItemStack(Material.COMPASS).update<CompassMeta> {
+    persistentDataContainer[keyValue(), PersistentDataType.INTEGER] = 1
     lore = listOf(
         "${ChatColor.DARK_PURPLE}Warpstone: [${ChatColor.MAGIC}UNKNOWN${ChatColor.DARK_PURPLE}]"
     )
     setDisplayName("${ChatColor.GOLD}Warpstone Key")
 }
 
-fun ItemStack.isWarpKey(plugin: KotlinPlugin, config: Config) = if (config.keyItems)
-    itemMeta?.persistentDataContainer?.get(keyValue(plugin), PersistentDataType.INTEGER) == 1
-else type == Material.COMPASS
-
-fun PluginManager.registerEvents(plugin: JavaPlugin, vararg listeners: Listener) =
+fun PluginManager.registerEvents(vararg listeners: Listener) =
     listeners.forEach { registerEvents(it, plugin) }
 
 fun BukkitScheduler.scheduleRepeatingAutoCancelTask(
-        plugin: KotlinPlugin,
         period: Long,
         delay : Long,
         task  : (Long) -> Unit,
