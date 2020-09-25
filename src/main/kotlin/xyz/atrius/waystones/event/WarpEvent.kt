@@ -44,8 +44,9 @@ class WarpEvent(
             return
         // Get the item that was used in the event
         val inv  = player.inventory
-        val item = inv.itemInMainHand.takeIf { event.hand == EquipmentSlot.HAND
-                || it.type == Material.COMPASS } ?: inv.itemInOffHand
+        val item = inv.itemInMainHand.takeIf {
+            event.hand == EquipmentSlot.HAND || it.type == Material.COMPASS
+        } ?: inv.itemInOffHand
         // Ignore the event if the item in hand isn't a compass or the clicked block is a lodestone
         if (!item.isWarpKey(plugin, config) || event.clickedBlock?.type == Material.LODESTONE)
             return
@@ -54,42 +55,34 @@ class WarpEvent(
             return player.sendActionError("You are too sick to warp")
         // Prevent warping if no stone is connected
         val meta = item.itemMeta as CompassMeta
-        if (!meta.hasLodestone()) {
-            // Tell the player if the stone was destroyed
-            if (meta.isLodestoneTracked) return player.sendActionError(
-                "The link to this warpstone has been severed"
-            )
-        }
+        // Tell the player if the stone was destroyed
+        if (!meta.hasLodestone() && meta.isLodestoneTracked) return player.sendActionError(
+            "The link to this warpstone has been severed"
+        )
         val location       = meta.lodestone ?: return
         val playerLocation = player.location
         val interDimension = !location.sameDimension(playerLocation)
         val name           = names[location] ?: "Warpstone"
-        // Prevent travel between worlds if world jumping is disabled
-        if (!config.jumpWorlds && interDimension) return player.sendActionError(
-            "Cannot locate $name due to dimensional interference"
-        )
-        val block = location.block
-        // Check the power requirements
-        if (!when (config.requirePower) {
-            ALL             -> block.isPowered(player, name)
-            INTER_DIMENSION -> if (interDimension) block.isPowered(player, name) else true
-            else -> false
-        }) return
-        // Block the warp if teleportation is not safe
-        if (!location.isSafe) return player.sendActionError(
-            "$name is obstructed and cannot be used."
-        )
-        // Extra conditions if the plugin has set a distance limit
-        if (config.limitDistance) {
-            // Get the distance to the warpstone and the stone's range
-            val ratio    = if (interDimension) config.worldRatio else 1
-            val distance = playerLocation.toVector().distance(location.toVector()) / ratio
-            val range    = location.range(config)
-            // Prevent warping if the distance is too great
-            if (!block.hasInfinitePower() && distance > range) return player.sendActionError(
-                "$name is out of warp range [${round(distance - range).toInt()} block(s)]"
-            )
+        val block          = location.block
+        val state          = block.getWarpState(player)
+        val error          = when {
+            state is Unpowered  ->
+                "$name does not currently have power"
+            state is Obstructed ->
+                "$name is obstructed and cannot be used"
+            state is InterDimension && !config.jumpWorlds ->
+                "Cannot locate $name due to dimensional interference"
+            state is Functional && config.limitDistance -> {
+                val range    = state.range / if (interDimension) config.worldRatio else 1
+                val distance = playerLocation.toVector().distance(location.toVector())
+                if (distance > range)
+                    "$name is out of warp range [${round(distance - range).toInt()} block(s)]"
+                else null
+            }
+            else -> null
         }
+        if (error != null)
+            return player.sendActionError(error)
         if (queuedTeleports[player] != null)
             scheduler.cancelTask(queuedTeleports[player] ?: -1)
         // Play an ambient effect to initiate the teleport
@@ -121,11 +114,6 @@ class WarpEvent(
         scheduler.cancelTask(queuedTeleports.remove(entity) ?: -1)
         entity.sendActionMessage("")
     }
-
-    private fun Block.isPowered(player: Player, name: String): Boolean = if (!isPowered) {
-        if (!isInhibited()) player.sendActionError("$name does not currently have power")
-        false
-    } else true
 
     private fun wait(player: Player, name: String) = { timer: Long ->
         val seconds = ceil(timer / 20.0).toInt()

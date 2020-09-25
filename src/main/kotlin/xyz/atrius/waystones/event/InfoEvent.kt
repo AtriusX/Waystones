@@ -28,10 +28,12 @@ class InfoEvent(
                 "Name: ${
                     names[block.location] ?: "None"
                 } ${
-                    when(config.limitDistance) {
-                        block.hasInfinitePower() -> "| Range: Infinite"
-                        block.isInhibited()      -> "| Status: Inhibited"
-                        else                     -> "| Range: ${block.location.range(config)}"
+                    when(block.getWarpState(player)) {
+                        Infinite   -> "| Range: Infinite"
+                        Inhibited  -> "| Status: Inhibited"
+                        Unpowered  -> "| Status: Unpowered"
+                        Obstructed -> "| Status: Obstructed"
+                        else       -> "| Range: ${block.location.range()}"
                     }
                 }", ChatColor.DARK_AQUA
             )
