@@ -2,8 +2,13 @@ package xyz.atrius.waystones.utility
 
 import org.bukkit.Location
 
-sealed class WarpKeyState
+sealed class KeyState {
 
-object Severed : WarpKeyState()
+    object None : KeyState()
 
-class Connected(val warp: Location) : WarpKeyState()
+    object Severed : KeyState()
+
+    object Blocked : KeyState()
+
+    class Connected(val warp: Location?) : KeyState()
+}
