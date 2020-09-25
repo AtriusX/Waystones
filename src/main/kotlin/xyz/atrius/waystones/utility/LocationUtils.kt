@@ -2,6 +2,7 @@ package xyz.atrius.waystones.utility
 
 import org.bukkit.Location
 import org.bukkit.Material.*
+import org.bukkit.World
 import org.bukkit.util.Vector
 import xyz.atrius.waystones.configuration
 import xyz.atrius.waystones.data.FloodFill
@@ -60,8 +61,11 @@ fun Location.range(): Int {
     }
 }
 
-fun Location.rotateY(angle: Double) =
-    add(Vector(cos(angle), 2.0, sin(angle)))
+fun Location.rotateY(angle: Double, amp: Double = 1.0) =
+    add(Vector(cos(angle) * amp, 2.0, sin(angle) * amp))
 
 fun Location.sameDimension(other: Location) =
     world == other.world ?: false
+
+fun Location.sameDimension(world: World) =
+    world == this.world ?: false

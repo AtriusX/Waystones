@@ -1,8 +1,6 @@
 package xyz.atrius.waystones.utility
 
-import org.bukkit.ChatColor
-import org.bukkit.Material
-import org.bukkit.NamespacedKey
+import org.bukkit.*
 import org.bukkit.event.Listener
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.CompassMeta
@@ -45,3 +43,16 @@ fun BukkitScheduler.scheduleRepeatingAutoCancelTask(
     }, delay)
     return id
 }
+
+fun World.forceSpawnParticle(
+    particle: Particle,
+    location: Location,
+    count   : Int,
+    offsetX : Double,
+    offsetY : Double,
+    offsetZ : Double,
+    speed   : Double,
+    waitTime: Long = 12
+) = Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, {
+    spawnParticle(particle, location, count, offsetX, offsetY, offsetZ, speed)
+}, if (location.sameDimension(this)) waitTime else 1)
