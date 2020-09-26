@@ -85,7 +85,7 @@ class WarpEvent(private val names : WarpNameService) : Listener {
         if (queuedTeleports[player] != null)
             scheduler.cancelTask(queuedTeleports[player] ?: -1)
         // Play an ambient effect to initiate the teleport
-        player.playSound(Sound.BLOCK_PORTAL_AMBIENT, pitch = 0f)
+        playerLocation.playSound(Sound.BLOCK_PORTAL_AMBIENT, pitch = 0f)
         // Queue the task and store the task id for if we need to cancel sooner
         queuedTeleports[player] = scheduler.scheduleRepeatingAutoCancelTask(
             configuration.waitTime.toLong(), wait(player, name),
@@ -150,8 +150,8 @@ class WarpEvent(private val names : WarpNameService) : Listener {
                 Particle.SMOKE_LARGE, location.UP.center, 400, 0.2, 0.5, 0.2, 0.1
             )
             // Warp sound effects
-            playSound(Sound.ENTITY_STRAY_DEATH, 0.5f, 0f)
-            playSound(Sound.BLOCK_BELL_RESONATE, 20f, 0f)
+            warpLocation.playSound(Sound.ENTITY_STRAY_DEATH, 0.5f, 0f)
+            warpLocation.playSound(Sound.BLOCK_BELL_RESONATE, 20f, 0f)
             // Skip debuffs if the player is immortal
             if (!immortal) {
                 val sick = hasPortalSickness()
@@ -179,7 +179,7 @@ class WarpEvent(private val names : WarpNameService) : Listener {
             if (!block.hasInfinitePower()) block.powerBlock?.update<RespawnAnchor> {
                 charges--
             }
-            player.playSound(Sound.BLOCK_RESPAWN_ANCHOR_DEPLETE)
+            warpLocation.playSound(Sound.BLOCK_RESPAWN_ANCHOR_DEPLETE)
         }
         // Destroy the compass if single-use mode is enabled
         if (configuration.singleUse && !player.immortal)
