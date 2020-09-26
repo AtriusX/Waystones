@@ -1,7 +1,9 @@
 package xyz.atrius.waystones.utility
 
+import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.Material.*
+import org.bukkit.Sound
 import org.bukkit.World
 import org.bukkit.util.Vector
 import xyz.atrius.waystones.configuration
@@ -69,3 +71,6 @@ fun Location.sameDimension(other: Location) =
 
 fun Location.sameDimension(world: World) =
     world == this.world ?: false
+
+fun Location.playSound(sound: Sound, volume: Float = 1f, pitch: Float = 1f) = Bukkit.getOnlinePlayers()
+    .forEach { if (it.world == world) it.playSound(this, sound, volume, pitch)  }
