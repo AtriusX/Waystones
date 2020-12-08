@@ -101,7 +101,7 @@ class WarpEvent(private val names : WarpNameService) : Listener {
         val player = event.player
         if (player in queuedTeleports) {
             scheduler.cancelTask(queuedTeleports.remove(player) ?: return)
-            player.sendActionMessage("")
+            player.sendActionError("Warp cancelled due to movement")
         }
     }
 
