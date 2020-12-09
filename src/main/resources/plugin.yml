@@ -6,3 +6,8 @@ prefix: Warpstones
 authors: [Atrius]
 description: Warp stones for survival
 website: https://atrius.xyz
+commands:
+  warpkey:
+    description: Gives a player one or more warp keys
+    usage: /warpkey [amount] [player]
+    permission: waystones.givekey
