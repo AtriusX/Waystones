@@ -7,7 +7,18 @@ authors: [Atrius]
 description: Warp stones for survival
 website: https://atrius.xyz
 commands:
-  warpkey:
-    description: Gives a player one or more warp keys
-    usage: /warpkey [amount] [player]
-    permission: waystones.givekey
+  waystones:
+    description: Main command
+    usage: /waystones
+permissions:
+  waystones.*:
+    description: Gives access to all Waystones commands
+    children:
+      waystones.reload: true
+      waystones.warpkey: true
+  waystones.reload:
+    description: Allows reloading the plugins config file
+    default: op
+  waystones.warpkey:
+    description: Allows giving warpkeys to self and players
+    default: op
