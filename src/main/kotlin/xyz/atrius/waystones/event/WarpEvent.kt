@@ -114,12 +114,14 @@ class WarpEvent(private val names : WarpNameService) : Listener {
         val entity = event.entity
         if (!configuration.damageStopsWarping || entity !is Player)
             return
-        scheduler.cancelTask(queuedTeleports.remove(entity) ?: -1)
-        // Stop warp sound & play torch burnout
-        entity.stopSound(Sound.BLOCK_PORTAL_AMBIENT)
-        entity.location.playSound(Sound.BLOCK_REDSTONE_TORCH_BURNOUT, pitch = 0f)
-        // Inform player of warp cancellation
-        entity.sendActionError("Warp cancelled due to taking damage")
+        if (entity in queuedTeleports) {
+            scheduler.cancelTask(queuedTeleports.remove(entity) ?: -1)
+            // Stop warp sound & play torch burnout
+            entity.stopSound(Sound.BLOCK_PORTAL_AMBIENT)
+            entity.location.playSound(Sound.BLOCK_REDSTONE_TORCH_BURNOUT, pitch = 0f)
+            // Inform player of warp cancellation
+            entity.sendActionError("Warp cancelled due to taking damage")
+        }
     }
 
     private fun wait(player: Player, name: String) = { timer: Long ->
