@@ -42,3 +42,8 @@ Players can create and warp to a warpstone by creating a lodestone and linking i
 - **portal-sickness-damage *[default: 5.0]***: The amount of damage (in heart pieces) taken by the user if warping while sick and DAMAGE_ON_TELEPORT is set.
 - **relinkable-keys *[default: true]***: Whether or not warp keys can be relinked after they are linked to a warpstone.
 - **enable-key-items *[default: true]***: Whether or not to use a custom item for warp keys. This enables a custom crafting recipe for the item, and prevents normal compasses from being used as warp keys. If this setting is enabled later, compass warp keys *should* hopefully still work as warp keys.
+
+### Commands
+- **/waystones**: Provides info about the plugin
+- **/waystones warpkey *[amount] [player]***: Gives warpkeys to players
+	- Requires `waystones.warpkey` permission
