@@ -13,7 +13,7 @@ fun infoCmd (
     sender.sendMessage("Version: §a${plugin?.description?.version}")
     sender.sendMessage("Author: §dAtriusX§r")
     sender.sendMessage("§aCommands: §r")
-    sender.sendMessage("§a/waystones reload§r - Reloads plugin config")
+    // sender.sendMessage("§a/waystones reload§r - Reloads plugin config")
     sender.sendMessage("§a/waystones warpkey §e[amount] [player]§r - Gives player set amount of keys")
     return true
 }
