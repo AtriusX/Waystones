@@ -9,7 +9,7 @@ import xyz.atrius.waystones.utility.KotlinPlugin
 import xyz.atrius.waystones.utility.defaultWarpKey
 import xyz.atrius.waystones.utility.keyValue
 import xyz.atrius.waystones.utility.registerEvents
-import xyz.atrius.waystones.commands.MainCmd
+import xyz.atrius.waystones.commands.WarpstoneCommand
 
 lateinit var plugin       : KotlinPlugin
 lateinit var configuration: Config
@@ -41,7 +41,7 @@ class Waystones : KotlinPlugin() {
             })
         }
         // Register Waystones Command
-        getCommand("waystones")?.setExecutor(MainCmd)
+        getCommand("waystones")?.setExecutor(WarpstoneCommand)
         logger.info("Warpstones loaded!")
     }
 

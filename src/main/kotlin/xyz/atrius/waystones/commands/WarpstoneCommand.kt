@@ -5,7 +5,7 @@ import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
 import org.bukkit.Bukkit
 
-object MainCmd : CommandExecutor {
+object WarpstoneCommand : CommandExecutor {
     override fun onCommand(
         sender: CommandSender,
         cmd: Command,
