@@ -22,8 +22,8 @@ object WarpstoneCommand : CommandExecutor {
             return infoCmd(sender)
 
         // Register Give WarpKey
-        val giveKeyCommands = arrayOf("getkey", "gk", "warpkey", "wk", "key", "k")
-        if (args[0].toLowerCase() in giveKeyCommands)
+        val getkeyAliases = arrayOf("getkey", "gk", "warpkey", "wk", "key", "k")
+        if (args[0].toLowerCase() in getkeyAliases)
             return getkeyCmd(sender, args.drop(1))
 
         // Command Not Found
@@ -52,8 +52,8 @@ object WarpstoneCommand : CommandExecutor {
 
         // Check Permissions
         if (
-            (sender == player && !sender.hasPermission("waystones.givekey.self")) ||
-            (sender != player && !sender.hasPermission("waystones.givekey.others"))
+            (sender == player && !sender.hasPermission("waystones.getkey.self")) ||
+            (sender != player && !sender.hasPermission("waystones.getkey.others"))
         ) {
             sender.sendMessage("&d[Waystones]&r &cYou don't have permission to run this command&r".translateColors('&'))
             return true

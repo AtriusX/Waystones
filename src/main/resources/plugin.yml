@@ -16,16 +16,16 @@ permissions:
     description: Gives access to all Waystones commands
     children:
       waystones.reload: true
-      waystones.givekey.self: true
-      waystones.givekey.others: true
-  waystones.givekey.*:
+      waystones.getkey.self: true
+      waystones.getkey.others: true
+  waystones.getkey.*:
     description: Allows giving warpkeys to all players
     children:
-      waystones.givekey.self: true
-      waystones.givekey.others: true
-  waystones.givekey.self:
+      waystones.getkey.self: true
+      waystones.getkey.others: true
+  waystones.getkey.self:
     description: Allows giving WarpKeys to yourself
     default: op
-  waystones.givekey.others:
+  waystones.getkey.others:
     description: Allows giving WarpKeys to other players
     default: op
