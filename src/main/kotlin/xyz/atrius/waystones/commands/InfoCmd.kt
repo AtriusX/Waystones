@@ -8,7 +8,6 @@ fun infoCmd (
     sender: CommandSender
 ): Boolean {
     val plugin = Bukkit.getPluginManager().getPlugin("Waystones")
-    Bukkit.getLogger()
     sender.sendMessage("------------ §dWaystones§r ------------")
     sender.sendMessage("Version: §a${plugin?.description?.version}")
     sender.sendMessage("Author: §dAtriusX§r")
