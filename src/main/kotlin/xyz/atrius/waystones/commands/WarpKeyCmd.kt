@@ -18,21 +18,13 @@ fun warpKeyCmd (
         return true
     }
 
-    // Amount of WarpKeys to give the Player
-    var amt = 1
-    if (args.isNotEmpty()) {
-        // Check if amount argument is strictly numerical
-        if (args[0].toIntOrNull() == null) {
-            sender.sendMessage("§d[Waystones]§r Amount must be numerical")
-            return false
-        } else amt = Integer.parseInt(args[0])
-    }
-    // Player to give WarpKeys to
-    val player =
-        if (args.size >= 2) Bukkit.getServer().getPlayer(args[1])
-        else (sender as Player)
+    // Set Amount and Player to give WarpKeys to
+    val amt = args.getOrNull(0)?.toIntOrNull() ?: 1
+    val player = args.getOrNull(1)?.let { Bukkit.getServer().getPlayer(it) } ?: sender as Player
+
     // Add WarpKey to Player inventory
-    for (i in 1..amt) player?.inventory?.addItem(defaultWarpKey())
+    for (i in 1..amt) player.inventory.addItem(defaultWarpKey())
+
     // Inform Player of given WarpKey
     sender.sendMessage("§d[Waystones]§r Gave §a$amt§r WarpKey to §a${sender.name}§r")
     return true
