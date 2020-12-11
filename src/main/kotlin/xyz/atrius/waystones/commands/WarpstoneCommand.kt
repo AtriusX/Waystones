@@ -10,7 +10,7 @@ object WarpstoneCommand : CommandExecutor {
         sender: CommandSender,
         cmd: Command,
         lbl: String,
-        args: Array<out String>
+        args: Array<String>
     ): Boolean {
         // Plugin Info
         if (args.isEmpty()) infoCmd(sender)
