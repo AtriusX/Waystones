@@ -6,6 +6,7 @@ import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.bukkit.Bukkit
 import xyz.atrius.waystones.utility.defaultWarpKey
+import xyz.atrius.waystones.utility.translateColors
 
 object WarpstoneCommand : CommandExecutor {
     // CommandExecutor / Subcommand Manager
@@ -25,18 +26,18 @@ object WarpstoneCommand : CommandExecutor {
             return getkeyCmd(sender, args.drop(1))
 
         // Command Not Found
-        else sender.sendMessage("§d[Waystones]§r Unknown command, check §a/waystones§r")
+        else sender.sendMessage("&d[Waystones]&r Unknown command, check &a/waystones&r".translateColors('&'))
         return true
     }
 
     // Command - Plugin Info
     private fun infoCmd (sender: CommandSender): Boolean {
         val plugin = Bukkit.getPluginManager().getPlugin("Waystones")
-        sender.sendMessage("------------ §dWaystones§r ------------")
-        sender.sendMessage("Version: §a${plugin?.description?.version}")
-        sender.sendMessage("Author: §dAtriusX§r")
-        sender.sendMessage("§aCommands: §r")
-        sender.sendMessage("§a/waystones getkey §e[amount] [player]§r - Gives player set amount of keys")
+        sender.sendMessage("------------ &dWaystones&r ------------".translateColors('&'))
+        sender.sendMessage("Version: &a${plugin?.description?.version}".translateColors('&'))
+        sender.sendMessage("Author: &dAtriusX&r".translateColors('&'))
+        sender.sendMessage("&aCommands: &r".translateColors('&'))
+        sender.sendMessage("&a/waystones getkey &e[amount] [player]&r - Gives player set amount of keys".translateColors('&'))
         return true
     }
     // Command - Give WarpKey(s)
@@ -53,7 +54,7 @@ object WarpstoneCommand : CommandExecutor {
             (sender == player && !sender.hasPermission("waystones.givekey.self")) ||
             (sender != player && !sender.hasPermission("waystones.givekey.others"))
         ) {
-            sender.sendMessage("§d[Waystones]§r §cYou don't have permission to run this command§r")
+            sender.sendMessage("&d[Waystones]&r &cYou don't have permission to run this command&r".translateColors('&'))
             return true
         }
 
@@ -63,7 +64,7 @@ object WarpstoneCommand : CommandExecutor {
         player.inventory.addItem(keyStack)
 
         // Inform Player of given WarpKey
-        sender.sendMessage("§d[Waystones]§r Gave §a$amt§r WarpKey to §a${player.name}§r")
+        sender.sendMessage("&d[Waystones]&r Gave &a$amt&r WarpKey to &a${player.name}&r".translateColors('&'))
         return true
     }
 }
