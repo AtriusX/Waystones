@@ -20,9 +20,9 @@ object WarpstoneCommand : CommandExecutor {
             return infoCmd(sender)
 
         // Register Give WarpKey
-        val giveKeyCommands = arrayOf("warpkey", "wk", "getkey", "gk", "key", "k")
+        val giveKeyCommands = arrayOf("getkey", "gk", "warpkey", "wk", "key", "k")
         if (args[0].toLowerCase() in giveKeyCommands)
-            return warpKeyCmd(sender, args.drop(1))
+            return getkeyCmd(sender, args.drop(1))
 
         // Command Not Found
         else sender.sendMessage("§d[Waystones]§r Unknown command, check §a/waystones§r")
@@ -36,11 +36,11 @@ object WarpstoneCommand : CommandExecutor {
         sender.sendMessage("Version: §a${plugin?.description?.version}")
         sender.sendMessage("Author: §dAtriusX§r")
         sender.sendMessage("§aCommands: §r")
-        sender.sendMessage("§a/waystones warpkey §e[amount] [player]§r - Gives player set amount of keys")
+        sender.sendMessage("§a/waystones getkey §e[amount] [player]§r - Gives player set amount of keys")
         return true
     }
     // Command - Give WarpKey(s)
-    private fun warpKeyCmd (
+    private fun getkeyCmd (
         sender: CommandSender,
         args: List<String>
     ): Boolean {
