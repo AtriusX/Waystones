@@ -21,7 +21,7 @@ object WarpstoneCommand : CommandExecutor {
 
         // Register Give WarpKey
         val giveKeyCommands = arrayOf("warpkey", "wk", "getkey", "gk", "key", "k")
-        if (args[0] in giveKeyCommands)
+        if (args[0].toLowerCase() in giveKeyCommands)
             return warpKeyCmd(sender, args.drop(1))
 
         // Command Not Found
