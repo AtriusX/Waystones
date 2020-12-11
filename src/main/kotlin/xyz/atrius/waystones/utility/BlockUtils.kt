@@ -37,5 +37,5 @@ fun Block.getWarpState(player: Player): WarpState = when {
     hasInfinitePower()                       -> Infinite
     !location.isSafe                         -> Obstructed
     !location.sameDimension(player.location) -> InterDimension(location.range())
-    else                                     -> Functional(location.range())
+    else                                     -> Active(location.range())
 }

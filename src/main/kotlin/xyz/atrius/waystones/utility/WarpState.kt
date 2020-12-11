@@ -1,19 +1,35 @@
 package xyz.atrius.waystones.utility
 
-sealed class WarpState {
+import xyz.atrius.waystones.configuration
 
-    object None : WarpState()
+sealed class WarpState(protected var message: String?) {
 
-    object Unpowered : WarpState()
+    object None : WarpState(null)
 
-    object Inhibited : WarpState()
+    object Unpowered : WarpState("%s does not currently have power")
 
-    object Infinite : WarpState()
+    object Inhibited : WarpState(null)
 
-    object Obstructed : WarpState()
+    object Infinite : WarpState(null)
 
-    open class Functional(val range: Int) : WarpState()
+    object Obstructed : WarpState("%s is obstructed and cannot be used")
 
-    class InterDimension(range: Int) : Functional(range)
+    open class Active(val range: Int) : WarpState(null) {
+        override fun postCondition(): Boolean =
+                configuration.limitDistance
+    }
+
+    class InterDimension(range: Int) : Active(range) {
+        init {
+            message = "Cannot locate %s due to dimensional interference"
+        }
+
+        override fun postCondition(): Boolean =
+                !configuration.jumpWorlds
+    }
+
+    fun message(name: String) = if (postCondition()) message?.format(name) else null
+
+    protected open fun postCondition(): Boolean = true
 }
 

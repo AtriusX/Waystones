@@ -30,9 +30,9 @@ fun PluginManager.registerEvents(vararg listeners: Listener) =
 
 fun BukkitScheduler.scheduleRepeatingAutoCancelTask(
     delay : Long,
+    period: Long = 1,
     task  : (Long) -> Unit,
-    finish: Runnable? = null,
-    period: Long = 1
+    finish: Runnable? = null
 ): Int {
     var timer = delay
     val id = scheduleSyncRepeatingTask(plugin, { task(timer).also { timer-- } }, 0, period)

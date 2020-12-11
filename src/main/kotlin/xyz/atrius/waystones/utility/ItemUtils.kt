@@ -6,6 +6,7 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.CompassMeta
 import org.bukkit.persistence.PersistentDataType
 import xyz.atrius.waystones.configuration
+import xyz.atrius.waystones.utility.KeyState.*
 
 
 fun ItemStack.isWarpKey() = if (configuration.keyItems)
@@ -16,11 +17,13 @@ fun CompassMeta.isSevered(): Boolean =
     !hasLodestone() && isLodestoneTracked
 
 fun ItemStack.getKeyState(player: Player): KeyState {
-    val meta = itemMeta as? CompassMeta
+    val meta = itemMeta as? CompassMeta ?: return None
+    val args = arrayOf<String>()
+            args.drop(2)
     return when {
-        meta == null || !isWarpKey() -> KeyState.None
-        meta.isSevered()             -> KeyState.Severed
-        player.canWarp()             -> KeyState.Blocked
-        else                         -> KeyState.Connected(meta.lodestone)
+        !isWarpKey() -> None
+        meta.isSevered() -> Severed
+        player.canWarp() -> Blocked
+        else -> Connected(meta.lodestone ?: return None)
     }
 }

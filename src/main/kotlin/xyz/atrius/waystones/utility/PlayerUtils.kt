@@ -8,18 +8,24 @@ import org.bukkit.Sound
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.PlayerInventory
+import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import xyz.atrius.waystones.SicknessOption
 import xyz.atrius.waystones.configuration
+import xyz.atrius.waystones.handler.PlayerHandler
 
 val Player.immortal: Boolean
         get() = gameMode in listOf(GameMode.CREATIVE, GameMode.SPECTATOR)
 
-fun Player.sendActionMessage(message: String, color: ChatColor? = null) =
-        this.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent("${color ?: ""}${ChatColor.BOLD}$message"))
+fun Player.sendActionMessage(message: String?, color: ChatColor? = null) = if (message != null)
+        spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent("${color ?: ""}${ChatColor.BOLD}$message"))
+else Unit
 
-fun Player.sendActionError(message: String) =
+fun Player.sendActionError(message: String?) =
         sendActionMessage(message, ChatColor.RED)
+
+fun Player.sendActionError(handler: PlayerHandler) =
+        sendActionError(handler.error)
 
 fun Player.clearActionMessage() = sendActionMessage("")
 
@@ -51,3 +57,6 @@ fun PlayerInventory.addItemNaturally(original: ItemStack, new: ItemStack) {
 
 fun Player.canWarp(): Boolean =
         configuration.portalSickWarping == SicknessOption.PREVENT_TELEPORT && hasPortalSickness()
+
+fun Player.addPotionEffects(vararg effects: PotionEffect) =
+        addPotionEffects(arrayListOf(*effects))
