@@ -13,22 +13,21 @@ import xyz.atrius.waystones.SicknessOption
 import xyz.atrius.waystones.configuration
 
 val Player.immortal: Boolean
-    get() = gameMode in listOf(GameMode.CREATIVE, GameMode.SPECTATOR)
+        get() = gameMode in listOf(GameMode.CREATIVE, GameMode.SPECTATOR)
 
 fun Player.sendActionMessage(message: String, color: ChatColor? = null) =
-    this.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent("${color ?: ""}${ChatColor.BOLD}$message"))
+        this.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent("${color ?: ""}${ChatColor.BOLD}$message"))
 
 fun Player.sendActionError(message: String) =
         sendActionMessage(message, ChatColor.RED)
 
+fun Player.clearActionMessage() = sendActionMessage("")
+
 fun Player.playSound(sound: Sound, volume: Float = 1f, pitch: Float = 1f) =
-    playSound(location, sound, volume, pitch)
+        playSound(location, sound, volume, pitch)
 
 fun Player.hasPortalSickness() =
-    getPotionEffect(PotionEffectType.CONFUSION)?.amplifier ?: 0 >= 4
-
-fun PlayerInventory.hasStackWithRoom(item: ItemStack) =
-    any { it?.isSimilar(item) == true && it.amount < it.maxStackSize }
+        getPotionEffect(PotionEffectType.CONFUSION)?.amplifier ?: 0 >= 4
 
 fun PlayerInventory.addItemNaturally(original: ItemStack, new: ItemStack) {
     val player = holder as Player
@@ -43,13 +42,12 @@ fun PlayerInventory.addItemNaturally(original: ItemStack, new: ItemStack) {
         }
         // Add the item to the first similar stack or drop it
         else -> {
-            if (!hasStackWithRoom(new))
+            if (addItem(new).isNotEmpty())
                 player.world.dropItem(player.location.UP, new)
-            else addItem(new)
             original.amount--
         }
     }
 }
 
 fun Player.canWarp(): Boolean =
-    configuration.portalSickWarping == SicknessOption.PREVENT_TELEPORT && hasPortalSickness()
+        configuration.portalSickWarping == SicknessOption.PREVENT_TELEPORT && hasPortalSickness()
