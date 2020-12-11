@@ -105,7 +105,7 @@ class WarpEvent(private val names : WarpNameService) : Listener {
             player.stopSound(Sound.BLOCK_PORTAL_AMBIENT)
             player.location.playSound(Sound.BLOCK_REDSTONE_TORCH_BURNOUT, pitch = 0f)
             // Inform player of warp cancellation
-            player.sendActionError("Warp cancelled due to movement")
+            player.sendActionError("Warp cancelled")
         }
     }
 
@@ -120,7 +120,7 @@ class WarpEvent(private val names : WarpNameService) : Listener {
             entity.stopSound(Sound.BLOCK_PORTAL_AMBIENT)
             entity.location.playSound(Sound.BLOCK_REDSTONE_TORCH_BURNOUT, pitch = 0f)
             // Inform player of warp cancellation
-            entity.sendActionError("Warp cancelled due to taking damage")
+            entity.sendActionError("Warp interrupted")
         }
     }
 
