@@ -23,7 +23,9 @@ fun warpKeyCmd (
     val player = args.getOrNull(1)?.let { Bukkit.getServer().getPlayer(it) } ?: sender as Player
 
     // Add WarpKey to Player inventory
-    for (i in 1..amt) player.inventory.addItem(defaultWarpKey())
+    val keyStack = defaultWarpKey()
+    keyStack.amount = amt
+    player.inventory.addItem(keyStack)
 
     // Inform Player of given WarpKey
     sender.sendMessage("§d[Waystones]§r Gave §a$amt§r WarpKey to §a${sender.name}§r")
