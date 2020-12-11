@@ -47,7 +47,7 @@ object WarpstoneCommand : CommandExecutor {
         args: List<String>
     ): Boolean {
         // Set Amount and Player to give WarpKeys to
-        val amt = args.getOrNull(0)?.toIntOrNull() ?: 1
+        val amount = args.getOrNull(0)?.toIntOrNull() ?: 1
         val player = args.getOrNull(1)?.let { Bukkit.getServer().getPlayer(it) } ?: sender as Player
 
         // Check Permissions
@@ -61,11 +61,11 @@ object WarpstoneCommand : CommandExecutor {
 
         // Add WarpKey to Player inventory
         val keyStack = defaultWarpKey()
-        keyStack.amount = amt
+        keyStack.amount = amount
         player.inventory.addItem(keyStack)
 
         // Inform Player of given WarpKey
-        sender.sendMessage("&d[Waystones]&r Gave &a$amt&r WarpKey${pluralS(amt)} to &a${player.name}&r".translateColors('&'))
+        sender.sendMessage("&d[Waystones]&r Gave &a$amount&r WarpKey${pluralS(amount)} to &a${player.name}&r".translateColors('&'))
         return true
     }
 }
