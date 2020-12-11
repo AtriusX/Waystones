@@ -34,11 +34,13 @@ object WarpstoneCommand : CommandExecutor {
     // Command - Plugin Info
     private fun infoCmd (sender: CommandSender): Boolean {
         val plugin = Bukkit.getPluginManager().getPlugin("Waystones")
-        sender.sendMessage("------------ &dWaystones&r ------------".translateColors('&'))
-        sender.sendMessage("Version: &a${plugin?.description?.version}".translateColors('&'))
-        sender.sendMessage("Author: &dAtriusX&r".translateColors('&'))
-        sender.sendMessage("&aCommands: &r".translateColors('&'))
-        sender.sendMessage("&a/waystones getkey &e[amount] [player]&r - Gives player set amount of keys".translateColors('&'))
+        sender.sendMessage("""
+            ------------ &dWaystones&r ------------
+            Version: &a${plugin?.description?.version}&r
+            Author: &dAtriusX&r
+            &aCommands: &r
+            &a/waystones getkey &e[amount] [player]&r - Gives player set amount of keys
+        """.trimIndent().translateColors('&'))
         return true
     }
     // Command - Give WarpKey(s)
