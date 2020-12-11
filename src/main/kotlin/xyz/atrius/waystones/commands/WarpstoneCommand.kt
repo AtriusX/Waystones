@@ -13,8 +13,8 @@ object WarpstoneCommand : CommandExecutor {
     // CommandExecutor / Subcommand Manager
     override fun onCommand(
         sender: CommandSender,
-        cmd: Command,
-        lbl: String,
+        command: Command,
+        label: String,
         args: Array<String>
     ): Boolean {
         // Plugin Info
