@@ -59,10 +59,8 @@ object WarpstoneCommand : CommandExecutor {
             return true
         }
 
-        // Add WarpKey to Player inventory
-        val keyStack = defaultWarpKey()
-        keyStack.amount = amount
-        player.inventory.addItem(keyStack)
+        // Add WarpKey(s) to Player inventory
+        player.inventory.addItem(defaultWarpKey(amount))
 
         // Inform Player of given WarpKey
         sender.sendMessage("&d[Waystones]&r Gave &a$amount&r WarpKey${pluralS(amount)} to &a${player.name}&r".translateColors('&'))

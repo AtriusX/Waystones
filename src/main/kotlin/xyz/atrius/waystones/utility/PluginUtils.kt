@@ -17,7 +17,7 @@ typealias KotlinPlugin =
 fun keyValue() =
     NamespacedKey(plugin, "is_warp_key")
 
-fun defaultWarpKey(): ItemStack = ItemStack(Material.COMPASS).update<CompassMeta> {
+fun defaultWarpKey(amount: Int = 1): ItemStack = ItemStack(Material.COMPASS, amount).update<CompassMeta> {
     persistentDataContainer[keyValue(), PersistentDataType.INTEGER] = 1
     lore = listOf(
         "${ChatColor.DARK_PURPLE}Warpstone: [${ChatColor.MAGIC}UNKNOWN${ChatColor.DARK_PURPLE}]"
