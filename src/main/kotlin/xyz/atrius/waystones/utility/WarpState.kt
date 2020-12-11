@@ -2,34 +2,40 @@ package xyz.atrius.waystones.utility
 
 import xyz.atrius.waystones.configuration
 
-sealed class WarpState(protected var message: String?) {
+sealed class WarpState(
+        private val message: String?,
+        private val status: String,
+        private val range: String = "None"
+) {
 
-    object None : WarpState(null)
+    object None : WarpState(null, "Unknown")
 
-    object Unpowered : WarpState("%s does not currently have power")
+    object Unpowered : WarpState("%s does not currently have power", "Unpowered")
 
-    object Inhibited : WarpState(null)
+    object Inhibited : WarpState(null, "Inhibited")
 
-    object Infinite : WarpState(null)
+    object Infinite : WarpState(null, "Active", "Infinite")
 
-    object Obstructed : WarpState("%s is obstructed and cannot be used")
+    object Obstructed : WarpState("%s is obstructed and cannot be used", "Active", "Obstructed")
 
-    open class Active(val range: Int) : WarpState(null) {
-        override fun postCondition(): Boolean =
-                configuration.limitDistance
-    }
-
-    class InterDimension(range: Int) : Active(range) {
-        init {
-            message = "Cannot locate %s due to dimensional interference"
+    class Active(range: Int) : WarpState(null, "Active", range.toString()) {
+        override fun message(name: String): String? {
+            return if (configuration.limitDistance) super.message(name) else ""
         }
-
-        override fun postCondition(): Boolean =
-                !configuration.jumpWorlds
     }
 
-    fun message(name: String) = if (postCondition()) message?.format(name) else null
+    class InterDimension(range: Int) : WarpState(
+            "Cannot locate %s due to dimensional interference", "Active", range.toString()
+    ) {
+        override fun message(name: String): String? {
+            return if (!configuration.jumpWorlds) super.message(name) else ""
+        }
+    }
 
-    protected open fun postCondition(): Boolean = true
+    open fun message(name: String): String? =
+            message?.format(name)
+
+    override fun toString(): String =
+            "Status: $status | Range: $range"
 }
 
