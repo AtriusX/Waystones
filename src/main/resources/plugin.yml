@@ -15,10 +15,16 @@ permissions:
     description: Gives access to all Waystones commands
     children:
       waystones.reload: true
-      waystones.warpkey: true
-  waystones.reload:
-    description: Allows reloading the plugins config file
+      waystones.givekey.self: true
+      waystones.givekey.others: true
+  waystones.givekey.*:
+    description: Allows giving warpkeys to all players
+    children:
+      waystones.givekey.self: true
+      waystones.givekey.others: true
+  waystones.givekey.self:
+    description: Allows giving WarpKeys to yourself
     default: op
-  waystones.warpkey:
-    description: Allows giving warpkeys to self and players
+  waystones.givekey.others:
+    description: Allows giving WarpKeys to other players
     default: op

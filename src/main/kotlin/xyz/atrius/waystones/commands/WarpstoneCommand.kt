@@ -44,15 +44,18 @@ object WarpstoneCommand : CommandExecutor {
         sender: CommandSender,
         args: List<String>
     ): Boolean {
-        // Permission Check
-        if (!sender.hasPermission("waystones.warpkey")) {
-            sender.sendMessage("§d[Waystones]§r §cYou don't have permission to run this command§r")
-            return true
-        }
-
         // Set Amount and Player to give WarpKeys to
         val amt = args.getOrNull(0)?.toIntOrNull() ?: 1
         val player = args.getOrNull(1)?.let { Bukkit.getServer().getPlayer(it) } ?: sender as Player
+
+        // Check Permissions
+        if (
+            (sender == player && !sender.hasPermission("waystones.givekey.self")) ||
+            (sender != player && !sender.hasPermission("waystones.givekey.others"))
+        ) {
+            sender.sendMessage("§d[Waystones]§r §cYou don't have permission to run this command§r")
+            return true
+        }
 
         // Add WarpKey to Player inventory
         val keyStack = defaultWarpKey()
