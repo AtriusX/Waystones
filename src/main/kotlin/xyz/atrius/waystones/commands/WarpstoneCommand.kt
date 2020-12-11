@@ -5,6 +5,7 @@ import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.bukkit.Bukkit
+import xyz.atrius.waystones.plugin
 import xyz.atrius.waystones.utility.defaultWarpKey
 import xyz.atrius.waystones.utility.translateColors
 import xyz.atrius.waystones.utility.pluralS
@@ -33,10 +34,9 @@ object WarpstoneCommand : CommandExecutor {
 
     // Command - Plugin Info
     private fun infoCmd (sender: CommandSender): Boolean {
-        val plugin = Bukkit.getPluginManager().getPlugin("Waystones")
         sender.sendMessage("""
             ------------ &dWaystones&r ------------
-            Version: &a${plugin?.description?.version}&r
+            Version: &a${plugin.description.version}&r
             Author: &dAtriusX&r
             &aCommands: &r
             &a/waystones getkey &e[amount] [player]&r - Gives player set amount of keys
