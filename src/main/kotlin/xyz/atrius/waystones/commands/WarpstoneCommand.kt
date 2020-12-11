@@ -7,6 +7,7 @@ import org.bukkit.entity.Player
 import org.bukkit.Bukkit
 import xyz.atrius.waystones.utility.defaultWarpKey
 import xyz.atrius.waystones.utility.translateColors
+import xyz.atrius.waystones.utility.pluralS
 
 object WarpstoneCommand : CommandExecutor {
     // CommandExecutor / Subcommand Manager
@@ -64,7 +65,7 @@ object WarpstoneCommand : CommandExecutor {
         player.inventory.addItem(keyStack)
 
         // Inform Player of given WarpKey
-        sender.sendMessage("&d[Waystones]&r Gave &a$amt&r WarpKey to &a${player.name}&r".translateColors('&'))
+        sender.sendMessage("&d[Waystones]&r Gave &a$amt&r WarpKey${pluralS(amt)} to &a${player.name}&r".translateColors('&'))
         return true
     }
 }
