@@ -10,6 +10,7 @@ commands:
   waystones:
     description: Displays plugin info and usage
     usage: /waystones [command]
+    aliases: [ws]
 permissions:
   waystones.*:
     description: Gives access to all Waystones commands
