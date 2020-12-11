@@ -63,7 +63,7 @@ object WarpstoneCommand : CommandExecutor {
         player.inventory.addItem(keyStack)
 
         // Inform Player of given WarpKey
-        sender.sendMessage("§d[Waystones]§r Gave §a$amt§r WarpKey to §a${sender.name}§r")
+        sender.sendMessage("§d[Waystones]§r Gave §a$amt§r WarpKey to §a${player.name}§r")
         return true
     }
 }
