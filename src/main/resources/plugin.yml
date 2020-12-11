@@ -8,8 +8,8 @@ description: Warp stones for survival
 website: https://atrius.xyz
 commands:
   waystones:
-    description: Main command
-    usage: /waystones
+    description: Displays plugin info and usage
+    usage: /waystones [command]
 permissions:
   waystones.*:
     description: Gives access to all Waystones commands
