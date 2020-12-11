@@ -19,8 +19,10 @@ object WarpstoneCommand : CommandExecutor {
         if (args.isEmpty())
             return infoCmd(sender)
 
-        // Register Commands
-        else if (args[0] == "warpkey") warpKeyCmd(sender, cmd, lbl, args.drop(1))
+        // Register Give WarpKey
+        val giveKeyCommands = arrayOf("warpkey", "wk", "getkey", "gk", "key", "k")
+        if (args[0] in giveKeyCommands)
+            return warpKeyCmd(sender, args.drop(1))
 
         // Command Not Found
         else sender.sendMessage("§d[Waystones]§r Unknown command, check §a/waystones§r")
