@@ -21,14 +21,14 @@ sealed class WarpState(
             "%s is Active", "Active", range
     ) {
         override fun message(name: String): String? =
-                if (configuration.limitDistance) super.message(name) else ""
+                if (configuration.limitDistance()) super.message(name) else ""
     }
 
     class InterDimension(range: Int) : WarpState(
             "Cannot locate %s due to dimensional interference", "Active", range
     ) {
         override fun message(name: String): String? =
-                if (!configuration.jumpWorlds) super.message(name) else ""
+                if (!configuration.jumpWorlds()) super.message(name) else ""
     }
 
     open fun message(name: String): String? =

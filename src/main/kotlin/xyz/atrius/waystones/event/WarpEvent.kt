@@ -64,7 +64,7 @@ class WarpEvent(private val names : WarpNameService) : Listener {
     @EventHandler
     fun onDamage(event: EntityDamageEvent) {
         val entity = event.entity
-        if (!configuration.damageStopsWarping || entity !is Player)
+        if (!configuration.damageStopsWarping() || entity !is Player)
             return
         TeleportManager.cancel(entity)
         entity.clearActionMessage()

@@ -11,7 +11,7 @@ import java.nio.file.StandardOpenOption.WRITE
 
 class WarpNameService(plugin: KotlinPlugin) : JsonFile(plugin, "warpnames") {
     private val names: HashMap<String, String> =
-            json.fromJson(FileReader(file), HashMap<String, String>()::class.java)
+        json.fromJson(FileReader(file), HashMap<String, String>()::class.java)
 
     fun add(location: Location, name: String) {
         names[location.locationCode] = name

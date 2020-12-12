@@ -25,7 +25,7 @@ class LinkHandler(
             return false
         // Prevent linking if relinking is disabled
         val meta = item.itemMeta as CompassMeta
-        return if (!configuration.relinkableKeys && meta.hasLodestone()) {
+        return if (!configuration.relinkableKeys() && meta.hasLodestone()) {
             error = "The destination for this key has been sealed"
             return false
         }

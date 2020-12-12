@@ -32,7 +32,7 @@ class KeyHandler(override val player: Player, private val event: PlayerInteractE
             if (keyState is KeyState.Connected) keyState.warp else null
 
     fun useKey() {
-        if (configuration.singleUse && !player.immortal)
+        if (configuration.singleUse() && !player.immortal)
             item.amount--
     }
 }

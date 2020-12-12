@@ -22,9 +22,9 @@ class SimpleTeleportEffect(warp: WaystoneHandler) : TeleportEffect {
         val seconds = ceil(timer / 20.0).toInt() // TODO: Should this be moved elsewhere?
         player.sendActionMessage("Warping to $name in $seconds second(s)", ChatColor.DARK_GREEN)
         // Play warp animation if enabled
-        if (!configuration.warpAnimations)
+        if (!configuration.warpAnimations())
             return
-        val amp = configuration.waitTime - timer + 0.1
+        val amp = configuration.waitTime() - timer + 0.1
         val ratio = timer * 2 + 1
         val period = (System.currentTimeMillis() / 3).toDouble()
         val world  = player.world
