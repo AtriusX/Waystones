@@ -7,7 +7,7 @@ import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.inventory.ItemStack
 import xyz.atrius.waystones.configuration
-import xyz.atrius.waystones.utility.KeyState
+import xyz.atrius.waystones.data.KeyState
 import xyz.atrius.waystones.utility.getKeyState
 import xyz.atrius.waystones.utility.immortal
 

@@ -1,4 +1,4 @@
-package xyz.atrius.waystones.utility
+package xyz.atrius.waystones.data
 
 import org.bukkit.Location
 

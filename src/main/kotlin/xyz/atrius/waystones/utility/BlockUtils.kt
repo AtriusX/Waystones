@@ -7,7 +7,8 @@ import org.bukkit.entity.Player
 import xyz.atrius.waystones.Power.ALL
 import xyz.atrius.waystones.Power.INTER_DIMENSION
 import xyz.atrius.waystones.configuration
-import xyz.atrius.waystones.utility.WarpState.*
+import xyz.atrius.waystones.data.WarpState
+import xyz.atrius.waystones.data.WarpState.*
 
 val Block.powerBlock: Block?
     get() = world.getBlockAt(location.DOWN).takeIf {

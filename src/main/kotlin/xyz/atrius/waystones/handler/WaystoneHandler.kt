@@ -10,7 +10,7 @@ import xyz.atrius.waystones.Power
 import xyz.atrius.waystones.SicknessOption
 import xyz.atrius.waystones.configuration
 import xyz.atrius.waystones.utility.*
-import xyz.atrius.waystones.utility.WarpState.Active
+import xyz.atrius.waystones.data.WarpState.Active
 import kotlin.math.round
 import kotlin.random.Random
 
