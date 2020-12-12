@@ -82,6 +82,9 @@ class Config(
         plugin.saveDefaultConfig()
     }
 
+    fun reload() =
+            plugin.reloadConfig()
+
     private inline fun <reified T> property(
             property: String,
             default: T
@@ -95,10 +98,9 @@ class Config(
     )
 
     private inline fun <reified T : Enum<T>> enumProp(
-            property: String,
-            default: T
+            property: String, default: T
     ) = Delegates.observable(
-        valueOfOrDefault(plugin, config.getString(property), default), observe(property)
+        valueOfOrDefault(config.getString(property), default), observe(property)
     )
 
     private fun <T> observe(property: String) = { _: KProperty<*>, _: T, new: T ->
