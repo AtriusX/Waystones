@@ -67,8 +67,7 @@ object WarpstoneCommand : CommandExecutor {
         // Inform Player of given WarpKey
         sender.sendMessage(
             "&d[Waystones]&r Gave &a$amount&r WarpKey(s) to &a${player.name}&r"
-                .pluralize(amount)
-                .translateColors('&')
+                .pluralize(amount).translateColors('&')
         )
         return true
     }
