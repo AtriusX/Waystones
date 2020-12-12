@@ -19,10 +19,10 @@ val Block.isPowered: Boolean
     get() = !isInhibited() && (hasInfinitePower() || hasNormalPower())
 
 fun Block.hasNormalPower(): Boolean =
-        (powerBlock?.blockData as? RespawnAnchor)?.charges ?: 0 > 0
+    (powerBlock?.blockData as? RespawnAnchor)?.charges ?: 0 > 0
 
 fun Block.isWarpStone(): Boolean =
-        type != Material.LODESTONE
+    type == Material.LODESTONE
 
 fun Block.hasPower(player: Player): Boolean = when(configuration.requirePower) {
     INTER_DIMENSION -> location.sameDimension(player.location) && isPowered
@@ -31,13 +31,13 @@ fun Block.hasPower(player: Player): Boolean = when(configuration.requirePower) {
 }
 
 fun Block.isInhibited(): Boolean =
-        powerBlock?.type == Material.OBSIDIAN
+    powerBlock?.type == Material.OBSIDIAN
 
 fun Block.hasInfinitePower(): Boolean =
-        powerBlock?.type == Material.COMMAND_BLOCK
+    powerBlock?.type == Material.COMMAND_BLOCK
 
 fun Block.getWarpState(player: Player): WarpState = when {
-    isWarpStone() -> None
+    !isWarpStone() -> None
     !hasPower(player) -> Unpowered
     isInhibited() -> Inhibited
     hasInfinitePower() -> Infinite

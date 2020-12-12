@@ -18,7 +18,7 @@ sealed class WarpState(
     object Obstructed : WarpState("%s is obstructed and cannot be used", "Obstructed")
 
     class Active(range: Int) : WarpState(
-            "%s is Active", "Active", range
+            null, "Active", range
     ) {
         override fun message(name: String): String? =
                 if (configuration.limitDistance) super.message(name) else ""

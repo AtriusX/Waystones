@@ -11,13 +11,16 @@ import xyz.atrius.waystones.data.KeyState
 import xyz.atrius.waystones.utility.getKeyState
 import xyz.atrius.waystones.utility.immortal
 
-class KeyHandler(override val player: Player, private val event: PlayerInteractEvent) : PlayerHandler {
+class KeyHandler(
+    override val player: Player,
+    private val event: PlayerInteractEvent
+) : PlayerHandler {
     override var error: String? = null
         private set
 
     private val inv = player.inventory
 
-    val item: ItemStack = inv.itemInMainHand.takeIf {
+    private val item: ItemStack = inv.itemInMainHand.takeIf {
         event.hand == EquipmentSlot.HAND || it.type == Material.COMPASS
     } ?: inv.itemInOffHand
 
@@ -29,7 +32,7 @@ class KeyHandler(override val player: Player, private val event: PlayerInteractE
     }
 
     fun getLocation(): Location? =
-            if (keyState is KeyState.Connected) keyState.warp else null
+        if (keyState is KeyState.Connected) keyState.warp else null
 
     fun useKey() {
         if (configuration.singleUse && !player.immortal)

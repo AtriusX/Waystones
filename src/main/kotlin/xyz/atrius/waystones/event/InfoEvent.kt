@@ -8,7 +8,10 @@ import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
 import xyz.atrius.waystones.data.WarpState
 import xyz.atrius.waystones.service.WarpNameService
-import xyz.atrius.waystones.utility.*
+import xyz.atrius.waystones.utility.cancel
+import xyz.atrius.waystones.utility.getWarpState
+import xyz.atrius.waystones.utility.isWarpKey
+import xyz.atrius.waystones.utility.sendActionMessage
 
 class InfoEvent(private val names : WarpNameService) : Listener {
 
@@ -19,7 +22,7 @@ class InfoEvent(private val names : WarpNameService) : Listener {
             return
         val block  = event.clickedBlock
         val player = event.player
-        val item   = player.inventory.itemInMainHand
+        val item   = event.item ?: return
         // Make sure the correct block/item pair is used
         if (block?.type != Material.LODESTONE || !item.isWarpKey())
             return
