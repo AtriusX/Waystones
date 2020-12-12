@@ -38,6 +38,12 @@ object WarpstoneCommand : CommandExecutor {
             .translateColors('&'))
         return true
     }
+    // Calculate Player and Amount Values
+    private fun getPlayerAndAmount(default: Player, first: String, second: String): Pair<Player, Int> {
+        val player = Bukkit.getPlayer(first) ?: default
+        val amount = second.toIntOrNull() ?: first.toIntOrNull() ?: 1
+        return player to amount
+    }
 
     // Command - Plugin Info
     private fun infoCmd (sender: CommandSender): Boolean {
@@ -56,11 +62,6 @@ object WarpstoneCommand : CommandExecutor {
         args: List<String>
     ): Boolean {
         // Set Amount and Player to give WarpKeys to
-        fun getPlayerAndAmount(default: Player, first: String, second: String): Pair<Player, Int> {
-            val player = Bukkit.getPlayer(first) ?: default
-            val amount = second.toIntOrNull() ?: first.toIntOrNull() ?: 1
-            return player to amount
-        }
         val (player, amount) = getPlayerAndAmount(sender as Player, args.getOrNull(0) ?: "", args.getOrNull(1) ?: "")
 
         // Check Permissions
