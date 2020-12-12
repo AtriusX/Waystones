@@ -6,6 +6,8 @@ import org.bukkit.ChatColor
 fun String.translateColors(colorCode: Char) = ChatColor.translateAlternateColorCodes(colorCode, this)
 
 // Return an 's' depending on input amount
-fun pluralS(amt: Int): String {
-    return if (amt != 1) "s" else ""
+fun String.pluralize(vararg count: Int): String {
+    var result = this
+    count.forEach { result = result.replaceFirst("(s)", if (it == 1) "" else "s") }
+    return result
 }

@@ -8,7 +8,7 @@ import org.bukkit.Bukkit
 import xyz.atrius.waystones.plugin
 import xyz.atrius.waystones.utility.defaultWarpKey
 import xyz.atrius.waystones.utility.translateColors
-import xyz.atrius.waystones.utility.pluralS
+import xyz.atrius.waystones.utility.pluralize
 
 object WarpstoneCommand : CommandExecutor {
     // CommandExecutor / Subcommand Manager
@@ -65,7 +65,11 @@ object WarpstoneCommand : CommandExecutor {
         player.inventory.addItem(defaultWarpKey(amount))
 
         // Inform Player of given WarpKey
-        sender.sendMessage("&d[Waystones]&r Gave &a$amount&r WarpKey${pluralS(amount)} to &a${player.name}&r".translateColors('&'))
+        sender.sendMessage(
+            "&d[Waystones]&r Gave &a$amount&r WarpKey(s) to &a${player.name}&r"
+                .pluralize(amount)
+                .translateColors('&')
+        )
         return true
     }
 }
