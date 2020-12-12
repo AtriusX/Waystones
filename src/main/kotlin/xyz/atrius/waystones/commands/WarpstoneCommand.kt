@@ -32,6 +32,13 @@ object WarpstoneCommand : CommandExecutor {
         return true
     }
 
+    // Send Permission Error
+    private fun sendPermError (sender: CommandSender): Boolean {
+        sender.sendMessage("&d[Waystones]&r &cYou don't have permission to run this command&r"
+            .translateColors('&'))
+        return true
+    }
+
     // Command - Plugin Info
     private fun infoCmd (sender: CommandSender): Boolean {
         sender.sendMessage("""
@@ -53,19 +60,15 @@ object WarpstoneCommand : CommandExecutor {
         val player = args.getOrNull(1)?.let { Bukkit.getServer().getPlayer(it) } ?: sender as Player
 
         // Check Permissions
-        if (
-            (sender == player && !sender.hasPermission("waystones.getkey.self")) ||
-            (sender != player && !sender.hasPermission("waystones.getkey.others"))
-        ) {
-            sender.sendMessage("&d[Waystones]&r &cYou don't have permission to run this command&r".translateColors('&'))
-            return true
-        }
+        if (!sender.hasPermission("waystones.getkey.self") || // Give Key to Self
+            (!sender.hasPermission("waystones.getkey.all") && sender != player)) // Give Key to Other
+            return sendPermError(sender)
 
         // Add WarpKey(s) to Player inventory
         player.inventory.addItem(defaultWarpKey(amount))
 
         // Inform Player of given WarpKey
-        sender.sendMessage("&d[Waystones]&r Gave &a$amount&r WarpKey(s) to &a${player.name}&r"
+        sender.sendMessage("&d[Waystones]&r Gave &b$amount&r WarpKey(s) to &a${player.name}&r"
             .pluralize(amount).translateColors('&'))
         return true
     }
