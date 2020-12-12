@@ -14,7 +14,8 @@ import xyz.atrius.waystones.plugin
 typealias KotlinPlugin =
         JavaPlugin
 
-private val DEFAULT_LORE = "${ChatColor.DARK_PURPLE}Warpstone: [${ChatColor.MAGIC}UNKNOWN${ChatColor.DARK_PURPLE}]"
+private val DEFAULT_LORE: String =
+    "${ChatColor.DARK_PURPLE}Warpstone: [${ChatColor.MAGIC}UNKNOWN${ChatColor.DARK_PURPLE}]"
 
 fun defaultWarpKey(): ItemStack = ItemStack(Material.COMPASS).update<CompassMeta> {
     this["is_warp_key", INTEGER] = 1
@@ -23,7 +24,7 @@ fun defaultWarpKey(): ItemStack = ItemStack(Material.COMPASS).update<CompassMeta
 }
 
 fun PluginManager.registerEvents(vararg listeners: Listener) =
-        listeners.forEach { registerEvents(it, plugin) }
+    listeners.forEach { registerEvents(it, plugin) }
 
 fun BukkitScheduler.scheduleRepeatingAutoCancelTask(
     delay: Long, period: Long = 1, task: (Long) -> Unit, finish: Runnable? = null
