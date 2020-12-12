@@ -56,8 +56,12 @@ object WarpstoneCommand : CommandExecutor {
         args: List<String>
     ): Boolean {
         // Set Amount and Player to give WarpKeys to
-        val amount = args.getOrNull(0)?.toIntOrNull() ?: 1
-        val player = args.getOrNull(1)?.let { Bukkit.getServer().getPlayer(it) } ?: sender as Player
+        fun getPlayerAndAmount(default: Player, first: String, second: String): Pair<Player, Int> {
+            val player = Bukkit.getPlayer(first) ?: default
+            val amount = second.toIntOrNull() ?: first.toIntOrNull() ?: 1
+            return player to amount
+        }
+        val (player, amount) = getPlayerAndAmount(sender as Player, args.getOrNull(0) ?: "", args.getOrNull(1) ?: "")
 
         // Check Permissions
         if (!sender.hasPermission("waystones.getkey.self") || // Give Key to Self
