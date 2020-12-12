@@ -1,4 +1,4 @@
-package xyz.atrius.waystones.data
+package xyz.atrius.waystones.data.config
 
 import org.bukkit.configuration.file.FileConfiguration
 import xyz.atrius.waystones.Power
@@ -46,6 +46,7 @@ class Config(
 
     // Determines if/how power is required from a respawn anchor in order to use the warp
     var requirePower: Power by enumProp("require-power", Power.INTER_DIMENSION)
+
     // Whether or not debuff effects are enabled
     var portalSickness: Boolean by property("enable-portal-sickness", true)
 
@@ -82,19 +83,15 @@ class Config(
         plugin.saveDefaultConfig()
     }
 
-    fun reload() =
-            plugin.reloadConfig()
+    fun <T> update(property: String, new: T) {
+        config.set(property, new)
+        plugin.saveConfig()
+    }
 
     private inline fun <reified T> property(
-            property: String,
-            default: T
+            property: String, default: T
     ) = Delegates.observable(
-        try {
-            config.get(property) as T? ?: default
-        } catch (e: Exception) {
-            plugin.logger.warning("Error occurred reading property $property, setting to default. Error: ${e.message}")
-            default
-        }, observe(property)
+        config.get(property) as? T? ?: default, observe(property)
     )
 
     private inline fun <reified T : Enum<T>> enumProp(
@@ -104,7 +101,6 @@ class Config(
     )
 
     private fun <T> observe(property: String) = { _: KProperty<*>, _: T, new: T ->
-        config.set(property, new)
-        plugin.saveConfig()
+        update(property, new)
     }
 }

@@ -3,7 +3,7 @@ package xyz.atrius.waystones
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.bukkit.inventory.ShapedRecipe
-import xyz.atrius.waystones.data.Config
+import xyz.atrius.waystones.data.config.Config
 import xyz.atrius.waystones.event.*
 import xyz.atrius.waystones.service.WarpNameService
 import xyz.atrius.waystones.utility.KotlinPlugin
