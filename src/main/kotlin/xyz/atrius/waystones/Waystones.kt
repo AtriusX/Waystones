@@ -1,13 +1,13 @@
 package xyz.atrius.waystones
 
 import org.bukkit.Material
+import org.bukkit.NamespacedKey
 import org.bukkit.inventory.ShapedRecipe
 import xyz.atrius.waystones.data.Config
 import xyz.atrius.waystones.event.*
 import xyz.atrius.waystones.service.WarpNameService
 import xyz.atrius.waystones.utility.KotlinPlugin
 import xyz.atrius.waystones.utility.defaultWarpKey
-import xyz.atrius.waystones.utility.keyValue
 import xyz.atrius.waystones.utility.registerEvents
 
 lateinit var plugin       : KotlinPlugin
@@ -33,7 +33,7 @@ class Waystones : KotlinPlugin() {
         )
         // Register warp key recipe if enabled
         if (configuration.keyItems) {
-            server.addRecipe(ShapedRecipe(keyValue(), defaultWarpKey()).apply {
+            server.addRecipe(ShapedRecipe(NamespacedKey(plugin, "is_warp_key"), defaultWarpKey()).apply {
                 shape(" * ", "*x*", " * ")
                 setIngredient('*', Material.IRON_INGOT)
                 setIngredient('x', Material.REDSTONE_BLOCK)
