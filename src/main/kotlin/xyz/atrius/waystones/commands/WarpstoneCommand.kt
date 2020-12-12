@@ -65,10 +65,8 @@ object WarpstoneCommand : CommandExecutor {
         player.inventory.addItem(defaultWarpKey(amount))
 
         // Inform Player of given WarpKey
-        sender.sendMessage(
-            "&d[Waystones]&r Gave &a$amount&r WarpKey(s) to &a${player.name}&r"
-                .pluralize(amount).translateColors('&')
-        )
+        sender.sendMessage("&d[Waystones]&r Gave &a$amount&r WarpKey(s) to &a${player.name}&r"
+            .pluralize(amount).translateColors('&'))
         return true
     }
 }
