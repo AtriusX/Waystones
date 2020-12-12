@@ -1,6 +1,5 @@
 package xyz.atrius.waystones.data.config
 
-import org.bukkit.configuration.file.FileConfiguration
 import xyz.atrius.waystones.Power
 import xyz.atrius.waystones.Power.INTER_DIMENSION
 import xyz.atrius.waystones.SicknessOption
@@ -8,12 +7,11 @@ import xyz.atrius.waystones.SicknessOption.DAMAGE_ON_TELEPORT
 import xyz.atrius.waystones.data.Property
 import xyz.atrius.waystones.utility.KotlinPlugin
 
-@Suppress("MemberVisibilityCanBePrivate")
-class Config(
-    private val plugin: KotlinPlugin
-) {
-    private val config: FileConfiguration
-        get() = plugin.config
+class Config(plugin: KotlinPlugin) {
+    init {
+        plugin.config.options().copyDefaults(true)
+        plugin.saveDefaultConfig()
+    }
 
     // The amount of ticks to wait before teleporting
     val waitTime: Property<Int> =
@@ -97,9 +95,4 @@ class Config(
 
     // Iron grants 20% of the max boost per block
     fun ironBoost(): Int = maxBoost() / 5
-
-    init {
-        plugin.config.options().copyDefaults(true)
-        plugin.saveDefaultConfig()
-    }
 }
