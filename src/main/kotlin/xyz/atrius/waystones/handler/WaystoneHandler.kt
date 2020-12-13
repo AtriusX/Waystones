@@ -9,8 +9,9 @@ import org.bukkit.potion.PotionEffectType
 import xyz.atrius.waystones.Power
 import xyz.atrius.waystones.SicknessOption
 import xyz.atrius.waystones.configuration
-import xyz.atrius.waystones.utility.*
 import xyz.atrius.waystones.data.WarpState.Active
+import xyz.atrius.waystones.data.WarpState.InterDimension
+import xyz.atrius.waystones.utility.*
 import kotlin.math.round
 import kotlin.random.Random
 
@@ -29,15 +30,17 @@ class WaystoneHandler(
 
     override fun handle(): Boolean {
         error = state.message(name)
-        if (state is Active) {
-            // Calculate range and distance from warp
-            val range    = state.range / if (interDimension) configuration.worldRatio else 1
-            val distance = location.toVector().distance(warpLocation.toVector())
-            return if (distance > range) false.also {
-                error = distanceError(name, distance, range)
-            } else true
+        return when (state) {
+            is Active, is InterDimension -> {
+                // Calculate range and distance from warp
+                val range    = state.range / if (interDimension) configuration.worldRatio else 1
+                val distance = location.toVector().distance(warpLocation.toVector())
+                if (distance > range) false.also {
+                    error = distanceError(name, distance, range)
+                } else true
+            }
+            else -> error == null
         }
-        return error == null
     }
 
     fun teleport() {
@@ -59,8 +62,8 @@ class WaystoneHandler(
             && !block.hasInfinitePower()
         ) {
             player.addPotionEffects(
-                    PotionEffect(PotionEffectType.CONFUSION, 600, 9),
-                    PotionEffect(PotionEffectType.BLINDNESS, 100, 9)
+                PotionEffect(PotionEffectType.CONFUSION, 600, 9),
+                PotionEffect(PotionEffectType.BLINDNESS, 100, 9)
             )
             player.sendActionMessage("You feel a chill in your bones...", ChatColor.DARK_GRAY)
         } else {
