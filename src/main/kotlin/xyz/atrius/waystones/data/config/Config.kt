@@ -57,6 +57,9 @@ class Config(plugin: KotlinPlugin) {
     val requirePower: Property<Power> =
         Property("require-power", INTER_DIMENSION, EnumParser(Power::class))
 
+    val powerCost: Property<Int> =
+        Property("power-cost", 1, PositiveValueParser)
+
     // Whether or not debuff effects are enabled
     val portalSickness: Property<Boolean> =
         Property("enable-portal-sickness", true, BooleanParser)

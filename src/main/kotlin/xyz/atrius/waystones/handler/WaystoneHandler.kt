@@ -59,8 +59,8 @@ class WaystoneHandler(
             && !block.hasInfinitePower()
         ) {
             player.addPotionEffects(
-                    PotionEffect(PotionEffectType.CONFUSION, 600, 9),
-                    PotionEffect(PotionEffectType.BLINDNESS, 100, 9)
+                PotionEffect(PotionEffectType.CONFUSION, 600, 9),
+                PotionEffect(PotionEffectType.BLINDNESS, 100, 9)
             )
             player.sendActionMessage("You feel a chill in your bones...", ChatColor.DARK_GRAY)
         } else {
@@ -71,7 +71,7 @@ class WaystoneHandler(
         if (power == Power.ALL || (interDimension && power == Power.INTER_DIMENSION)) {
             // Only deplete power if the power is not infinite
             if (!block.hasInfinitePower()) block.powerBlock?.update<RespawnAnchor> {
-                charges--
+                charges -= configuration.powerCost()
             }
         }
     }
