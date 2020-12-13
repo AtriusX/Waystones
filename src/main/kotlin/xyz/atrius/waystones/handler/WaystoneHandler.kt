@@ -9,8 +9,7 @@ import org.bukkit.potion.PotionEffectType
 import xyz.atrius.waystones.Power
 import xyz.atrius.waystones.SicknessOption
 import xyz.atrius.waystones.configuration
-import xyz.atrius.waystones.data.WarpState.Active
-import xyz.atrius.waystones.data.WarpState.InterDimension
+import xyz.atrius.waystones.data.WarpState.*
 import xyz.atrius.waystones.utility.*
 import kotlin.math.round
 import kotlin.random.Random
@@ -39,6 +38,7 @@ class WaystoneHandler(
                     error = distanceError(name, distance, range)
                 } else true
             }
+            is Inhibited -> false
             else -> error == null
         }
     }

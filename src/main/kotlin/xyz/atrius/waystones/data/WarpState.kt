@@ -7,7 +7,7 @@ sealed class WarpState(
         private val status: String,
         val range: Int = 0
 ) {
-    object None : WarpState(null, "Unknown")
+    object None : WarpState("The connection to %s has been severed.", "Unknown")
 
     object Unpowered : WarpState("%s does not currently have power", "Unpowered")
 
@@ -21,14 +21,14 @@ sealed class WarpState(
             null, "Active", range
     ) {
         override fun message(name: String): String? =
-                if (configuration.limitDistance) super.message(name) else ""
+            if (configuration.limitDistance) super.message(name) else ""
     }
 
     class InterDimension(range: Int) : WarpState(
             "Cannot locate %s due to dimensional interference", "Active", range
     ) {
         override fun message(name: String): String? =
-                if (!configuration.jumpWorlds) super.message(name) else ""
+            if (!configuration.jumpWorlds) super.message(name) else ""
     }
 
     open fun message(name: String): String? =

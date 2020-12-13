@@ -38,8 +38,8 @@ fun Block.hasInfinitePower(): Boolean =
 
 fun Block.getWarpState(player: Player): WarpState = when {
     !isWarpStone() -> None
-    !hasPower(player) -> Unpowered
     isInhibited() -> Inhibited
+    !hasPower(player) -> Unpowered
     hasInfinitePower() -> Infinite
     !location.isSafe -> Obstructed
     !location.sameDimension(player.location) -> InterDimension(location.range())

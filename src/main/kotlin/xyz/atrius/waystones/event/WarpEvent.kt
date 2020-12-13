@@ -5,7 +5,6 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action.RIGHT_CLICK_AIR
-import org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK
 import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerMoveEvent
@@ -28,7 +27,7 @@ class WarpEvent(private val names : WarpNameService) : Listener {
         val player = event.player
         // Don't start warp while flying with elytra, not right-clicking, or a lodestone was clicked
         if (player.isGliding
-            || event.action !in listOf(RIGHT_CLICK_AIR, RIGHT_CLICK_BLOCK)
+            || event.action != RIGHT_CLICK_AIR
             || event.clickedBlock?.type == Material.LODESTONE
         ) return
         // Handle key actions and terminate if handler fails
