@@ -5,12 +5,13 @@ import xyz.atrius.waystones.data.Property
 object ConfigManager {
     private val options = hashMapOf<String, Property<*>>()
 
-    fun register(key: String, ref: Property<*>) {
-        options[key] = ref
+    internal fun register(key: String, ref: Property<*>) {
+        if (key !in options) options[key] = ref
     }
 
-    operator fun get(option: String): Any? =
-        options[option]?.invoke()
+    @Suppress("UNCHECKED_CAST")
+    operator fun <T> get(option: String): T? =
+        options[option]?.invoke() as T?
 
     operator fun set(option: String, value: String) {
         options[option]?.invoke(value)

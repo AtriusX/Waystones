@@ -23,7 +23,7 @@ class Property<T>(
         parser.parse(config.getString(property)) ?: default, observe(property)
     )
 
-    operator fun invoke() = value
+    operator fun invoke(): T = value
 
     operator fun invoke(input: String) {
         value = parser.parse(input) ?: return
