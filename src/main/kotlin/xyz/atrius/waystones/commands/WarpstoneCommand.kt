@@ -52,7 +52,7 @@ object WarpstoneCommand : CommandExecutor {
             Version: &a${plugin.description.version}&r
             Author: &dAtriusX&r
             &aCommands: &r
-            &a/waystones getkey &e[amount] [player]&r - Gives player set amount of keys
+            &a/waystones getkey &b[ &ecount &b| &eplayer &b[&ecount&b] ]&r - Gives player set amount of keys
         """.trimIndent().translateColors('&'))
         return true
     }
