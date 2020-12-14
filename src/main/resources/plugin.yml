@@ -6,3 +6,20 @@ prefix: Warpstones
 authors: [Atrius]
 description: Warp stones for survival
 website: https://atrius.xyz
+commands:
+  waystones:
+    description: Displays plugin info and usage
+    usage: /waystones [command]
+    aliases: [ws]
+permissions:
+  waystones.*:
+    description: Gives access to all Waystones commands
+    children:
+      waystones.getkey.all: true
+  waystones.getkey.all:
+    description: Allows giving warpkeys to all players
+    children:
+      waystones.getkey.self: true
+  waystones.getkey.self:
+    description: Allows giving WarpKeys to yourself
+    default: op
