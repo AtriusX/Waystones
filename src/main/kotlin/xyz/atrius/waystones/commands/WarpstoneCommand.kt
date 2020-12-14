@@ -33,11 +33,12 @@ object WarpstoneCommand : CommandExecutor {
     }
 
     // Send Permission Error
-    private fun sendPermError (sender: CommandSender): Boolean {
+    private fun sendPermError(sender: CommandSender): Boolean {
         sender.sendMessage("&d[Waystones]&r &cYou don't have permission to run this command&r"
             .translateColors('&'))
         return true
     }
+
     // Calculate Player and Amount Values
     private fun getPlayerAndAmount(default: Player, first: String, second: String): Pair<Player, Int> {
         val player = Bukkit.getPlayer(first) ?: default
@@ -46,7 +47,7 @@ object WarpstoneCommand : CommandExecutor {
     }
 
     // Command - Plugin Info
-    private fun infoCmd (sender: CommandSender): Boolean {
+    private fun infoCmd(sender: CommandSender): Boolean {
         sender.sendMessage("""
             ------------ &dWaystones&r ------------
             Version: &a${plugin.description.version}&r
@@ -56,8 +57,9 @@ object WarpstoneCommand : CommandExecutor {
         """.trimIndent().translateColors('&'))
         return true
     }
+
     // Command - Give WarpKey(s)
-    private fun getkeyCmd (
+    private fun getkeyCmd(
         sender: CommandSender,
         args: List<String>
     ): Boolean {
