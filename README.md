@@ -45,5 +45,8 @@ Players can create and warp to a warpstone by creating a lodestone and linking i
 
 ### Commands
 - **/waystones**: Provides info about the plugin
-- **/waystones warpkey *[amount] [player]***: Gives warpkeys to players
-	- Requires `waystones.warpkey` permission
+- **/waystones getkey [ count | player [count] ]***: Gives warpkeys to players
+
+### Permissions
+- **waystones.getkey.self** - Allows using the `getkey` command to give yourself a Warp Key
+- **waystones.getkey.all** - Allows using the `getkey` command to give any player a Warp Key
