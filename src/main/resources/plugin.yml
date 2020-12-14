@@ -15,7 +15,6 @@ permissions:
   waystones.*:
     description: Gives access to all Waystones commands
     children:
-      waystones.reload: true
       waystones.getkey.all: true
   waystones.getkey.all:
     description: Allows giving warpkeys to all players
