@@ -1,6 +1,7 @@
 package xyz.atrius.waystones.utility
 
 import org.bukkit.*
+import org.bukkit.command.CommandExecutor
 import org.bukkit.event.Listener
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.CompassMeta
@@ -46,3 +47,7 @@ fun World.forceSpawnParticle(
 ) = Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, {
     spawnParticle(particle, location, count, offsetX, offsetY, offsetZ, speed)
 }, if (location.sameDimension(this)) waitTime else 1)
+
+fun KotlinPlugin.registerCommands(vararg commands: Pair<String, CommandExecutor>) = commands.forEach { (command, executor) ->
+    getCommand(command)?.setExecutor(executor)
+}
