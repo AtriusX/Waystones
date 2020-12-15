@@ -12,28 +12,28 @@ import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import xyz.atrius.waystones.SicknessOption
 import xyz.atrius.waystones.configuration
-import xyz.atrius.waystones.handler.PlayerHandler
+import xyz.atrius.waystones.handler.Handler
 
 val Player.immortal: Boolean
-        get() = gameMode in listOf(GameMode.CREATIVE, GameMode.SPECTATOR)
+    get() = gameMode in listOf(GameMode.CREATIVE, GameMode.SPECTATOR)
 
 fun Player.sendActionMessage(message: String?, color: ChatColor? = null) = if (message != null)
-        spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent("${color ?: ""}${ChatColor.BOLD}$message"))
+    spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent("${color ?: ""}${ChatColor.BOLD}$message"))
 else Unit
 
 fun Player.sendActionError(message: String?) =
-        sendActionMessage(message, ChatColor.RED)
+    sendActionMessage(message, ChatColor.RED)
 
-fun Player.sendActionError(handler: PlayerHandler) =
-        sendActionError(handler.error)
+fun Player.sendActionError(handler: Handler) =
+    sendActionError(handler.error)
 
 fun Player.clearActionMessage() = sendActionMessage("")
 
 fun Player.playSound(sound: Sound, volume: Float = 1f, pitch: Float = 1f) =
-        playSound(location, sound, volume, pitch)
+    playSound(location, sound, volume, pitch)
 
 fun Player.hasPortalSickness() =
-        getPotionEffect(PotionEffectType.CONFUSION)?.amplifier ?: 0 >= 4
+    getPotionEffect(PotionEffectType.CONFUSION)?.amplifier ?: 0 >= 4
 
 fun PlayerInventory.addItemNaturally(original: ItemStack, new: ItemStack) {
     val player = holder as Player
@@ -56,7 +56,7 @@ fun PlayerInventory.addItemNaturally(original: ItemStack, new: ItemStack) {
 }
 
 fun Player.canWarp(): Boolean =
-        configuration.portalSickWarping == SicknessOption.PREVENT_TELEPORT && hasPortalSickness()
+    configuration.portalSickWarping == SicknessOption.PREVENT_TELEPORT && hasPortalSickness()
 
 fun Player.addPotionEffects(vararg effects: PotionEffect) =
-        addPotionEffects(arrayListOf(*effects))
+    addPotionEffects(arrayListOf(*effects))

@@ -49,7 +49,7 @@ class LinkHandler(
         isLodestoneTracked = true
         val name = names[block.location] ?: "Warpstone"
         lore = listOf(
-                "${ChatColor.DARK_PURPLE}$name: [${lodestone?.locationCode}]"
+            "${ChatColor.DARK_PURPLE}$name: [${lodestone?.locationCode}]"
         )
     }
 }

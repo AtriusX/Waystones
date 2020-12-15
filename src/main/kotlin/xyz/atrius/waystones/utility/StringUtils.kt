@@ -8,6 +8,8 @@ fun String.translateColors(colorCode: Char) = ChatColor.translateAlternateColorC
 // Return an 's' depending on input amount
 fun String.pluralize(vararg count: Int): String {
     var result = this
-    count.forEach { result = result.replaceFirst("(s)", if (it == 1) "" else "s") }
+    count.forEach {
+        result = result.replaceFirst("(s)", if (it == 1) "" else "s")
+    }
     return result
 }
