@@ -41,7 +41,7 @@ class WarpEvent(private val names : WarpNameService) : Listener {
         if (!warp.handle())
             return player.sendActionError(warp)
         // Queue the teleport then use key and warp on success
-        TeleportManager.queueTeleport(player, warp) {
+        TeleportManager.queueEvent(player, warp) {
             key.useKey()
             warp.teleport()
         }

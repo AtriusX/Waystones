@@ -8,7 +8,7 @@ import xyz.atrius.waystones.handler.WaystoneHandler
 object TeleportManager {
     private val queuedTeleports = HashMap<Player, Int>()
 
-    fun queueTeleport(player: Player, warp: WaystoneHandler, onComplete: () -> Unit = {}) {
+    fun queueEvent(player: Player, warp: WaystoneHandler, onComplete: () -> Unit = {}) {
         // Cancel any previous queues for this player
         if (contains(player))
             cancel(player)
