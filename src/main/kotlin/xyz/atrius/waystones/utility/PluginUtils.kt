@@ -6,7 +6,6 @@ import org.bukkit.event.Listener
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.CompassMeta
 import org.bukkit.persistence.PersistentDataType.INTEGER
-import org.bukkit.plugin.PluginManager
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.scheduler.BukkitScheduler
 import xyz.atrius.waystones.plugin
@@ -23,8 +22,10 @@ fun defaultWarpKey(amount: Int = 1): ItemStack = ItemStack(Material.COMPASS, amo
     setDisplayName("${ChatColor.GOLD}Warpstone Key")
 }
 
-fun PluginManager.registerEvents(vararg listeners: Listener) =
-    listeners.forEach { registerEvents(it, plugin) }
+fun KotlinPlugin.registerEvents(vararg listeners: Listener) {
+    val events = server.pluginManager
+    listeners.forEach { events.registerEvents(it, plugin) }
+}
 
 fun BukkitScheduler.scheduleRepeatingAutoCancelTask(
     delay: Long, period: Long = 1, task: (Long) -> Unit, finish: Runnable? = null

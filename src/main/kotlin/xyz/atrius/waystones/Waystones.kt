@@ -24,9 +24,8 @@ class Waystones : KotlinPlugin() {
         plugin        = this
         configuration = Config(this)
         names         = WarpNameService(this)
-
-        val events = server.pluginManager
-        events.registerEvents(
+        // Register listeners
+        registerEvents(
             WarpEvent(names),
             NameEvent(names),
             DestroyEvent(names),
