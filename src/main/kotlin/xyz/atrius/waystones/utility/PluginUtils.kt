@@ -12,18 +12,18 @@ import xyz.atrius.waystones.plugin
 
 // Just because I'm petty
 typealias KotlinPlugin =
-        JavaPlugin
+    JavaPlugin
 
 private val DEFAULT_LORE = "${ChatColor.DARK_PURPLE}Warpstone: [${ChatColor.MAGIC}UNKNOWN${ChatColor.DARK_PURPLE}]"
 
-fun defaultWarpKey(): ItemStack = ItemStack(Material.COMPASS).update<CompassMeta> {
+fun defaultWarpKey(amount: Int = 1): ItemStack = ItemStack(Material.COMPASS, amount).update<CompassMeta> {
     this["is_warp_key", INTEGER] = 1
     lore = listOf(DEFAULT_LORE)
     setDisplayName("${ChatColor.GOLD}Warpstone Key")
 }
 
 fun PluginManager.registerEvents(vararg listeners: Listener) =
-        listeners.forEach { registerEvents(it, plugin) }
+    listeners.forEach { registerEvents(it, plugin) }
 
 fun BukkitScheduler.scheduleRepeatingAutoCancelTask(
     delay: Long, period: Long = 1, task: (Long) -> Unit, finish: Runnable? = null
