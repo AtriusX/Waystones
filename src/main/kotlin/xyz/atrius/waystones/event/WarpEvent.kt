@@ -14,7 +14,6 @@ import xyz.atrius.waystones.handler.KeyHandler
 import xyz.atrius.waystones.handler.WaystoneHandler
 import xyz.atrius.waystones.service.WarpNameService
 import xyz.atrius.waystones.utility.cancel
-import xyz.atrius.waystones.utility.clearActionMessage
 import xyz.atrius.waystones.utility.hasMovedBlock
 import xyz.atrius.waystones.utility.sendActionError
 import kotlin.contracts.ExperimentalContracts
@@ -57,7 +56,7 @@ class WarpEvent(private val names : WarpNameService) : Listener {
         if (player !in TeleportManager)
             return
         TeleportManager.cancel(player)
-        player.clearActionMessage()
+        player.sendActionError("Teleportation cancelled")
     }
 
     @EventHandler
@@ -66,6 +65,6 @@ class WarpEvent(private val names : WarpNameService) : Listener {
         if (!configuration.damageStopsWarping || entity !is Player)
             return
         TeleportManager.cancel(entity)
-        entity.clearActionMessage()
+        entity.sendActionError("Teleportation interrupted")
     }
 }
