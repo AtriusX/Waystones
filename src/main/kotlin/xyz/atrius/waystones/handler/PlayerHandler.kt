@@ -2,10 +2,7 @@ package xyz.atrius.waystones.handler
 
 import org.bukkit.entity.Player
 
-interface PlayerHandler {
+interface PlayerHandler : Handler {
+
     val player: Player
-
-    val error: String?
-
-    fun handle(): Boolean
 }
