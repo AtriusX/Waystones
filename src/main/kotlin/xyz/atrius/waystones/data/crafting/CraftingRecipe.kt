@@ -4,6 +4,7 @@ import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.ShapedRecipe
+import xyz.atrius.waystones.utility.splitMultiline
 
 abstract class CraftingRecipe(
     key: NamespacedKey,
@@ -13,4 +14,16 @@ abstract class CraftingRecipe(
     abstract val recipe: String
 
     abstract val items: HashMap<Char, Material>
+
+    init {
+        setup()
+    }
+
+    private fun setup() {
+        // Process the crafting recipe
+        shape(*recipe.splitMultiline())
+        // Set ingredients for each item
+        for ((key, item) in items)
+            setIngredient(key, item)
+    }
 }

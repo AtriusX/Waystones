@@ -18,3 +18,7 @@ fun String.pluralize(vararg count: Int): String {
 
 // Convert string to a namespace key
 fun String.toKey() = NamespacedKey(plugin, this)
+
+// Split a multiline string into a spreadable array
+fun String.splitMultiline() =
+    split("\n").toTypedArray()
