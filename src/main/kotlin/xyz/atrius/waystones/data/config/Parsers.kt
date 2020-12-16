@@ -41,15 +41,16 @@ class EnumParser<E : Enum<E>>(private val enum: KClass<E>) : ArgumentParser<E> {
     }
 }
 
-class ArrayParser<T>(private val parser: ArgumentParser<T>) : ArgumentParser<Array<T>> {
-
+class ListParser<T>(private val parser: ArgumentParser<T>) : ArgumentParser<List<T>> {
     @Suppress("UNCHECKED_CAST")
-    override fun parse(input: String?): Array<T>? {
-        val data = input?.split(" ") ?: return null
+    override fun parse(input: String?): List<T>? {
+        // Parse data in either list or vararg form
+        val data = input?.removeSurrounding("[", "]")
+            ?.split(" |, *".toRegex()) ?: return null
         val arr = mutableListOf<Any>()
         // Populate the array
         for (item in data)
             arr += (parser.parse(item) ?: return null)
-        return arr as Array<T>?
+        return arr as List<T>?
     }
 }

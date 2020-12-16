@@ -32,7 +32,7 @@ class Waystones : KotlinPlugin() {
                 LinkEvent(names)
         )
         // Register warp key recipe if enabled
-        if (configuration.keyItems) {
+        if (configuration.keyItems()) {
             server.addRecipe(ShapedRecipe(NamespacedKey(plugin, "is_warp_key"), defaultWarpKey()).apply {
                 shape(" * ", "*x*", " * ")
                 setIngredient('*', Material.IRON_INGOT)
