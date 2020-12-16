@@ -16,4 +16,5 @@ fun String.pluralize(vararg count: Int): String {
     return result
 }
 
-fun String.toNamespace() = NamespacedKey(plugin, this)
+// Convert string to a namespace key
+fun String.toKey() = NamespacedKey(plugin, this)

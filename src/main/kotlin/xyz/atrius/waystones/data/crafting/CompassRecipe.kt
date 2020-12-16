@@ -2,9 +2,9 @@ package xyz.atrius.waystones.data.crafting
 
 import org.bukkit.Material
 import xyz.atrius.waystones.utility.defaultWarpKey
-import xyz.atrius.waystones.utility.toNamespace
+import xyz.atrius.waystones.utility.toKey
 
-object CompassRecipe : CraftingRecipe("is_warp_key".toNamespace(), defaultWarpKey()) {
+object CompassRecipe : CraftingRecipe("is_warp_key".toKey(), defaultWarpKey()) {
 
     override val recipe = """
         | *

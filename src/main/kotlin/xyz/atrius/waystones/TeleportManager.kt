@@ -23,6 +23,6 @@ object TeleportManager {
     }
 
     operator fun contains(player: Player) =
-            player in queuedTeleports
+        player in queuedTeleports
 }
 
