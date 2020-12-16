@@ -4,6 +4,7 @@ import org.bukkit.*
 import org.bukkit.command.CommandExecutor
 import org.bukkit.event.Listener
 import org.bukkit.inventory.ItemStack
+import org.bukkit.inventory.Recipe
 import org.bukkit.inventory.meta.CompassMeta
 import org.bukkit.persistence.PersistentDataType.INTEGER
 import org.bukkit.plugin.java.JavaPlugin
@@ -25,6 +26,10 @@ fun defaultWarpKey(amount: Int = 1): ItemStack = ItemStack(Material.COMPASS, amo
 fun KotlinPlugin.registerEvents(vararg listeners: Listener) {
     val events = server.pluginManager
     listeners.forEach { events.registerEvents(it, plugin) }
+}
+
+fun KotlinPlugin.registerRecipes(vararg recipes: Recipe) = recipes.forEach {
+    server.addRecipe(it)
 }
 
 fun BukkitScheduler.scheduleRepeatingAutoCancelTask(

@@ -1,16 +1,14 @@
 package xyz.atrius.waystones
 
-import org.bukkit.Material
-import org.bukkit.NamespacedKey
-import org.bukkit.inventory.ShapedRecipe
 import xyz.atrius.waystones.commands.WarpstoneCommand
 import xyz.atrius.waystones.data.config.Config
+import xyz.atrius.waystones.data.crafting.CompassRecipe
 import xyz.atrius.waystones.event.*
 import xyz.atrius.waystones.service.WarpNameService
 import xyz.atrius.waystones.utility.KotlinPlugin
-import xyz.atrius.waystones.utility.defaultWarpKey
 import xyz.atrius.waystones.utility.registerCommands
 import xyz.atrius.waystones.utility.registerEvents
+import xyz.atrius.waystones.utility.registerRecipes
 
 lateinit var plugin       : KotlinPlugin
 lateinit var configuration: Config
@@ -32,14 +30,10 @@ class Waystones : KotlinPlugin() {
             InfoEvent(names),
             LinkEvent(names)
         )
-        // Register warp key recipe if enabled TODO: Move this logic into a dedicated class
-        if (configuration.keyItems) {
-            server.addRecipe(ShapedRecipe(NamespacedKey(plugin, "is_warp_key"), defaultWarpKey()).apply {
-                shape(" * ", "*x*", " * ")
-                setIngredient('*', Material.IRON_INGOT)
-                setIngredient('x', Material.REDSTONE_BLOCK)
-            })
-        }
+        // Register warp key recipe if enabled
+        if (configuration.keyItems) registerRecipes(
+            CompassRecipe
+        )
         // Register Waystones Command
         registerCommands(
             "waystones" to WarpstoneCommand

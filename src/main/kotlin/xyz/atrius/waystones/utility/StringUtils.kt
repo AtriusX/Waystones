@@ -1,6 +1,8 @@
 package xyz.atrius.waystones.utility
 
 import org.bukkit.ChatColor
+import org.bukkit.NamespacedKey
+import xyz.atrius.waystones.plugin
 
 // Translate ChatColors using custom ColorCode
 fun String.translateColors(colorCode: Char) = ChatColor.translateAlternateColorCodes(colorCode, this)
@@ -13,3 +15,5 @@ fun String.pluralize(vararg count: Int): String {
     }
     return result
 }
+
+fun String.toNamespace() = NamespacedKey(plugin, this)
