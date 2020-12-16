@@ -23,14 +23,14 @@ object WarpstoneCommand : CommandExecutor {
         if (args[0].toLowerCase() in aliases)
             return getKeyCommand(sender, args.drop(1))
         // Command Not Found
-        else sender.sendMessage("&d[Waystones]&r Unknown command, check &a/waystones&r".translateColors('&'))
+        else sender.sendMessage("&d[Waystones]&r Unknown command, check &a/waystones&r".translateColors())
         return true
     }
 
     // Send Permission Error
     private fun sendPermError(sender: CommandSender) = true.also {
         sender.sendMessage("&d[Waystones]&r &cYou don't have permission to run this command&r"
-            .translateColors('&'))
+            .translateColors())
     }
 
     // Calculate Player and Amount Values
@@ -48,7 +48,7 @@ object WarpstoneCommand : CommandExecutor {
             Author: &dAtriusX&r
             &aCommands: &r
             &a/waystones getkey &b[ &ecount &b| &eplayer &b[&ecount&b] ]&r - Gives player set amount of keys
-        """.trimIndent().translateColors('&'))
+        """.trimIndent().translateColors())
     }
 
     // Command - Give WarpKey(s)
@@ -63,7 +63,7 @@ object WarpstoneCommand : CommandExecutor {
         player.inventory.addItem(defaultWarpKey(amount))
         // Inform Player of given WarpKey
         sender.sendMessage("&d[Waystones]&r Gave &b$amount&r WarpKey(s) to &a${player.name}&r"
-            .pluralize(amount).translateColors('&'))
+            .pluralize(amount).translateColors())
         return true
     }
 }

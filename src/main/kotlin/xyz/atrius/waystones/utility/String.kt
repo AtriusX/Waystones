@@ -5,7 +5,7 @@ import org.bukkit.NamespacedKey
 import xyz.atrius.waystones.plugin
 
 // Translate ChatColors using custom ColorCode
-fun String.translateColors(colorCode: Char) = ChatColor.translateAlternateColorCodes(colorCode, this)
+fun String.translateColors(colorCode: Char = '&') = ChatColor.translateAlternateColorCodes(colorCode, this)
 
 // Return an 's' depending on input amount
 fun String.pluralize(vararg count: Int): String {
