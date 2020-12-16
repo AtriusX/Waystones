@@ -19,8 +19,8 @@ class Property<T>(
         ConfigManager.register(property, this)
     }
 
-    private var value: T by observable(
-        parser.parse(config.getString(property)) ?: default, observe(property)
+    private var value: T by observable( // TODO: Test auto-define experiment
+        parser.parse(config.getString(property)) ?: default.also { value = it }, observe(property)
     )
 
     operator fun invoke(): T = value
