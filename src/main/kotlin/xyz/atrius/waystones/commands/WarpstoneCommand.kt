@@ -43,12 +43,12 @@ object WarpstoneCommand : CommandExecutor {
     // Command - Plugin Info
     private fun infoCommand(sender: CommandSender) = true.also {
         sender.sendMessage("""
-            ------------ &dWaystones&r ------------
-            Version: &a${plugin.description.version}&r
-            Author: &dAtriusX&r
-            &aCommands: &r
-            &a/waystones getkey &b[ &ecount &b| &eplayer &b[&ecount&b] ]&r - Gives player set amount of keys
-        """.trimIndent().translateColors())
+            |------------ &dWaystones&r ------------
+            |Version: &a${plugin.description.version}&r
+            |Author: &dAtriusX&r
+            |&aCommands: &r
+            |&a/waystones getkey &b[ &ecount &b| &eplayer &b[&ecount&b] ]&r - Gives player set amount of keys
+        """.trimMargin().translateColors())
     }
 
     // Command - Give WarpKey(s)
