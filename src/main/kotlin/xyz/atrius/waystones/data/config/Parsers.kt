@@ -4,9 +4,16 @@ import kotlin.reflect.KClass
 
 interface ArgumentParser<T> {
 
+    /**
+     * Parses the given data into the specified output type
+     * this will return null if there is a problem with parsing
+     * the data.
+     *
+     * @param input The input value to parse.
+     * @property T The parser return type. Null if error occurs.
+     * @return The parsed data, or null if an error occurred.
+     */
     fun parse(input: String?): T?
-
-    fun isValid(value: T): Boolean = true
 }
 
 object StringParser : ArgumentParser<String> {
@@ -20,7 +27,13 @@ sealed class IntParser : ArgumentParser<Int> {
 }
 
 object PositiveValueParser : IntParser() {
-    override fun isValid(value: Int): Boolean = value >= 0
+
+    override fun parse(input: String?): Int? {
+        val num = super.parse(input) ?: return null
+        return if(isValid(num)) num else null
+    }
+
+    private fun isValid(value: Int): Boolean = value >= 0
 }
 
 object DoubleParser : ArgumentParser<Double> {
