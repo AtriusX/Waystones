@@ -9,6 +9,10 @@ interface ArgumentParser<T> {
     fun isValid(value: T): Boolean = true
 }
 
+object StringParser : ArgumentParser<String> {
+    override fun parse(input: String?) = input
+}
+
 sealed class IntParser : ArgumentParser<Int> {
     override fun parse(input: String?): Int? = input?.toIntOrNull()
 
