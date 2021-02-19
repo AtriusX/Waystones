@@ -30,7 +30,7 @@ object PositiveValueParser : IntParser() {
 
     override fun parse(input: String?): Int? {
         val num = super.parse(input) ?: return null
-        return if(isValid(num)) num else null
+        return if (isValid(num)) num else null
     }
 
     private fun isValid(value: Int): Boolean = value >= 0

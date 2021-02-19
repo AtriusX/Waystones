@@ -14,7 +14,7 @@ object TeleportManager {
             cancel(player)
         // Queue the task and store the task id for if we need to cancel sooner
         queuedTeleports[player] =
-                AnimationManager.register(SimpleTeleportEffect(warp), warp.warpLocation, onComplete)
+            AnimationManager.register(SimpleTeleportEffect(warp), warp.warpLocation, onComplete)
     }
 
     fun cancel(player: Player) {
@@ -23,6 +23,6 @@ object TeleportManager {
     }
 
     operator fun contains(player: Player) =
-            player in queuedTeleports
+        player in queuedTeleports
 }
 
