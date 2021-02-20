@@ -20,7 +20,7 @@ class Property<T>(
     }
 
     private var value: T by observable( // TODO: Test auto-define experiment
-        parser.parse(config.getString(property)) ?: default.also { value = it }, observe(property)
+        parser.parse(config.getString(property)) ?: default.also { config[property] = it }, observe(property)
     )
 
     operator fun invoke(): T = value
