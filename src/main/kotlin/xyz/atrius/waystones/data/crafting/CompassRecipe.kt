@@ -7,9 +7,9 @@ import xyz.atrius.waystones.utility.toKey
 object CompassRecipe : CraftingRecipe("is_warp_key".toKey(), defaultWarpKey()) {
 
     override val recipe = """
-        | *
+        | * 
         |*x*
-        | *
+        | * 
     """.trimMargin()
 
     override val items = hashMapOf(

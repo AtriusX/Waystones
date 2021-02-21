@@ -9,6 +9,7 @@ import org.bukkit.inventory.meta.CompassMeta
 import org.bukkit.persistence.PersistentDataType.INTEGER
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.scheduler.BukkitScheduler
+import xyz.atrius.waystones.data.crafting.CraftingRecipe
 import xyz.atrius.waystones.plugin
 
 // Just because I'm petty
@@ -29,6 +30,8 @@ fun KotlinPlugin.registerEvents(vararg listeners: Listener) {
 }
 
 fun KotlinPlugin.registerRecipes(vararg recipes: Recipe) = recipes.forEach {
+    if (it is CraftingRecipe)
+        it.setup()
     server.addRecipe(it)
 }
 

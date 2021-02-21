@@ -15,11 +15,7 @@ abstract class CraftingRecipe(
 
     abstract val items: HashMap<Char, Material>
 
-    init {
-        setup()
-    }
-
-    private fun setup() {
+    fun setup() {
         // Process the crafting recipe
         shape(*recipe.splitMultiline())
         // Set ingredients for each item
