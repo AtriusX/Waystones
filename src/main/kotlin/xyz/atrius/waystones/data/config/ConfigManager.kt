@@ -1,6 +1,7 @@
 package xyz.atrius.waystones.data.config
 
 import xyz.atrius.waystones.data.Property
+import xyz.atrius.waystones.plugin
 
 object ConfigManager {
     private val options = hashMapOf<String, Property<*>>()
@@ -19,4 +20,10 @@ object ConfigManager {
 
     fun getOptions(): Set<String> =
         options.keys
+
+    fun reload() {
+        for ((prop, option) in options) {
+            option(plugin.config.getString(prop))
+        }
+    }
 }

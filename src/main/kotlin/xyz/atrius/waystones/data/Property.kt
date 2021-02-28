@@ -15,7 +15,7 @@ class Property<T>(
     private val config: FileConfiguration
         get() = plugin.config
 
-    private var value: T by observable( // TODO: Test auto-define experiment
+    private var value: T by observable(
         parser.parse(config.getString(property))
             ?: default.also { update(property, it) },
         observe(property)
@@ -27,7 +27,7 @@ class Property<T>(
 
     operator fun invoke(): T = value
 
-    operator fun invoke(input: String) {
+    operator fun invoke(input: String?) {
         value = parser.parse(input) ?: return
     }
 
