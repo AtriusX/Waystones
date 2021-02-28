@@ -15,6 +15,12 @@ class Property<T>(
     private val config: FileConfiguration
         get() = plugin.config
 
+    private var value: T by observable( // TODO: Test auto-define experiment
+        parser.parse(config.getString(property))
+            ?: default.also { update(property, it) },
+        observe(property)
+    )
+
     init {
         ConfigManager.register(property, this)
     }
@@ -25,14 +31,12 @@ class Property<T>(
         value = parser.parse(input) ?: return
     }
 
-    private var value: T by observable( // TODO: Test auto-define experiment
-        parser.parse(config.getString(property))
-            ?: default.also { value = it },
-        observe(property)
-    )
-
     private fun <T> observe(property: String) = { _: KProperty<*>, _: T, new: T ->
-        plugin.config.set(property, new)
+        update(property, new)
+    }
+
+    private fun <T> update(property: String, new: T) {
+        config.set(property, new)
         plugin.saveConfig()
     }
 }
