@@ -16,11 +16,9 @@ import xyz.atrius.waystones.service.WarpNameService
 import xyz.atrius.waystones.utility.cancel
 import xyz.atrius.waystones.utility.hasMovedBlock
 import xyz.atrius.waystones.utility.sendActionError
-import kotlin.contracts.ExperimentalContracts
 
 class WarpEvent(private val names : WarpNameService) : Listener {
 
-    @ExperimentalContracts
     @EventHandler
     fun onClick(event: PlayerInteractEvent) {
         val player = event.player
