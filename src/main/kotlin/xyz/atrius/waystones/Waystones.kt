@@ -31,7 +31,7 @@ class Waystones : KotlinPlugin() {
             LinkEvent(names)
         )
         // Register warp key recipe if enabled
-        if (configuration.keyItems) registerRecipes(
+        if (configuration.keyItems()) registerRecipes(
             CompassRecipe
         )
         // Register Waystones Command

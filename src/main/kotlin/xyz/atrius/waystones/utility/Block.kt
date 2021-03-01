@@ -24,7 +24,7 @@ fun Block.hasNormalPower(): Boolean =
 fun Block.isWarpStone(): Boolean =
     type == Material.LODESTONE
 
-fun Block.hasPower(player: Player): Boolean = when(configuration.requirePower) {
+fun Block.hasPower(player: Player): Boolean = when(configuration.requirePower()) {
     INTER_DIMENSION -> location.sameDimension(player.location) || isPowered
     ALL -> isPowered
     else -> false
