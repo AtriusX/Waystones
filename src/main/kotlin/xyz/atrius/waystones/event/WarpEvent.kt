@@ -1,5 +1,6 @@
 package xyz.atrius.waystones.event
 
+import net.md_5.bungee.api.ChatColor
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -16,6 +17,7 @@ import xyz.atrius.waystones.service.WarpNameService
 import xyz.atrius.waystones.utility.cancel
 import xyz.atrius.waystones.utility.hasMovedBlock
 import xyz.atrius.waystones.utility.sendActionError
+import xyz.atrius.waystones.utility.sendActionMessage
 
 class WarpEvent(private val names : WarpNameService) : Listener {
 
@@ -42,6 +44,7 @@ class WarpEvent(private val names : WarpNameService) : Listener {
         TeleportManager.queueEvent(player, warp) {
             key.useKey()
             warp.teleport()
+            player.sendActionMessage("Teleportation Successful", ChatColor.GREEN)
         }
         event.cancel()
     }

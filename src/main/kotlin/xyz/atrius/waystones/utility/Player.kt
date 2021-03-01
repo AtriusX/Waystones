@@ -17,8 +17,8 @@ import xyz.atrius.waystones.handler.Handler
 val Player.immortal: Boolean
     get() = gameMode in listOf(GameMode.CREATIVE, GameMode.SPECTATOR)
 
-fun Player.sendActionMessage(message: String?, color: ChatColor? = null) = if (message != null)
-    spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent("${color ?: ""}${ChatColor.BOLD}$message"))
+fun Player.sendActionMessage(message: String?, color: ChatColor = ChatColor.WHITE) = if (message != null)
+    spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent("${color}${ChatColor.BOLD}$message"))
 else Unit
 
 fun Player.sendActionError(message: String?) =
