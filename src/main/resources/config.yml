@@ -9,6 +9,7 @@ world-ratio: 8
 warp-animations: true
 single-use: false
 require-power: INTER_DIMENSION
+power-cost: 1
 enable-portal-sickness: true
 portal-sickness-chance: 0.05
 portal-sickness-warping: DAMAGE_ON_TELEPORT

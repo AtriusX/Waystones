@@ -8,9 +8,9 @@ import xyz.atrius.waystones.data.struct.StackSet
 import xyz.atrius.waystones.utility.neighbors
 
 class FloodFill(
-        private val startPosition: Location,
-        maxFill: Int = Int.MAX_VALUE,
-        private vararg val materials: Material
+    private val startPosition: Location,
+    maxFill: Int = Int.MAX_VALUE,
+    private vararg val materials: Material
 ) : SizedHashSet<Block>(maxFill) {
     var breakdown: StackSet<Material>
 

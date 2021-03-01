@@ -16,7 +16,8 @@ import xyz.atrius.waystones.plugin
 typealias KotlinPlugin =
     JavaPlugin
 
-private val DEFAULT_LORE = "${ChatColor.DARK_PURPLE}Warpstone: [${ChatColor.MAGIC}UNKNOWN${ChatColor.DARK_PURPLE}]"
+private val DEFAULT_LORE: String =
+    "${ChatColor.DARK_PURPLE}Warpstone: [${ChatColor.MAGIC}UNKNOWN${ChatColor.DARK_PURPLE}]"
 
 fun defaultWarpKey(amount: Int = 1): ItemStack = ItemStack(Material.COMPASS, amount).update<CompassMeta> {
     this["is_warp_key", INTEGER] = 1

@@ -10,7 +10,7 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.PlayerInventory
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
-import xyz.atrius.waystones.SicknessOption
+import xyz.atrius.waystones.SicknessOption.PREVENT_TELEPORT
 import xyz.atrius.waystones.configuration
 import xyz.atrius.waystones.handler.Handler
 
@@ -27,7 +27,8 @@ fun Player.sendActionError(message: String?) =
 fun Player.sendActionError(handler: Handler) =
     sendActionError(handler.error)
 
-fun Player.clearActionMessage() = sendActionMessage("")
+fun Player.clearActionMessage() =
+    sendActionMessage("")
 
 fun Player.playSound(sound: Sound, volume: Float = 1f, pitch: Float = 1f) =
     playSound(location, sound, volume, pitch)
@@ -56,7 +57,7 @@ fun PlayerInventory.addItemNaturally(original: ItemStack, new: ItemStack) {
 }
 
 fun Player.canWarp(): Boolean =
-    configuration.portalSickWarping == SicknessOption.PREVENT_TELEPORT && hasPortalSickness()
+    configuration.portalSickWarping() == PREVENT_TELEPORT && hasPortalSickness()
 
 fun Player.addPotionEffects(vararg effects: PotionEffect) =
     addPotionEffects(arrayListOf(*effects))

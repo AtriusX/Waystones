@@ -35,7 +35,7 @@ class KeyHandler(
         if (keyState is KeyState.Connected) keyState.warp else null
 
     fun useKey() {
-        if (configuration.singleUse && !player.immortal)
+        if (configuration.singleUse() && !player.immortal)
             item.amount--
     }
 }
