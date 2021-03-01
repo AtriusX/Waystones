@@ -13,8 +13,13 @@ object TeleportManager {
         if (contains(player))
             cancel(player)
         // Queue the task and store the task id for if we need to cancel sooner
-        queuedTeleports[player] =
-            AnimationManager.register(SimpleTeleportEffect(warp), warp.warpLocation, onComplete)
+        queuedTeleports[player] = AnimationManager.register(
+            SimpleTeleportEffect(warp),
+            warp.warpLocation
+        ) {
+            queuedTeleports.remove(player)
+            onComplete()
+        }
     }
 
     fun cancel(player: Player) {
@@ -23,6 +28,6 @@ object TeleportManager {
     }
 
     operator fun contains(player: Player) =
-        player in queuedTeleports && queuedTeleports[player] != -1
+        player in queuedTeleports
 }
 
