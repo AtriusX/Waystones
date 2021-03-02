@@ -4,6 +4,7 @@ import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
 import xyz.atrius.waystones.data.MultiReferencable
+import xyz.atrius.waystones.utility.translateColors
 
 class CommandNamespace(
     override vararg val aliases: String
@@ -20,9 +21,10 @@ class CommandNamespace(
         for (c in commands) {
             if (args[0] in c.aliases) {
                 c.execute(sender, args.drop(1).toTypedArray())
-                break
+                return true
             }
         }
+        sender.sendMessage("&d[Waystones]&r &cUnknown command, check &a/waystones&r".translateColors())
     }
 
     fun register(vararg command: SimpleCommand): CommandNamespace {
