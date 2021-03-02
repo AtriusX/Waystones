@@ -1,6 +1,7 @@
 package xyz.atrius.waystones.utility
 
-import org.bukkit.*
+import org.bukkit.ChatColor
+import org.bukkit.Material
 import org.bukkit.command.CommandExecutor
 import org.bukkit.event.Listener
 import org.bukkit.inventory.ItemStack
@@ -48,15 +49,6 @@ fun BukkitScheduler.scheduleRepeatingAutoCancelTask(
     }, delay)
     return id
 }
-
-// TODO: Consider removing
-fun World.forceSpawnParticle(
-    particle: Particle, location: Location, count: Int,
-    offsetX: Double, offsetY: Double, offsetZ: Double,
-    speed: Double, waitTime: Long = 12
-) = Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, {
-    spawnParticle(particle, location, count, offsetX, offsetY, offsetZ, speed)
-}, if (location.sameDimension(this)) waitTime else 1)
 
 fun KotlinPlugin.registerCommands(vararg commands: Pair<String, CommandExecutor>) = commands.forEach { (command, executor) ->
     getCommand(command)?.setExecutor(executor)
