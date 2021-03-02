@@ -2,6 +2,7 @@ package xyz.atrius.waystones
 
 import xyz.atrius.waystones.commands.CommandNamespace
 import xyz.atrius.waystones.commands.GetKeyCommand
+import xyz.atrius.waystones.commands.InfoCommand
 import xyz.atrius.waystones.commands.ReloadCommand
 import xyz.atrius.waystones.data.config.Config
 import xyz.atrius.waystones.data.crafting.CompassRecipe
@@ -42,6 +43,7 @@ class Waystones : KotlinPlugin() {
 //        )
         registerNamespaces(
             CommandNamespace("waystones").register(
+                InfoCommand,
                 GetKeyCommand,
                 ReloadCommand
             )
