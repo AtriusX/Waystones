@@ -49,15 +49,15 @@ val Location.isSafe: Boolean
 
 fun Location.range(): Int {
     val config = configuration
-    return config.baseDistance + FloodFill(
-            this, config.maxWarpSize, NETHERITE_BLOCK, EMERALD_BLOCK, DIAMOND_BLOCK, GOLD_BLOCK, IRON_BLOCK
+    return config.baseDistance() + FloodFill(
+        this, config.maxWarpSize(), NETHERITE_BLOCK, EMERALD_BLOCK, DIAMOND_BLOCK, GOLD_BLOCK, IRON_BLOCK
     ).breakdown.entries.sumBy {
         it.value * when(it.key) {
-            NETHERITE_BLOCK -> config.netheriteBoost
-            EMERALD_BLOCK   -> config.emeraldBoost
-            DIAMOND_BLOCK   -> config.diamondBoost
-            GOLD_BLOCK      -> config.goldBoost
-            IRON_BLOCK      -> config.ironBoost
+            NETHERITE_BLOCK -> config.netheriteBoost()
+            EMERALD_BLOCK   -> config.emeraldBoost()
+            DIAMOND_BLOCK   -> config.diamondBoost()
+            GOLD_BLOCK      -> config.goldBoost()
+            IRON_BLOCK      -> config.ironBoost()
             else            -> 1
         }
     }

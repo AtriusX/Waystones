@@ -1,15 +1,14 @@
 package xyz.atrius.waystones
 
-import org.bukkit.Material
-import org.bukkit.inventory.ShapedRecipe
-import xyz.atrius.waystones.data.Config
+import xyz.atrius.waystones.commands.WarpstoneCommand
+import xyz.atrius.waystones.data.config.Config
+import xyz.atrius.waystones.data.crafting.CompassRecipe
 import xyz.atrius.waystones.event.*
 import xyz.atrius.waystones.service.WarpNameService
 import xyz.atrius.waystones.utility.KotlinPlugin
-import xyz.atrius.waystones.utility.defaultWarpKey
-import xyz.atrius.waystones.utility.keyValue
+import xyz.atrius.waystones.utility.registerCommands
 import xyz.atrius.waystones.utility.registerEvents
-import xyz.atrius.waystones.commands.WarpstoneCommand
+import xyz.atrius.waystones.utility.registerRecipes
 
 lateinit var plugin       : KotlinPlugin
 lateinit var configuration: Config
@@ -23,25 +22,22 @@ class Waystones : KotlinPlugin() {
         plugin        = this
         configuration = Config(this)
         names         = WarpNameService(this)
-
-        val events = server.pluginManager
-        events.registerEvents(
-                WarpEvent(names),
-                NameEvent(names),
-                DestroyEvent(names),
-                InfoEvent(names),
-                LinkEvent(names)
+        // Register listeners
+        registerEvents(
+            WarpEvent(names),
+            NameEvent(names),
+            DestroyEvent(names),
+            InfoEvent(names),
+            LinkEvent(names)
         )
         // Register warp key recipe if enabled
-        if (configuration.keyItems) {
-            server.addRecipe(ShapedRecipe(keyValue(), defaultWarpKey()).apply {
-                shape(" * ", "*x*", " * ")
-                setIngredient('*', Material.IRON_INGOT)
-                setIngredient('x', Material.REDSTONE_BLOCK)
-            })
-        }
+        if (configuration.keyItems()) registerRecipes(
+            CompassRecipe
+        )
         // Register Waystones Command
-        getCommand("waystones")?.setExecutor(WarpstoneCommand)
+        registerCommands(
+            "waystones" to WarpstoneCommand
+        )
         logger.info("Warpstones loaded!")
     }
 
