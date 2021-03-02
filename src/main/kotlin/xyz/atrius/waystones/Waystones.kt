@@ -1,13 +1,14 @@
 package xyz.atrius.waystones
 
-import xyz.atrius.waystones.commands.WarpstoneCommand
+import xyz.atrius.waystones.commands.CommandNamespace
+import xyz.atrius.waystones.commands.ReloadCommand
 import xyz.atrius.waystones.data.config.Config
 import xyz.atrius.waystones.data.crafting.CompassRecipe
 import xyz.atrius.waystones.event.*
 import xyz.atrius.waystones.service.WarpNameService
 import xyz.atrius.waystones.utility.KotlinPlugin
-import xyz.atrius.waystones.utility.registerCommands
 import xyz.atrius.waystones.utility.registerEvents
+import xyz.atrius.waystones.utility.registerNamespaces
 import xyz.atrius.waystones.utility.registerRecipes
 
 lateinit var plugin       : KotlinPlugin
@@ -35,8 +36,13 @@ class Waystones : KotlinPlugin() {
             CompassRecipe
         )
         // Register Waystones Command
-        registerCommands(
-            "waystones" to WarpstoneCommand
+//        registerCommands( TODO: Temporary disabling
+//            "waystones" to WarpstoneCommand
+//        )
+        registerNamespaces(
+            CommandNamespace("waystones").register(
+                ReloadCommand
+            )
         )
         logger.info("Warpstones loaded!")
     }
