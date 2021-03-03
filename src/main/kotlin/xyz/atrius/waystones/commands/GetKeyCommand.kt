@@ -23,11 +23,11 @@ object GetKeyCommand : SimpleCommand("getkey", "gk", "key", "k") {
             args.getOrNull(1) ?: ""
         )
         // Check Permissions
-        if (
-            !sender.hasPermission("waystones.getkey.self") || // Give Key to Self
-            (!sender.hasPermission("waystones.getkey.all") && sender != player)
-        ) { // Give Key to Other
-            sender.sendMessage("&cYou don't have permission to reload this!".translateColors())
+        if (!sender.hasPermission("waystones.getkey.self")
+            || !sender.hasPermission("waystones.getkey.all")
+            && sender != player
+        ) {
+            sender.sendMessage("&cYou don't have permission to run this!".translateColors())
             return
         }
         // Add WarpKey(s) to Player inventory
