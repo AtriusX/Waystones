@@ -7,7 +7,7 @@ import xyz.atrius.waystones.utility.defaultWarpKey
 import xyz.atrius.waystones.utility.pluralize
 import xyz.atrius.waystones.utility.translateColors
 
-object GetKeyCommand : SimpleCommand("getkey", "gk", "key") {
+object GetKeyCommand : SimpleCommand("getkey", "gk", "key", "k") {
     // Calculate Player and Amount Values
     private fun getPlayerAndAmount(default: Player, first: String, second: String): Pair<Player, Int> {
         val player = Bukkit.getPlayer(first) ?: default
