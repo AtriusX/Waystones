@@ -26,7 +26,7 @@ object ConfigCommand : SimpleCommand("config", "conf", "co", "c") {
     }
 
     private fun listOptions(sender: CommandSender) {
-        sender.message("&6------------ &Config&r ------------")
+        sender.message("&6------------ &cConfig&6 ------------")
         // Display each config property
         for ((prop, value) in ConfigManager)
             sender.message("&6$prop&f: &b${value()}")
