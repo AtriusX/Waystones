@@ -5,6 +5,7 @@ import net.md_5.bungee.api.ChatMessageType
 import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.GameMode
 import org.bukkit.Sound
+import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.PlayerInventory
@@ -61,3 +62,6 @@ fun Player.canWarp(): Boolean =
 
 fun Player.addPotionEffects(vararg effects: PotionEffect) =
     addPotionEffects(arrayListOf(*effects))
+
+fun CommandSender.message(message: String, colorCode: Char = '&') =
+    sendMessage(message.translateColors(colorCode))
