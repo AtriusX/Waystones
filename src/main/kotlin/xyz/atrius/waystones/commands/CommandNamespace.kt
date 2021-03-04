@@ -35,7 +35,7 @@ class CommandNamespace(
                 return true
             }
         }
-        sender.message("&d[Waystones]&r &cUnknown command, check &a/waystones&r")
+        sender.message("&7[&dWaystones&7] &cUnknown command, check &a/waystones&r")
         return true
     }
 
@@ -45,9 +45,9 @@ class CommandNamespace(
     }
 
     private fun listCommands(sender: CommandSender) {
-        sender.message("------------ &dWaystones&r ------------")
+        sender.message("&7------------ &dWaystones&7 -------------")
         for (command in commands)
-            sender.message("&6/${aliases[0]} &b${command.aliases[0]}")
-        sender.message("-----------------------------------")
+            sender.message("&f/${aliases[0]} &b${command.aliases[0]}")
+        sender.message("&7-----------------------------------")
     }
 }

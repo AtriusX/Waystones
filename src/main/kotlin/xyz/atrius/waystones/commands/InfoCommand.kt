@@ -8,10 +8,13 @@ object InfoCommand : SimpleCommand("info", "i") {
 
     override fun execute(sender: CommandSender, args: Array<String>) {
         sender.message("""
-            |------------ &dWaystones&r ------------
-            |Version: &a${plugin.description.version}&r
-            |Author: &dAtri&r
-            |-----------------------------------
+            |
+            |&7------------- &dWaystones &7------------&r
+            |
+            |Version&7: &a${plugin.description.version}&r
+            |Author&7: &dAtri&r
+            |
+            |&7-----------------------------------
         """.trimMargin())
     }
 }
