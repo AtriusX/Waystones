@@ -4,8 +4,8 @@ import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import xyz.atrius.waystones.utility.defaultWarpKey
+import xyz.atrius.waystones.utility.message
 import xyz.atrius.waystones.utility.pluralize
-import xyz.atrius.waystones.utility.translateColors
 
 object GetKeyCommand : SimpleCommand("getkey", "gk", "key", "k") {
     // Calculate Player and Amount Values
@@ -27,13 +27,14 @@ object GetKeyCommand : SimpleCommand("getkey", "gk", "key", "k") {
             || !sender.hasPermission("waystones.getkey.all")
             && sender != player
         ) {
-            sender.sendMessage("&cYou don't have permission to run this!".translateColors())
+            sender.message("&cYou don't have permission to run this!")
             return
         }
         // Add WarpKey(s) to Player inventory
         player.inventory.addItem(defaultWarpKey(amount))
         // Inform Player of given WarpKey
-        sender.sendMessage("&d[Waystones]&r Gave &b$amount&r WarpKey(s) to &a${player.name}&r"
-            .pluralize(amount).translateColors())
+        sender.message(
+            "&d[Waystones]&r Gave &b$amount&r WarpKey(s) to &a${player.name}&r".pluralize(amount)
+        )
     }
 }

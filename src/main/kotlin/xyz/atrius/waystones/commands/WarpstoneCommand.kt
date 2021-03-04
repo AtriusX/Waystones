@@ -7,8 +7,8 @@ import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import xyz.atrius.waystones.plugin
 import xyz.atrius.waystones.utility.defaultWarpKey
+import xyz.atrius.waystones.utility.message
 import xyz.atrius.waystones.utility.pluralize
-import xyz.atrius.waystones.utility.translateColors
 
 object WarpstoneCommand : CommandExecutor {
     // CommandExecutor / Subcommand Manager
@@ -23,14 +23,13 @@ object WarpstoneCommand : CommandExecutor {
         if (args[0].toLowerCase() in aliases)
             return getKeyCommand(sender, args.drop(1))
         // Command Not Found
-        else sender.sendMessage("&d[Waystones]&r Unknown command, check &a/waystones&r".translateColors())
+        else sender.message("&d[Waystones]&r Unknown command, check &a/waystones&r")
         return true
     }
 
     // Send Permission Error
     private fun sendPermError(sender: CommandSender) = true.also {
-        sender.sendMessage("&d[Waystones]&r &cYou don't have permission to run this command&r"
-            .translateColors())
+        sender.message("&d[Waystones]&r &cYou don't have permission to run this command&r")
     }
 
     // Calculate Player and Amount Values
@@ -42,13 +41,13 @@ object WarpstoneCommand : CommandExecutor {
 
     // Command - Plugin Info
     private fun infoCommand(sender: CommandSender) = true.also {
-        sender.sendMessage("""
+        sender.message("""
             |------------ &dWaystones&r ------------
             |Version: &a${plugin.description.version}&r
             |Author: &dAtriusX&r
             |&aCommands: &r
             |&a/waystones getkey &b[ &ecount &b| &eplayer &b[&ecount&b] ]&r - Gives player set amount of keys
-        """.trimMargin().translateColors())
+        """.trimMargin())
     }
 
     // Command - Give WarpKey(s)
@@ -62,8 +61,8 @@ object WarpstoneCommand : CommandExecutor {
         // Add WarpKey(s) to Player inventory
         player.inventory.addItem(defaultWarpKey(amount))
         // Inform Player of given WarpKey
-        sender.sendMessage("&d[Waystones]&r Gave &b$amount&r WarpKey(s) to &a${player.name}&r"
-            .pluralize(amount).translateColors())
+        sender.message("&d[Waystones]&r Gave &b$amount&r WarpKey(s) to &a${player.name}&r"
+            .pluralize(amount))
         return true
     }
 }
