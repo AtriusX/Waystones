@@ -1,9 +1,6 @@
 package xyz.atrius.waystones
 
-import xyz.atrius.waystones.commands.CommandNamespace
-import xyz.atrius.waystones.commands.GetKeyCommand
-import xyz.atrius.waystones.commands.InfoCommand
-import xyz.atrius.waystones.commands.ReloadCommand
+import xyz.atrius.waystones.commands.*
 import xyz.atrius.waystones.data.config.Config
 import xyz.atrius.waystones.data.crafting.CompassRecipe
 import xyz.atrius.waystones.event.*
@@ -37,15 +34,13 @@ class Waystones : KotlinPlugin() {
         if (configuration.keyItems()) registerRecipes(
             CompassRecipe
         )
-        // Register Waystones Command
-//        registerCommands( TODO: Temporary disabling
-//            "waystones" to WarpstoneCommand
-//        )
+        // Register command namespaces
         registerNamespaces(
             CommandNamespace("waystones").register(
                 InfoCommand,
                 GetKeyCommand,
-                ReloadCommand
+                ReloadCommand,
+                ConfigCommand
             )
         )
         logger.info("Warpstones loaded!")
