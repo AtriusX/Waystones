@@ -2,6 +2,7 @@ package xyz.atrius.waystones.data.config
 
 import xyz.atrius.waystones.data.Property
 import xyz.atrius.waystones.plugin
+import kotlin.collections.MutableMap.MutableEntry
 
 object ConfigManager {
     private val options = hashMapOf<String, Property<*>>()
@@ -11,11 +12,14 @@ object ConfigManager {
     }
 
     @Suppress("UNCHECKED_CAST")
-    operator fun <T> get(option: String): T? =
-        options[option]?.invoke() as T?
+    operator fun get(option: String?): Property<*>? = options[option]
 
-    operator fun set(option: String, value: String) {
-        options[option]?.invoke(value)
+    operator fun set(option: String?, value: String?): Boolean {
+        return options[option]?.invoke(value) ?: false
+    }
+
+    operator fun iterator(): MutableIterator<MutableEntry<String, Property<*>>> {
+        return options.iterator()
     }
 
     fun getOptions(): Set<String> =
