@@ -10,10 +10,8 @@ object ConfigCommand : SimpleCommand("config", "conf", "co", "c") {
         val setting = args.getOrNull(0)
         val new = args.getOrNull(1)
         // List all arguments if the argument list is empty
-        if (args.isEmpty()) {
-            listOptions(sender)
-            return
-        }
+        if (args.isEmpty())
+            return listOptions(sender)
         // Return the previous config value
         if (new == null) {
             sender.message("&6$setting&f: &b${ConfigManager[setting]?.invoke()}")
