@@ -7,6 +7,12 @@ import xyz.atrius.waystones.utility.message
 object ConfigCommand : SimpleCommand("config", "conf", "co", "c") {
 
     override fun execute(sender: CommandSender, args: Array<String>) {
+        // Permissions Check
+        if (!sender.hasPermission("waystones.config")) {
+            sender.message("&7[&dWaystones&7] &cYou don't have permission to run this!")
+            return
+        }
+
         val setting = args.getOrNull(0)
         val new = args.getOrNull(1)
         // List all arguments if the argument list is empty
