@@ -14,7 +14,7 @@ object InfoCommand : SimpleCommand("info", "i") {
             |Version&7: &a${plugin.description.version}&r
             |Author&7: &dAtri&r
             |
-            |&7-----------------------------------
+            |&7---------------&b-&d-&f-&d-&b-&7---------------
         """.trimMargin())
     }
 }
