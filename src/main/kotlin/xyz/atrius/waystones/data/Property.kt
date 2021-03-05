@@ -40,4 +40,7 @@ class Property<T>(
         config.set(property, if (new is Enum<*>) new.toString() else new)
         plugin.saveConfig()
     }
+
+    override fun toString(): String =
+        parser.toString(value)
 }
