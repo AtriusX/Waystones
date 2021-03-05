@@ -2,16 +2,16 @@ package xyz.atrius.waystones.commands
 
 import org.bukkit.command.CommandSender
 import xyz.atrius.waystones.plugin
-import xyz.atrius.waystones.utility.message
+import xyz.atrius.waystones.utility.translateColors
 
 object InfoCommand : SimpleCommand("info", "i") {
 
-    val desc = plugin.description
-    val version = desc.version
-    val author = desc.authors.getOrNull(0) ?: "Unknown"
-    val contributors = desc.authors.drop(1)
+    private val desc = plugin.description
+    private val version = desc.version
+    private val author = desc.authors.getOrNull(0) ?: "Unknown"
+    private val contributors = desc.authors.drop(1)
         .joinToString(", ") { "&d$it&r" }
-    val infoMsg = """
+    private val infoMsg = """
         |
         |&7------------- &dWaystones &7------------&r
         |
@@ -20,8 +20,8 @@ object InfoCommand : SimpleCommand("info", "i") {
         |Contributors: $contributors
         |
         |&7---------------&b-&d-&f-&d-&b-&7---------------
-    """.trimIndent()
+    """.trimIndent().translateColors()
 
     override fun execute(sender: CommandSender, args: Array<String>) =
-        sender.message(infoMsg)
+        sender.sendMessage(infoMsg)
 }
