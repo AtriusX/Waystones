@@ -22,7 +22,7 @@ object InfoCommand : SimpleCommand("info", "i") {
         |Website: &d&n$website&r
         |
         |&7---------------&b-&d-&f-&d-&b-&7---------------
-    """.trimIndent().translateColors()
+    """.trimMargin().translateColors()
 
     override fun execute(sender: CommandSender, args: Array<String>) =
         sender.sendMessage(infoMsg)
