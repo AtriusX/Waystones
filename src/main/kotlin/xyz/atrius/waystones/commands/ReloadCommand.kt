@@ -8,11 +8,11 @@ object ReloadCommand : SimpleCommand("reload", "rl") {
 
     override fun execute(sender: CommandSender, args: Array<String>) {
         if (!sender.hasPermission("waystones.reload")) {
-            sender.message("&cYou don't have permission to reload this!")
+            sender.message("&7[&dWaystones&7] &cYou don't have permission to reload this!")
             return
         }
 
-        sender.message("&6Reloaded waystones config!")
+        sender.message("&7[&dWaystones&7] &aReloaded config!")
         ConfigManager.reload()
     }
 }

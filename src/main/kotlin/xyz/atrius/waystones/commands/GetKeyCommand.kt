@@ -27,14 +27,14 @@ object GetKeyCommand : SimpleCommand("getkey", "gk", "key", "k") {
             || !sender.hasPermission("waystones.getkey.all")
             && sender != player
         ) {
-            sender.message("&cYou don't have permission to run this!")
+            sender.message("&7[&dWaystones&7] &cYou don't have permission to run this!")
             return
         }
         // Add WarpKey(s) to Player inventory
         player.inventory.addItem(defaultWarpKey(amount))
         // Inform Player of given WarpKey
         sender.message(
-            "&d[Waystones]&r Gave &b$amount&r WarpKey(s) to &a${player.name}&r".pluralize(amount)
+            "&7[&dWaystones&7]&f Gave &bx$amount&r WarpKey(s) to &a${player.name}&r".pluralize(amount)
         )
     }
 }
