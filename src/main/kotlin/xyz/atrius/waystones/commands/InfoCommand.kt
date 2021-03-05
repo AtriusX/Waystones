@@ -13,7 +13,6 @@ object InfoCommand : SimpleCommand("info", "i") {
         .joinToString(", ") { "&d$it&r" }
     private val website = desc.website
     private val infoMsg = """
-        |
         |&7------------- &dWaystones &7------------&r
         |
         |Version&7: &a$version&r
