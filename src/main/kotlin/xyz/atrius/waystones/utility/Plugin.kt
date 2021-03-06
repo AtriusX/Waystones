@@ -19,12 +19,12 @@ typealias KotlinPlugin =
     JavaPlugin
 
 private val DEFAULT_LORE: String =
-    "${ChatColor.DARK_PURPLE}Warpstone: [${ChatColor.MAGIC}UNKNOWN${ChatColor.DARK_PURPLE}]"
+    "${ChatColor.DARK_PURPLE}Waystone: [${ChatColor.MAGIC}UNKNOWN${ChatColor.DARK_PURPLE}]"
 
 fun defaultWarpKey(amount: Int = 1): ItemStack = ItemStack(Material.COMPASS, amount).update<CompassMeta> {
     this["is_warp_key", INTEGER] = 1
     lore = listOf(DEFAULT_LORE)
-    setDisplayName("${ChatColor.GOLD}Warpstone Key")
+    setDisplayName("${ChatColor.GOLD}Waystone Key")
 }
 
 fun KotlinPlugin.registerEvents(vararg listeners: Listener) {

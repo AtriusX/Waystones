@@ -76,7 +76,7 @@ class Config(plugin: KotlinPlugin) {
     val portalSicknessDamage: Property<Double> =
         Property("portal-sickness-damage", 5.0, DoubleParser)
 
-    // Whether or not keys can be relinked to another warpstone after being linked once
+    // Whether or not keys can be relinked to another waystone after being linked once
     val relinkableKeys: Property<Boolean> =
         Property("relinkable-keys", true, BooleanParser)
 

@@ -43,10 +43,10 @@ class Waystones : KotlinPlugin() {
                 ConfigCommand
             )
         )
-        logger.info("Warpstones loaded!")
+        logger.info("Waystones loaded!")
     }
 
     override fun onDisable() {
-        logger.info("Warpstones disabled!")
+        logger.info("Waystones disabled!")
     }
 }
