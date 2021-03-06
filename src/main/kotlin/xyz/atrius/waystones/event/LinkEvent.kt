@@ -21,12 +21,15 @@ class LinkEvent(private val names : WarpNameService) : Listener {
         val block = event.clickedBlock ?: return
         val linker = LinkHandler(player, item, block, names)
         when (val result = linker.handle()) {
-            is Fail -> return player.sendActionError(result)
+            is Fail -> {
+                player.sendActionError(result)
+                event.cancel()
+            }
             Success -> {
                 linker.link()
                 event.cancel()
             }
-            else -> return
+            else -> Unit
         }
     }
 }

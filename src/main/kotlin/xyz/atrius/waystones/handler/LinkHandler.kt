@@ -22,16 +22,16 @@ class LinkHandler(
     override fun handle(): HandleState {
         if (!item.isWarpKey() || block.type != Material.LODESTONE)
             return Ignore
+        // Check if the player is able to link to this waystone
+        if (!player.hasPermission("waystones.link"))
+            return Fail("This link has severed and rotted away...")
         // Prevent linking if relinking is disabled
         val meta = item.itemMeta as CompassMeta
-        return if (!configuration.relinkableKeys() && meta.hasLodestone()) {
-            return Fail("The destination for this key has been sealed")
-        }
+        return if (!configuration.relinkableKeys() && meta.hasLodestone())
+            Fail("The destination for this key has been sealed")
         // Prevent relinking if the location is the same
-        else if (!player.immortal && meta.lodestone == block.location) {
-            return Fail("Already linked to this destination")
-        }
-        // Successful if no error is given
+        else if (!player.immortal && meta.lodestone == block.location)
+            Fail("Already linked to this destination")
         else Success
     }
 
@@ -44,7 +44,7 @@ class LinkHandler(
     private fun ItemStack.link(block: Block) = update<CompassMeta> {
         lodestone = block.location
         isLodestoneTracked = true
-        val name = names[block.location] ?: "Warpstone"
+        val name = names[block.location] ?: "Waystone"
         lore = listOf(
             "${ChatColor.DARK_PURPLE}$name: [${lodestone?.locationCode}]"
         )
