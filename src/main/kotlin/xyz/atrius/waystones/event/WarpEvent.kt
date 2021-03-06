@@ -33,15 +33,16 @@ class WarpEvent(private val names : WarpNameService) : Listener {
         ) return
         // Handle key actions and terminate if handler fails
         val key = KeyHandler(player, event)
-        if (!key.handle())
-            return player.sendActionError(key)
+        when (val result = key.handle()) {
+            is Fail -> return player.sendActionError(result)
+        }
         // Make sure the key is connected before we continue
         val location = key.getLocation() ?: return
         val name = names[location] ?: "Waystone"
         // Handle key actions and terminate if handler fails
         val warp = WaystoneHandler(player, location, name)
-        when (warp.handle()) {
-            is Fail -> return player.sendActionError(warp)
+        when (val result = warp.handle()) {
+            is Fail -> return player.sendActionError(result)
             is Success -> {
                 // Queue the teleport then use key and warp on success
                 TeleportManager.queueEvent(player, warp) {
@@ -51,7 +52,6 @@ class WarpEvent(private val names : WarpNameService) : Listener {
                 }
                 event.cancel()
             }
-            else -> return
         }
     }
 

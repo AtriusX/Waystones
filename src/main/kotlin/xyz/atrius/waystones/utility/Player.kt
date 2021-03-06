@@ -13,6 +13,7 @@ import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import xyz.atrius.waystones.SicknessOption.PREVENT_TELEPORT
 import xyz.atrius.waystones.configuration
+import xyz.atrius.waystones.handler.HandleState
 import xyz.atrius.waystones.handler.Handler
 
 val Player.immortal: Boolean
@@ -25,8 +26,8 @@ else Unit
 fun Player.sendActionError(message: String?) =
     sendActionMessage(message, ChatColor.RED)
 
-fun Player.sendActionError(handler: Handler) =
-    sendActionError(handler.error)
+fun Player.sendActionError(fail: HandleState.Fail) =
+    sendActionError(fail.error)
 
 fun Player.clearActionMessage() =
     sendActionMessage("")
