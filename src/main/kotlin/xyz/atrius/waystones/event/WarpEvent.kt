@@ -65,6 +65,9 @@ class WarpEvent(private val names : WarpNameService) : Listener {
         val entity = event.entity
         if (!configuration.damageStopsWarping() || entity !is Player)
             return
+        // Don't cancel anything unless the entity is currently queued
+        if (entity !in TeleportManager)
+            return
         TeleportManager.cancel(entity)
         entity.sendActionError("Teleportation interrupted")
     }
