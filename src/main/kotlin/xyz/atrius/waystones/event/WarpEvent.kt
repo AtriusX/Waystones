@@ -11,6 +11,8 @@ import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerMoveEvent
 import xyz.atrius.waystones.TeleportManager
 import xyz.atrius.waystones.configuration
+import xyz.atrius.waystones.handler.HandleState
+import xyz.atrius.waystones.handler.HandleState.*
 import xyz.atrius.waystones.handler.KeyHandler
 import xyz.atrius.waystones.handler.WaystoneHandler
 import xyz.atrius.waystones.service.WarpNameService
@@ -38,15 +40,19 @@ class WarpEvent(private val names : WarpNameService) : Listener {
         val name = names[location] ?: "Waystone"
         // Handle key actions and terminate if handler fails
         val warp = WaystoneHandler(player, location, name)
-        if (!warp.handle())
-            return player.sendActionError(warp)
-        // Queue the teleport then use key and warp on success
-        TeleportManager.queueEvent(player, warp) {
-            key.useKey()
-            warp.teleport()
-            player.sendActionMessage("Teleportation Successful", ChatColor.GREEN)
+        when (warp.handle()) {
+            is Fail -> return player.sendActionError(warp)
+            is Success -> {
+                // Queue the teleport then use key and warp on success
+                TeleportManager.queueEvent(player, warp) {
+                    key.useKey()
+                    warp.teleport()
+                    player.sendActionMessage("Teleportation Successful", ChatColor.GREEN)
+                }
+                event.cancel()
+            }
+            else -> return
         }
-        event.cancel()
     }
 
     @EventHandler

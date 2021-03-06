@@ -4,6 +4,8 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
+import xyz.atrius.waystones.handler.HandleState
+import xyz.atrius.waystones.handler.HandleState.*
 import xyz.atrius.waystones.handler.LinkHandler
 import xyz.atrius.waystones.service.WarpNameService
 import xyz.atrius.waystones.utility.cancel
@@ -19,9 +21,13 @@ class LinkEvent(private val names : WarpNameService) : Listener {
         val item = event.item ?: return
         val block = event.clickedBlock ?: return
         val linker = LinkHandler(player, item, block, names)
-        if (!linker.handle())
-            return player.sendActionError(linker)
-        linker.link()
-        event.cancel()
+        when (linker.handle()) {
+            is Fail -> return player.sendActionError(linker)
+            Success -> {
+                linker.link()
+                event.cancel()
+            }
+            else -> return
+        }
     }
 }
