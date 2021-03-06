@@ -8,6 +8,7 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.CompassMeta
 import xyz.atrius.waystones.configuration
+import xyz.atrius.waystones.handler.HandleState.*
 import xyz.atrius.waystones.service.WarpNameService
 import xyz.atrius.waystones.utility.*
 
@@ -17,25 +18,21 @@ class LinkHandler(
         private val block: Block,
         private val names: WarpNameService
 ) : PlayerHandler {
-    override var error: String? = null
-        private set
 
-    override fun handle(): Boolean {
+    override fun handle(): HandleState {
         if (!item.isWarpKey() || block.type != Material.LODESTONE)
-            return false
+            return Ignore
         // Prevent linking if relinking is disabled
         val meta = item.itemMeta as CompassMeta
         return if (!configuration.relinkableKeys() && meta.hasLodestone()) {
-            error = "The destination for this key has been sealed"
-            return false
+            return Fail("The destination for this key has been sealed")
         }
         // Prevent relinking if the location is the same
         else if (!player.immortal && meta.lodestone == block.location) {
-            error = "Already linked to this destination"
-            return false
+            return Fail("Already linked to this destination")
         }
         // Successful if no error is given
-        else error == null
+        else Success
     }
 
     fun link() {

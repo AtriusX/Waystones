@@ -5,6 +5,8 @@ import org.bukkit.Material
 import org.bukkit.block.Block
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
+import xyz.atrius.waystones.handler.HandleState.Ignore
+import xyz.atrius.waystones.handler.HandleState.Success
 import xyz.atrius.waystones.service.WarpNameService
 
 class NameHandler(
@@ -13,15 +15,13 @@ class NameHandler(
         private val block: Block,
         private val names: WarpNameService
 ) : PlayerHandler {
-    override val error: String? = null
-
     private val meta = item.itemMeta
 
-    override fun handle(): Boolean = when {
-        item.type != Material.NAME_TAG -> false
-        block.type != Material.LODESTONE -> false
-        meta?.hasDisplayName() != true -> false
-        else -> true
+    override fun handle(): HandleState = when {
+        item.type  != Material.NAME_TAG  ||
+        block.type != Material.LODESTONE ||
+        meta?.hasDisplayName() != true   -> Ignore
+        else -> Success
     }
 
     fun createName(): String? {
