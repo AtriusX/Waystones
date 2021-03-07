@@ -9,9 +9,10 @@ import xyz.atrius.waystones.utility.pluralize
 
 object GetKeyCommand : SimpleCommand("getkey", "gk", "key", "k") {
     // Calculate Player and Amount Values
-    private fun getPlayerAndAmount(default: Player, first: String, second: String): Pair<Player, Int> {
-        val player = Bukkit.getPlayer(first) ?: default
-        val amount = second.toIntOrNull() ?: first.toIntOrNull() ?: 1
+    private fun getPlayerAndAmount(default: Player, first: String?, second: String?): Pair<Player, Int> {
+        val player = if (first != null)
+            Bukkit.getPlayer(first) ?: default else default
+        val amount = second?.toIntOrNull() ?: first?.toIntOrNull() ?: 1
         return player to amount
     }
 
@@ -19,8 +20,8 @@ object GetKeyCommand : SimpleCommand("getkey", "gk", "key", "k") {
         // Set Amount and Player to give WarpKeys to
         val (player, amount) = getPlayerAndAmount(
             sender as Player,
-            args.getOrNull(0) ?: "",
-            args.getOrNull(1) ?: ""
+            args.getOrNull(0),
+            args.getOrNull(1)
         )
         // Check Permissions
         if (!sender.hasPermission("waystones.getkey.self")
