@@ -2,6 +2,7 @@ package xyz.atrius.waystones.service
 
 import org.bukkit.Location
 import xyz.atrius.waystones.data.JsonFile
+import xyz.atrius.waystones.plugin
 import xyz.atrius.waystones.utility.KotlinPlugin
 import xyz.atrius.waystones.utility.locationCode
 import java.io.FileReader
@@ -9,7 +10,7 @@ import java.nio.file.Files
 import java.nio.file.StandardOpenOption.CREATE
 import java.nio.file.StandardOpenOption.WRITE
 
-class WarpNameService(plugin: KotlinPlugin) : JsonFile(plugin, "warpnames") {
+object WarpNameService : JsonFile(plugin, "warpnames") {
     private val names: HashMap<String, String> =
         json.fromJson(FileReader(file), HashMap<String, String>()::class.java)
 
@@ -29,5 +30,5 @@ class WarpNameService(plugin: KotlinPlugin) : JsonFile(plugin, "warpnames") {
     }
 
     operator fun get(location: Location?) =
-            names[location?.locationCode]
+        names[location?.locationCode]
 }

@@ -12,8 +12,7 @@ import xyz.atrius.waystones.service.WarpNameService
 class NameHandler(
         override val player: Player,
         private val item: ItemStack,
-        private val block: Block,
-        private val names: WarpNameService
+        private val block: Block
 ) : PlayerHandler {
     private val meta = item.itemMeta
 
@@ -28,7 +27,7 @@ class NameHandler(
         if (meta == null)
             return null
         val name = meta.displayName
-        names.add(block.location, name)
+        WarpNameService.add(block.location, name)
         if (player.gameMode != GameMode.CREATIVE)
             item.amount--
         return name

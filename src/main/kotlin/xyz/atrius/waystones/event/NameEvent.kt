@@ -6,13 +6,12 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK
 import org.bukkit.event.player.PlayerInteractEvent
-import xyz.atrius.waystones.handler.HandleState.*
+import xyz.atrius.waystones.handler.HandleState.Success
 import xyz.atrius.waystones.handler.NameHandler
-import xyz.atrius.waystones.service.WarpNameService
 import xyz.atrius.waystones.utility.cancel
 import xyz.atrius.waystones.utility.sendActionMessage
 
-class NameEvent(private val names: WarpNameService) : Listener {
+object NameEvent : Listener {
 
     @EventHandler
     fun onClick(event: PlayerInteractEvent) {
@@ -21,7 +20,7 @@ class NameEvent(private val names: WarpNameService) : Listener {
         val player = event.player
         val item = player.inventory.itemInMainHand
         val block = event.clickedBlock
-        val handler = NameHandler(player, item, block ?: return, names)
+        val handler = NameHandler(player, item, block ?: return)
         when (handler.handle()) {
             Success -> {
                 val name = handler.createName() ?: return

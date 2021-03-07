@@ -21,14 +21,13 @@ class Waystones : KotlinPlugin() {
     override fun onEnable() {
         plugin        = this
         configuration = Config(this)
-        names         = WarpNameService(this)
         // Register listeners
         registerEvents(
-            WarpEvent(names),
-            NameEvent(names),
-            DestroyEvent(names),
-            InfoEvent(names),
-            LinkEvent(names)
+            WarpEvent,
+            NameEvent,
+            DestroyEvent,
+            InfoEvent,
+            LinkEvent
         )
         // Register warp key recipe if enabled
         if (configuration.keyItems()) registerRecipes(

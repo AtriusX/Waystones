@@ -15,8 +15,7 @@ import xyz.atrius.waystones.utility.*
 class LinkHandler(
         override val player: Player,
         private val item: ItemStack,
-        private val block: Block,
-        private val names: WarpNameService
+        private val block: Block
 ) : PlayerHandler {
 
     override fun handle(): HandleState {
@@ -44,7 +43,7 @@ class LinkHandler(
     private fun ItemStack.link(block: Block) = update<CompassMeta> {
         lodestone = block.location
         isLodestoneTracked = true
-        val name = names[block.location] ?: "Waystone"
+        val name = WarpNameService[block.location] ?: "Waystone"
         lore = listOf(
             "${ChatColor.DARK_PURPLE}$name: [${lodestone?.locationCode}]"
         )
