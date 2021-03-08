@@ -3,8 +3,6 @@ package xyz.atrius.waystones.data
 sealed class WarpState(
     private val status: String
 ) {
-    object Inhibited : WarpState("Inhibited")
-
     override fun toString(): String {
         return "Status: $status"
     }
@@ -15,7 +13,9 @@ sealed class WarpErrorState(
     status: String = "Unknown",
 ) : WarpState(status) {
 
-    object None : WarpErrorState("The connection to %s has been severed.")
+    object None : WarpErrorState("The connection to %s has been severed")
+
+    object Inhibited : WarpErrorState("%s has been suppressed", "Inhibited")
 
     object Unpowered : WarpErrorState("%s does not currently have power", "Unpowered")
 
