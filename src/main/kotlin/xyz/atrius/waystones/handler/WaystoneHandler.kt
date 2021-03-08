@@ -9,9 +9,10 @@ import org.bukkit.potion.PotionEffectType
 import xyz.atrius.waystones.Power
 import xyz.atrius.waystones.SicknessOption
 import xyz.atrius.waystones.configuration
-import xyz.atrius.waystones.data.WarpState
-import xyz.atrius.waystones.data.WarpState.*
-import xyz.atrius.waystones.handler.HandleState.*
+import xyz.atrius.waystones.data.WarpActiveState
+import xyz.atrius.waystones.data.WarpErrorState
+import xyz.atrius.waystones.handler.HandleState.Fail
+import xyz.atrius.waystones.handler.HandleState.Success
 import xyz.atrius.waystones.utility.*
 import kotlin.math.round
 import kotlin.random.Random
@@ -27,17 +28,15 @@ class WaystoneHandler(
     val state          = block.getWarpState(player)
 
     override fun handle(): HandleState {
-        val message = state.message(name)
         return when (state) {
-            is Active, is InterDimension -> {
+            is WarpActiveState -> {
                 // Calculate range and distance from warp
                 val range    = state.range / if (interDimension) configuration.worldRatio() else 1
                 val distance = location.toVector().distance(warpLocation.toVector())
                 if (distance > range)
                     Fail(distanceError(name, distance, range)) else Success
             }
-            is Inhibited -> Ignore
-            else -> Fail(message ?: return Success)
+            is WarpErrorState -> Fail(state.message(name))
         }
     }
 

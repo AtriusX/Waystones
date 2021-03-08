@@ -21,12 +21,12 @@ sealed class WarpErrorState(
 
     object Obstructed : WarpErrorState("%s is obstructed and cannot be used", "Obstructed")
 
-    open fun message(name: String): String? =
+    open fun message(name: String): String =
         message.format(name)
 }
 
 sealed class WarpActiveState(
-    private val range: Int
+    val range: Int
 ) : WarpState("Active") {
 
     class Active(range: Int) : WarpActiveState(range)
