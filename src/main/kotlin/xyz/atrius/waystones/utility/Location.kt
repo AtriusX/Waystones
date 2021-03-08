@@ -8,6 +8,7 @@ import org.bukkit.World
 import org.bukkit.util.Vector
 import xyz.atrius.waystones.configuration
 import xyz.atrius.waystones.data.FloodFill
+import xyz.atrius.waystones.service.WorldRatioService
 import kotlin.math.cos
 import kotlin.math.floor
 import kotlin.math.sin
@@ -74,3 +75,6 @@ fun Location.sameDimension(world: World) =
 
 fun Location.playSound(sound: Sound, volume: Float = 1f, pitch: Float = 1f) = Bukkit.getOnlinePlayers()
     .forEach { if (it.world == world) it.playSound(this, sound, volume, pitch)  }
+
+fun World.getRatio(): Int =
+    WorldRatioService[this]
