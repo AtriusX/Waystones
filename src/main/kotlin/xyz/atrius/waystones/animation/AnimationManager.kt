@@ -13,7 +13,6 @@ object AnimationManager {
     fun register(effect: TeleportEffect, to: Location, onComplete: () -> Unit = {}) = effect.run {
         effect.start()
         scheduler.scheduleRepeatingAutoCancelTask(configuration.waitTime().toLong(), 1, { animation(it) }) {
-            onComplete()
             end()
             // Preload chunk (hopefully this plays the end animation)
             to.world?.getChunkAt(to)

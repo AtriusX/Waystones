@@ -9,13 +9,13 @@ import org.bukkit.event.block.BlockExplodeEvent
 import org.bukkit.event.entity.EntityExplodeEvent
 import xyz.atrius.waystones.service.WarpNameService
 
-class DestroyEvent(private val names: WarpNameService) : Listener {
+object DestroyEvent : Listener {
 
     @EventHandler
     fun onBreak(event: BlockBreakEvent) {
         val block = event.block
         if (block.type == Material.LODESTONE)
-            names.remove(block.location)
+            WarpNameService.remove(block.location)
     }
 
     @EventHandler
@@ -25,5 +25,5 @@ class DestroyEvent(private val names: WarpNameService) : Listener {
     fun onEntityExplode(event: EntityExplodeEvent) = destroy(event.blockList())
 
     private fun destroy(blocks: List<Block>) =
-        names.remove(blocks.firstOrNull { it.type == Material.LODESTONE }?.location)
+        WarpNameService.remove(blocks.firstOrNull { it.type == Material.LODESTONE }?.location)
 }

@@ -5,6 +5,7 @@ import net.md_5.bungee.api.ChatMessageType
 import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.GameMode
 import org.bukkit.Sound
+import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.PlayerInventory
@@ -12,6 +13,7 @@ import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import xyz.atrius.waystones.SicknessOption.PREVENT_TELEPORT
 import xyz.atrius.waystones.configuration
+import xyz.atrius.waystones.handler.HandleState
 import xyz.atrius.waystones.handler.Handler
 
 val Player.immortal: Boolean
@@ -24,8 +26,8 @@ else Unit
 fun Player.sendActionError(message: String?) =
     sendActionMessage(message, ChatColor.RED)
 
-fun Player.sendActionError(handler: Handler) =
-    sendActionError(handler.error)
+fun Player.sendActionError(fail: HandleState.Fail) =
+    sendActionError(fail.error)
 
 fun Player.clearActionMessage() =
     sendActionMessage("")
@@ -61,3 +63,6 @@ fun Player.canWarp(): Boolean =
 
 fun Player.addPotionEffects(vararg effects: PotionEffect) =
     addPotionEffects(arrayListOf(*effects))
+
+fun CommandSender.message(message: String, colorCode: Char = '&') =
+    sendMessage(message.translateColors(colorCode))

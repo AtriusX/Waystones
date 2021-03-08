@@ -8,34 +8,30 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.CompassMeta
 import xyz.atrius.waystones.configuration
+import xyz.atrius.waystones.handler.HandleState.*
 import xyz.atrius.waystones.service.WarpNameService
 import xyz.atrius.waystones.utility.*
 
 class LinkHandler(
         override val player: Player,
         private val item: ItemStack,
-        private val block: Block,
-        private val names: WarpNameService
+        private val block: Block
 ) : PlayerHandler {
-    override var error: String? = null
-        private set
 
-    override fun handle(): Boolean {
+    override fun handle(): HandleState {
         if (!item.isWarpKey() || block.type != Material.LODESTONE)
-            return false
+            return Ignore
+        // Check if the player is able to link to this waystone
+        if (!player.hasPermission("waystones.link"))
+            return Fail("This link has severed and rotted away...")
         // Prevent linking if relinking is disabled
         val meta = item.itemMeta as CompassMeta
-        return if (!configuration.relinkableKeys() && meta.hasLodestone()) {
-            error = "The destination for this key has been sealed"
-            return false
-        }
+        return if (!configuration.relinkableKeys() && meta.hasLodestone())
+            Fail("The destination for this key has been sealed")
         // Prevent relinking if the location is the same
-        else if (!player.immortal && meta.lodestone == block.location) {
-            error = "Already linked to this destination"
-            return false
-        }
-        // Successful if no error is given
-        else error == null
+        else if (!player.immortal && meta.lodestone == block.location)
+            Fail("Already linked to this destination")
+        else Success
     }
 
     fun link() {
@@ -47,7 +43,7 @@ class LinkHandler(
     private fun ItemStack.link(block: Block) = update<CompassMeta> {
         lodestone = block.location
         isLodestoneTracked = true
-        val name = names[block.location] ?: "Warpstone"
+        val name = WarpNameService[block.location] ?: "Waystone"
         lore = listOf(
             "${ChatColor.DARK_PURPLE}$name: [${lodestone?.locationCode}]"
         )

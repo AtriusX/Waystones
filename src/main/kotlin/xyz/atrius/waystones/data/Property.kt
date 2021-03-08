@@ -27,8 +27,9 @@ class Property<T>(
 
     operator fun invoke(): T = value
 
-    operator fun invoke(input: String?) {
-        value = parser.parse(input) ?: return
+    operator fun invoke(input: String?): Boolean {
+        value = parser.parse(input) ?: return false
+        return true
     }
 
     private fun <T> observe(property: String) = { _: KProperty<*>, _: T, new: T ->
@@ -36,7 +37,10 @@ class Property<T>(
     }
 
     private fun <T> update(property: String, new: T) {
-        config.set(property, new)
+        config.set(property, if (new is Enum<*>) new.toString() else new)
         plugin.saveConfig()
     }
+
+    override fun toString(): String =
+        parser.toString(value)
 }

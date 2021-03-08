@@ -14,6 +14,9 @@ interface ArgumentParser<T> {
      * @return The parsed data, or null if an error occurred.
      */
     fun parse(input: String?): T?
+
+    fun toString(value: T): String =
+        value.toString()
 }
 
 object StringParser : ArgumentParser<String> {
@@ -41,8 +44,14 @@ object DoubleParser : ArgumentParser<Double> {
 }
 
 object PercentageParser : ArgumentParser<Double> {
-    override fun parse(input: String?): Double? = if (input?.matches("[0-9]+%".toRegex()) == true)
-        input.dropLast(1).toDouble() / 100 else null
+    private val regex = "^[0-9]+(.[0-9]+)?%$".toRegex()
+
+    override fun parse(input: String?): Double? =
+        if (input?.matches(regex) == true)
+            input.dropLast(1).toDouble() / 100 else null
+
+    override fun toString(value: Double): String =
+        "${value * 100}%"
 }
 
 object BooleanParser : ArgumentParser<Boolean> {

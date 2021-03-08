@@ -13,7 +13,7 @@ import xyz.atrius.waystones.utility.getWarpState
 import xyz.atrius.waystones.utility.isWarpKey
 import xyz.atrius.waystones.utility.sendActionMessage
 
-class InfoEvent(private val names : WarpNameService) : Listener {
+object InfoEvent: Listener {
 
     @EventHandler
     fun onClick(event: PlayerInteractEvent) {
@@ -26,7 +26,7 @@ class InfoEvent(private val names : WarpNameService) : Listener {
         // Make sure the correct block/item pair is used
         if (block?.type != Material.LODESTONE || !item.isWarpKey())
             return
-        val name = names[block.location] ?: "None"
+        val name = WarpNameService[block.location] ?: "None"
         val state = block.getWarpState(player)
         // Skip any non-warp blocks
         if (state == WarpState.None)

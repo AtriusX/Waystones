@@ -11,6 +11,8 @@ import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerMoveEvent
 import xyz.atrius.waystones.TeleportManager
 import xyz.atrius.waystones.configuration
+import xyz.atrius.waystones.handler.HandleState.Fail
+import xyz.atrius.waystones.handler.HandleState.Success
 import xyz.atrius.waystones.handler.KeyHandler
 import xyz.atrius.waystones.handler.WaystoneHandler
 import xyz.atrius.waystones.service.WarpNameService
@@ -19,7 +21,7 @@ import xyz.atrius.waystones.utility.hasMovedBlock
 import xyz.atrius.waystones.utility.sendActionError
 import xyz.atrius.waystones.utility.sendActionMessage
 
-class WarpEvent(private val names : WarpNameService) : Listener {
+object WarpEvent : Listener {
 
     @EventHandler
     fun onClick(event: PlayerInteractEvent) {
@@ -31,22 +33,26 @@ class WarpEvent(private val names : WarpNameService) : Listener {
         ) return
         // Handle key actions and terminate if handler fails
         val key = KeyHandler(player, event)
-        if (!key.handle())
-            return player.sendActionError(key)
+        when (val result = key.handle()) {
+            is Fail -> return player.sendActionError(result)
+        }
         // Make sure the key is connected before we continue
         val location = key.getLocation() ?: return
-        val name = names[location] ?: "Waystone"
+        val name = WarpNameService[location] ?: "Waystone"
         // Handle key actions and terminate if handler fails
         val warp = WaystoneHandler(player, location, name)
-        if (!warp.handle())
-            return player.sendActionError(warp)
-        // Queue the teleport then use key and warp on success
-        TeleportManager.queueEvent(player, warp) {
-            key.useKey()
-            warp.teleport()
-            player.sendActionMessage("Teleportation Successful", ChatColor.GREEN)
+        when (val result = warp.handle()) {
+            is Fail -> return player.sendActionError(result)
+            is Success -> {
+                // Queue the teleport then use key and warp on success
+                TeleportManager.queueEvent(player, warp) {
+                    key.useKey()
+                    warp.teleport()
+                    player.sendActionMessage("Teleportation Successful", ChatColor.GREEN)
+                }
+                event.cancel()
+            }
         }
-        event.cancel()
     }
 
     @EventHandler

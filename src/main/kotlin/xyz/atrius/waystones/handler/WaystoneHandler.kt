@@ -11,6 +11,7 @@ import xyz.atrius.waystones.SicknessOption
 import xyz.atrius.waystones.configuration
 import xyz.atrius.waystones.data.WarpState
 import xyz.atrius.waystones.data.WarpState.*
+import xyz.atrius.waystones.handler.HandleState.*
 import xyz.atrius.waystones.utility.*
 import kotlin.math.round
 import kotlin.random.Random
@@ -20,27 +21,23 @@ class WaystoneHandler(
     val warpLocation: Location,
     val name: String
 ) : PlayerHandler {
-    override var error: String? = null
-        private set
-
     val location       = player.location
     val interDimension = !warpLocation.sameDimension(location)
     val block          = warpLocation.block
     val state          = block.getWarpState(player)
 
-    override fun handle(): Boolean {
-        error = state.message(name)
+    override fun handle(): HandleState {
+        val message = state.message(name)
         return when (state) {
             is Active, is InterDimension -> {
                 // Calculate range and distance from warp
                 val range    = state.range / if (interDimension) configuration.worldRatio() else 1
                 val distance = location.toVector().distance(warpLocation.toVector())
-                if (distance > range) false.also {
-                    error = distanceError(name, distance, range)
-                } else true
+                if (distance > range)
+                    Fail(distanceError(name, distance, range)) else Success
             }
-            is Inhibited -> false
-            else -> error == null
+            is Inhibited -> Ignore
+            else -> Fail(message ?: return Success)
         }
     }
 

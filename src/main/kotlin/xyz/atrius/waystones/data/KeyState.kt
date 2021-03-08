@@ -6,7 +6,7 @@ sealed class KeyState(val message: String?) {
 
     object None : KeyState(null)
 
-    object Severed : KeyState("The link to this warpstone has been severed")
+    object Severed : KeyState("The link to this waystone has been severed")
 
     object Blocked : KeyState("You are too sick to warp")
 

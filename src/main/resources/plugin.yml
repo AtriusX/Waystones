@@ -2,8 +2,8 @@ name: Waystones
 version: 1.0-1.16.3
 main: xyz.atrius.waystones.Waystones
 api-version: 1.16
-prefix: Warpstones
-authors: [Atrius]
+prefix: Waystones
+authors: [Atrius, Sepshun]
 description: Warp stones for survival
 website: https://atrius.xyz
 commands:
@@ -16,10 +16,18 @@ permissions:
     description: Gives access to all Waystones commands
     children:
       waystones.getkey.all: true
+      waystones.reload: true
+      waystones.config: true
   waystones.getkey.all:
     description: Allows giving warpkeys to all players
     children:
       waystones.getkey.self: true
   waystones.getkey.self:
     description: Allows giving WarpKeys to yourself
+    default: op
+  waystones.reload:
+    description: Allows reloading the plugin config
+    default: op
+  waystones.config:
+    description: Allows viewing and editing plugin config
     default: op
