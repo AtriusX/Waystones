@@ -8,6 +8,9 @@ import org.bukkit.World
 import org.bukkit.util.Vector
 import xyz.atrius.waystones.configuration
 import xyz.atrius.waystones.data.FloodFill
+import xyz.atrius.waystones.data.TeleportType
+import xyz.atrius.waystones.data.TeleportType.Interdimensional
+import xyz.atrius.waystones.data.TeleportType.Normal
 import xyz.atrius.waystones.service.WorldRatioService
 import kotlin.math.cos
 import kotlin.math.floor
@@ -70,7 +73,15 @@ fun Location.rotateY(angle: Double, amp: Double = 1.0) =
 fun Location.sameDimension(other: Location) =
     world == other.world ?: false
 
-fun Location.sameDimension(world: World) =
+/*
+ * Synchronizes the world coordinates between 2 trans-dimensional locations. This is
+ * particularly useful for translating coordinates between dimensions that have differing
+ * world scales. (eg. Nether -> Overworld, where the nether scale is 8:1.)
+ */
+fun Location.synchronize(other: Location): TeleportType =
+    if (sameDimension(other.world)) Normal else Interdimensional(world, other.world)
+
+fun Location.sameDimension(world: World?) =
     world == this.world ?: false
 
 fun Location.playSound(sound: Sound, volume: Float = 1f, pitch: Float = 1f) = Bukkit.getOnlinePlayers()

@@ -30,9 +30,11 @@ class WaystoneHandler(
     override fun handle(): HandleState {
         return when (state) {
             is WarpActiveState -> {
-                // Calculate range and distance from warp
+                // Calculate range, sync ratio and distance from warp
                 val range    = state.range / if (interDimension) configuration.worldRatio() else 1
-                val distance = location.toVector().distance(warpLocation.toVector())
+                val type     = location.synchronize(warpLocation)
+                val distance = location.toVector()
+                    .distance(warpLocation.toVector().multiply(type.getRatio()))
                 if (distance > range)
                     Fail(distanceError(name, distance, range)) else Success
             }

@@ -7,12 +7,14 @@ sealed class TeleportType {
 
     object Normal : TeleportType()
 
+    open fun getRatio(): Double = 1.0
+
     class Interdimensional(
-        private val to: World,
-        private val from: World
+        private val to: World?,
+        private val from: World?
     ) : TeleportType() {
 
-        fun getRatio(): Double =
-            from.getRatio().toDouble() / to.getRatio()
+        override fun getRatio(): Double =
+            (from?.getRatio()?.toDouble() ?: 1.0) / (to?.getRatio() ?: 1)
     }
 }
