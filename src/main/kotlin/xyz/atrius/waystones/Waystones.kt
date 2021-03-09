@@ -17,14 +17,12 @@ lateinit var configuration: Config
 @Suppress("unused")
 class Waystones : KotlinPlugin() {
 
-    init {
-        WarpNameService.load()
-        WorldRatioService.load()
-    }
-
     override fun onEnable() {
         plugin        = this
         configuration = Config(this)
+        // Load services
+        WarpNameService.load()
+        WorldRatioService.load()
         // Register listeners
         registerEvents(
             WarpEvent,
