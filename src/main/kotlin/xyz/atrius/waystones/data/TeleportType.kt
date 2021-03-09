@@ -15,6 +15,6 @@ sealed class TeleportType {
     ) : TeleportType() {
 
         override fun getRatio(): Double =
-            (from?.getRatio()?.toDouble() ?: 1.0) / (to?.getRatio() ?: 1)
+            (from?.getRatio() ?: 1.0) / (to?.getRatio() ?: 1.0)
     }
 }
