@@ -18,7 +18,7 @@ open class JsonFile<T>(name: String) {
         load()
     }
 
-    private fun load() {
+    fun load() {
         try {
             if (!file.exists())
                 plugin.saveResource(file.name, false)
@@ -27,7 +27,7 @@ open class JsonFile<T>(name: String) {
         }
     }
 
-    protected fun save() {
+    fun save() {
         val json = json.toJson(data)
         Files.write(file.toPath(), json.toByteArray(), CREATE, WRITE)
     }

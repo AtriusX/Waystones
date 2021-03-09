@@ -5,6 +5,7 @@ import xyz.atrius.waystones.data.config.Config
 import xyz.atrius.waystones.data.crafting.CompassRecipe
 import xyz.atrius.waystones.event.*
 import xyz.atrius.waystones.service.WarpNameService
+import xyz.atrius.waystones.service.WorldRatioService
 import xyz.atrius.waystones.utility.KotlinPlugin
 import xyz.atrius.waystones.utility.registerEvents
 import xyz.atrius.waystones.utility.registerNamespaces
@@ -16,7 +17,10 @@ lateinit var configuration: Config
 @Suppress("unused")
 class Waystones : KotlinPlugin() {
 
-    lateinit var names: WarpNameService
+    init {
+        WarpNameService.load()
+        WorldRatioService.load()
+    }
 
     override fun onEnable() {
         plugin        = this

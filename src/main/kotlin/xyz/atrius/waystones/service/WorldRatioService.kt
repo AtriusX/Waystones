@@ -6,5 +6,5 @@ import xyz.atrius.waystones.data.JsonFile
 object WorldRatioService : JsonFile<Int>("ratios") {
 
     operator fun get(world: World): Int =
-        data[world.name] ?: 1
+        data.getOrDefault(world.name, 1)
 }
