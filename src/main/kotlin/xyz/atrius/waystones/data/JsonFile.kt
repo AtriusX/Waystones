@@ -11,12 +11,7 @@ import java.nio.file.StandardOpenOption.WRITE
 open class JsonFile<T>(name: String) {
     private val file = File(plugin.dataFolder, "$name.json")
     private val json = GsonBuilder().setPrettyPrinting().create()
-    protected val data: HashMap<String, T> =
-        json.fromJson(FileReader(file), HashMap<String, T>()::class.java)
-
-    init {
-        load()
-    }
+    protected lateinit var data: HashMap<String, T>
 
     fun load() {
         try {
@@ -25,6 +20,7 @@ open class JsonFile<T>(name: String) {
         } catch (e: Exception) {
             e.printStackTrace()
         }
+        data = json.fromJson(FileReader(file), HashMap<String, T>()::class.java)
     }
 
     fun save() {
