@@ -15,7 +15,6 @@ import xyz.atrius.waystones.data.WarpErrorState
 import xyz.atrius.waystones.handler.HandleState.Fail
 import xyz.atrius.waystones.handler.HandleState.Success
 import xyz.atrius.waystones.utility.*
-import kotlin.math.round
 import kotlin.random.Random
 
 class WaystoneHandler(
@@ -80,5 +79,5 @@ class WaystoneHandler(
     }
 
     private fun distanceError(name: String, distance: Double, range: Int): String =
-            "$name is out of warp range [${round(distance - range).toInt()} block(s)]"
+        "$name is out of warp range [%.1f block(s)]".format(distance - range)
 }
