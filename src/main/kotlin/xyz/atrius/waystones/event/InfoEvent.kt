@@ -6,7 +6,7 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
-import xyz.atrius.waystones.data.WarpState
+import xyz.atrius.waystones.data.WarpErrorState
 import xyz.atrius.waystones.service.WarpNameService
 import xyz.atrius.waystones.utility.cancel
 import xyz.atrius.waystones.utility.getWarpState
@@ -29,7 +29,7 @@ object InfoEvent: Listener {
         val name = WarpNameService[block.location] ?: "None"
         val state = block.getWarpState(player)
         // Skip any non-warp blocks
-        if (state == WarpState.None)
+        if (state == WarpErrorState.None)
             return
         player.sendActionMessage("Name: $name | $state", ChatColor.DARK_AQUA)
         event.cancel()

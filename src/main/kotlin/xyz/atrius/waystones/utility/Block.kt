@@ -7,8 +7,10 @@ import org.bukkit.entity.Player
 import xyz.atrius.waystones.Power.ALL
 import xyz.atrius.waystones.Power.INTER_DIMENSION
 import xyz.atrius.waystones.configuration
+import xyz.atrius.waystones.data.WarpActiveState.Active
+import xyz.atrius.waystones.data.WarpActiveState.Infinite
+import xyz.atrius.waystones.data.WarpErrorState.*
 import xyz.atrius.waystones.data.WarpState
-import xyz.atrius.waystones.data.WarpState.*
 
 val Block.powerBlock: Block?
     get() = world.getBlockAt(location.DOWN).takeIf {
@@ -40,8 +42,7 @@ fun Block.getWarpState(player: Player): WarpState = when {
     !isWaystone() -> None
     isInhibited() -> Inhibited
     !hasPower(player) -> Unpowered
-    hasInfinitePower() -> Infinite
     !location.isSafe -> Obstructed
-    !location.sameDimension(player.location) -> InterDimension(location.range())
+    hasInfinitePower() -> Infinite
     else -> Active(location.range())
 }

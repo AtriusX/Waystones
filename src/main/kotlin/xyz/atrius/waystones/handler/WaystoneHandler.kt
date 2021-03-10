@@ -6,14 +6,15 @@ import org.bukkit.block.data.type.RespawnAnchor
 import org.bukkit.entity.Player
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
+import org.bukkit.util.Vector
 import xyz.atrius.waystones.Power
 import xyz.atrius.waystones.SicknessOption
 import xyz.atrius.waystones.configuration
-import xyz.atrius.waystones.data.WarpState
-import xyz.atrius.waystones.data.WarpState.*
-import xyz.atrius.waystones.handler.HandleState.*
+import xyz.atrius.waystones.data.WarpActiveState
+import xyz.atrius.waystones.data.WarpErrorState
+import xyz.atrius.waystones.handler.HandleState.Fail
+import xyz.atrius.waystones.handler.HandleState.Success
 import xyz.atrius.waystones.utility.*
-import kotlin.math.round
 import kotlin.random.Random
 
 class WaystoneHandler(
@@ -27,17 +28,17 @@ class WaystoneHandler(
     val state          = block.getWarpState(player)
 
     override fun handle(): HandleState {
-        val message = state.message(name)
         return when (state) {
-            is Active, is InterDimension -> {
-                // Calculate range and distance from warp
+            is WarpActiveState -> {
+                // Calculate range, sync ratio and distance from warp
                 val range    = state.range / if (interDimension) configuration.worldRatio() else 1
-                val distance = location.toVector().distance(warpLocation.toVector())
+                val type     = location.synchronize(warpLocation)
+                val distance = location.toVector()
+                    .distance(warpLocation.toVector().multiply(Vector(type.getRatio(), 1.0, type.getRatio())))
                 if (distance > range)
                     Fail(distanceError(name, distance, range)) else Success
             }
-            is Inhibited -> Ignore
-            else -> Fail(message ?: return Success)
+            is WarpErrorState -> Fail(state.message(name))
         }
     }
 
@@ -78,5 +79,5 @@ class WaystoneHandler(
     }
 
     private fun distanceError(name: String, distance: Double, range: Int): String =
-            "$name is out of warp range [${round(distance - range).toInt()} block(s)]"
+        "$name is out of warp range [%.1f block(s)]".format(distance - range)
 }
