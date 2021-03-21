@@ -23,7 +23,7 @@ import xyz.atrius.waystones.utility.sendActionMessage
 
 object WarpEvent : Listener {
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     fun onClick(event: PlayerInteractEvent) {
         val player = event.player
         // Don't start warp while flying with elytra, not right-clicking, or a lodestone was clicked
@@ -55,7 +55,7 @@ object WarpEvent : Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     fun onMove(event: PlayerMoveEvent) {
         if (!event.hasMovedBlock())
             return
@@ -66,7 +66,7 @@ object WarpEvent : Listener {
         player.sendActionError("Teleportation cancelled")
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     fun onDamage(event: EntityDamageEvent) {
         val entity = event.entity
         if (!configuration.damageStopsWarping() || entity !is Player)

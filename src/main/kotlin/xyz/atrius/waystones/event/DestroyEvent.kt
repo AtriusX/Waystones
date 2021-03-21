@@ -11,17 +11,17 @@ import xyz.atrius.waystones.service.WarpNameService
 
 object DestroyEvent : Listener {
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     fun onBreak(event: BlockBreakEvent) {
         val block = event.block
         if (block.type == Material.LODESTONE)
             WarpNameService.remove(block.location)
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     fun onExplode(event: BlockExplodeEvent) = destroy(event.blockList())
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     fun onEntityExplode(event: EntityExplodeEvent) = destroy(event.blockList())
 
     private fun destroy(blocks: List<Block>) =

@@ -13,7 +13,7 @@ import xyz.atrius.waystones.utility.sendActionMessage
 
 object NameEvent : Listener {
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     fun onClick(event: PlayerInteractEvent) {
         if (event.action != RIGHT_CLICK_BLOCK)
             return

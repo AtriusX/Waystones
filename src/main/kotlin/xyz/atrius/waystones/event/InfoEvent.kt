@@ -15,7 +15,7 @@ import xyz.atrius.waystones.utility.sendActionMessage
 
 object InfoEvent: Listener {
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     fun onClick(event: PlayerInteractEvent) {
         // Filter non left-click events
         if (event.action != Action.LEFT_CLICK_BLOCK)
