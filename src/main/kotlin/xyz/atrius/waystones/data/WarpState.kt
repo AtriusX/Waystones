@@ -13,16 +13,19 @@ sealed class WarpState(
 
 sealed class WarpErrorState(
     private val message: String,
-    status: String = "Unknown",
+    status: String = localization.localize("waystone-status-unknown"),
 ) : WarpState(status, -2) {
 
-    object None : WarpErrorState("The connection to %s has been severed")
+    object None : WarpErrorState(localization.localize("warp-error"))
 
-    object Inhibited : WarpErrorState("%s has been suppressed", "Inhibited")
+    object Inhibited : WarpErrorState(localization.localize("warp-error-inhibited"),
+            localization.localize("waystone-status-inhibited"))
 
-    object Unpowered : WarpErrorState("%s does not currently have power", "Unpowered")
+    object Unpowered : WarpErrorState(localization.localize("warp-error-unpowered"),
+            localization.localize("waystone-status-unpowered"))
 
-    object Obstructed : WarpErrorState("%s is obstructed and cannot be used", "Obstructed")
+    object Obstructed : WarpErrorState(localization.localize("warp-error-obstructed"),
+            localization.localize("waystone-status-obstructed"))
 
     open fun message(name: String): String =
         message.format(name)
@@ -30,7 +33,7 @@ sealed class WarpErrorState(
 
 sealed class WarpActiveState(
     val range: Int
-) : WarpState("Active", range) {
+) : WarpState(localization.localize("waystone-status-active"), range) {
 
     class Active(range: Int) : WarpActiveState(range)
 
