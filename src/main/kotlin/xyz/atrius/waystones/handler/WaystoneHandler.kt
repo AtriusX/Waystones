@@ -79,5 +79,5 @@ class WaystoneHandler(
     }
 
     private fun distanceError(name: String, distance: Double, range: Int): String =
-        "$name is out of warp range [%.1f block(s)]".format(distance - range)
+        localization.localize("warp-out-of-range", name, distance - range)
 }
