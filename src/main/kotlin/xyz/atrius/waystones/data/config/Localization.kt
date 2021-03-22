@@ -18,33 +18,24 @@ class Localization(val plugin: KotlinPlugin, localeTag: String) {
     }
 
     fun localize(key: String, vararg args: Any?): String {
-        return MessageFormat(config.getString(key, "")!!, locale)
+        return MessageFormat(config.getString(key)!!, locale)
                 .format(*args.map { it ?: "null" }.toTypedArray()).translateColors()
-    }
-
-    private fun saveDefaults() {
-        if (!configFile.exists()) {
-            plugin.saveResource(configFile.name, false)
-        } else {
-            val defaultConfigFile = plugin.getResource(configFile.name)
-            if (defaultConfigFile != null) {
-                val existingConfig = YamlConfiguration.loadConfiguration(configFile)
-                val defaultConfig = YamlConfiguration.loadConfiguration(InputStreamReader(defaultConfigFile))
-                existingConfig.setDefaults(defaultConfig)
-                existingConfig.save(configFile)
-            }
-        }
     }
 
     fun reload(localeTag: String) {
         configFile = File(plugin.dataFolder, "locale-$localeTag.yml")
 
-        saveDefaults()
-        config.load(configFile)
-        locale = Locale.forLanguageTag(config.getString("locale"))
+        if (!configFile.exists()) {
+            plugin.saveResource(configFile.name, false)
+        } else {
+            val defaultConfigFile = plugin.getResource(configFile.name) ?: plugin.getResource("locale-en.yml")!!
+            val defaultConfig = YamlConfiguration.loadConfiguration(InputStreamReader(defaultConfigFile))
+            config.load(configFile)
+            config.options().copyDefaults(true)
+            config.setDefaults(defaultConfig)
+            config.save(configFile)
+        }
 
-        val defaultConfigFile = plugin.getResource(configFile.name) ?: plugin.getResource("locale-en.yml")!!
-        val defaultConfig = YamlConfiguration.loadConfiguration(InputStreamReader(defaultConfigFile))
-        config.setDefaults(defaultConfig)
+        locale = Locale.forLanguageTag(config.getString("locale"))
     }
 }
