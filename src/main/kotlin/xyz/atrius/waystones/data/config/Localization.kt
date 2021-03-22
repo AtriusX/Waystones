@@ -8,16 +8,17 @@ import java.io.InputStreamReader
 import java.text.MessageFormat
 import java.util.*
 
-class Localization(val plugin: KotlinPlugin, locale: String) {
-    private var configFile = File(plugin.dataFolder, "locale-$locale.yml")
-    val config = YamlConfiguration()
+class Localization(val plugin: KotlinPlugin, localeTag: String) {
+    private var configFile = File(plugin.dataFolder, "locale-$localeTag.yml")
+    private val config = YamlConfiguration()
+    private var locale: Locale = Locale.getDefault()
 
     init {
-        reload(locale)
+        reload(localeTag)
     }
 
     fun localize(key: String, vararg args: Any?): String {
-        return MessageFormat(config.getString(key, "")!!, Locale.forLanguageTag(config.getString("locale")))
+        return MessageFormat(config.getString(key, "")!!, locale)
                 .format(*args.map { it ?: "null" }.toTypedArray()).translateColors()
     }
 
@@ -35,11 +36,12 @@ class Localization(val plugin: KotlinPlugin, locale: String) {
         }
     }
 
-    fun reload(locale: String) {
-        configFile = File(plugin.dataFolder, "locale-$locale.yml")
+    fun reload(localeTag: String) {
+        configFile = File(plugin.dataFolder, "locale-$localeTag.yml")
 
         saveDefaults()
         config.load(configFile)
+        locale = Locale.forLanguageTag(config.getString("locale"))
 
         val defaultConfigFile = plugin.getResource(configFile.name) ?: plugin.getResource("locale-en.yml")!!
         val defaultConfig = YamlConfiguration.loadConfiguration(InputStreamReader(defaultConfigFile))
