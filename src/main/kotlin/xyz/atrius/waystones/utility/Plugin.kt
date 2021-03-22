@@ -1,6 +1,5 @@
 package xyz.atrius.waystones.utility
 
-import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.command.CommandExecutor
 import org.bukkit.event.Listener
@@ -12,19 +11,20 @@ import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.scheduler.BukkitScheduler
 import xyz.atrius.waystones.commands.CommandNamespace
 import xyz.atrius.waystones.data.crafting.CraftingRecipe
+import xyz.atrius.waystones.localization
 import xyz.atrius.waystones.plugin
 
 // Just because I'm petty
 typealias KotlinPlugin =
     JavaPlugin
 
-private val DEFAULT_LORE: String =
-    "${ChatColor.DARK_PURPLE}Waystone: [${ChatColor.MAGIC}UNKNOWN${ChatColor.DARK_PURPLE}]"
+private val DEFAULT_LORE: List<String> =
+        listOf(localization.localize("key-lore"))
 
 fun defaultWarpKey(amount: Int = 1): ItemStack = ItemStack(Material.COMPASS, amount).update<CompassMeta> {
     this["is_warp_key", INTEGER] = 1
-    lore = listOf(DEFAULT_LORE)
-    setDisplayName("${ChatColor.GOLD}Waystone Key")
+    lore = DEFAULT_LORE
+    setDisplayName(localization.localize("key-name"))
 }
 
 fun KotlinPlugin.registerEvents(vararg listeners: Listener) {

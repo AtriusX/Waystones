@@ -14,17 +14,16 @@ import org.bukkit.potion.PotionEffectType
 import xyz.atrius.waystones.SicknessOption.PREVENT_TELEPORT
 import xyz.atrius.waystones.configuration
 import xyz.atrius.waystones.handler.HandleState
-import xyz.atrius.waystones.handler.Handler
 
 val Player.immortal: Boolean
     get() = gameMode in listOf(GameMode.CREATIVE, GameMode.SPECTATOR)
 
-fun Player.sendActionMessage(message: String?, color: ChatColor = ChatColor.WHITE) = if (message != null)
-    spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent("${color}${ChatColor.BOLD}$message"))
+fun Player.sendActionMessage(message: String?) = if (message != null)
+    spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent(message))
 else Unit
 
 fun Player.sendActionError(message: String?) =
-    sendActionMessage(message, ChatColor.RED)
+    sendActionMessage("${ChatColor.RED}${ChatColor.BOLD}$message")
 
 fun Player.sendActionError(fail: HandleState.Fail) =
     sendActionError(fail.error)

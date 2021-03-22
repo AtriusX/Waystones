@@ -1,6 +1,5 @@
 package xyz.atrius.waystones.handler
 
-import net.md_5.bungee.api.ChatColor
 import org.bukkit.Location
 import org.bukkit.block.data.type.RespawnAnchor
 import org.bukkit.entity.Player
@@ -14,6 +13,7 @@ import xyz.atrius.waystones.data.WarpActiveState
 import xyz.atrius.waystones.data.WarpErrorState
 import xyz.atrius.waystones.handler.HandleState.Fail
 import xyz.atrius.waystones.handler.HandleState.Success
+import xyz.atrius.waystones.localization
 import xyz.atrius.waystones.utility.*
 import kotlin.random.Random
 
@@ -64,9 +64,9 @@ class WaystoneHandler(
                 PotionEffect(PotionEffectType.CONFUSION, 600, 9),
                 PotionEffect(PotionEffectType.BLINDNESS, 100, 9)
             )
-            player.sendActionMessage("You feel a chill in your bones...", ChatColor.DARK_GRAY)
+            player.sendActionMessage(localization.localize("warp-sickness"))
         } else {
-            player.sendActionMessage("Warped to $name", ChatColor.DARK_GREEN)
+            player.sendActionMessage(localization.localize("warp-safely"))
         }
         // Determine how power is depleted from the warp
         val power = configuration.requirePower()

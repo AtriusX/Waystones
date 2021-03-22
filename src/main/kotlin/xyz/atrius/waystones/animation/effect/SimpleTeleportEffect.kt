@@ -1,11 +1,11 @@
 package xyz.atrius.waystones.animation.effect
 
-import net.md_5.bungee.api.ChatColor
 import org.bukkit.Location
 import org.bukkit.Particle
 import org.bukkit.Sound
 import xyz.atrius.waystones.configuration
 import xyz.atrius.waystones.handler.WaystoneHandler
+import xyz.atrius.waystones.localization
 import xyz.atrius.waystones.utility.*
 import kotlin.math.ceil
 
@@ -20,7 +20,7 @@ class SimpleTeleportEffect(warp: WaystoneHandler) : TeleportEffect {
 
     override fun animation(timer: Long) {
         val seconds = ceil(timer / 20.0).toInt() // TODO: Should this be moved elsewhere?
-        player.sendActionMessage("Warping to $name in $seconds second(s)", ChatColor.DARK_GREEN)
+        player.sendActionMessage(localization.localize("warp-wait", name, seconds))
         // Play warp animation if enabled
         if (!configuration.warpAnimations())
             return

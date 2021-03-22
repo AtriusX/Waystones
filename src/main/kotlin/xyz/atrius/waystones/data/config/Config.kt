@@ -13,6 +13,10 @@ class Config(plugin: KotlinPlugin) {
         plugin.saveDefaultConfig()
     }
 
+    // The localization to be used
+    val localization: Property<String> =
+        Property("localization", "en", StringParser)
+
     // The amount of ticks to wait before teleporting
     val waitTime: Property<Int> =
         Property("wait-time", 60, PositiveValueParser)

@@ -2,6 +2,7 @@ package xyz.atrius.waystones
 
 import xyz.atrius.waystones.commands.*
 import xyz.atrius.waystones.data.config.Config
+import xyz.atrius.waystones.data.config.Localization
 import xyz.atrius.waystones.data.crafting.CompassRecipe
 import xyz.atrius.waystones.event.*
 import xyz.atrius.waystones.service.WarpNameService
@@ -13,6 +14,7 @@ import xyz.atrius.waystones.utility.registerRecipes
 
 lateinit var plugin       : KotlinPlugin
 lateinit var configuration: Config
+lateinit var localization : Localization
 
 @Suppress("unused")
 class Waystones : KotlinPlugin() {
@@ -20,6 +22,7 @@ class Waystones : KotlinPlugin() {
     override fun onEnable() {
         plugin        = this
         configuration = Config(this)
+        localization  = Localization(this, configuration.localization())
         // Load services
         WarpNameService.load()
         WorldRatioService.load()

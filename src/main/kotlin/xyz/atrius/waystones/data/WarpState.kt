@@ -1,17 +1,20 @@
 package xyz.atrius.waystones.data
 
+import xyz.atrius.waystones.localization
+
 sealed class WarpState(
-    private val status: String
+    private val status: String,
+    private val range: Int
 ) {
     override fun toString(): String {
-        return "Status: $status"
+        return localization.localize("waystone-status", status, range)
     }
 }
 
 sealed class WarpErrorState(
     private val message: String,
     status: String = "Unknown",
-) : WarpState(status) {
+) : WarpState(status, -2) {
 
     object None : WarpErrorState("The connection to %s has been severed")
 
@@ -27,17 +30,9 @@ sealed class WarpErrorState(
 
 sealed class WarpActiveState(
     val range: Int
-) : WarpState("Active") {
+) : WarpState("Active", range) {
 
     class Active(range: Int) : WarpActiveState(range)
 
     object Infinite : WarpActiveState(-1)
-
-    override fun toString(): String {
-        val range = when (range) {
-            -1 -> "Infinite"
-            else -> this.range.toString()
-        }
-        return "${super.toString()} | Range: $range"
-    }
 }
