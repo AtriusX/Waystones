@@ -27,6 +27,7 @@ class Localization(val plugin: KotlinPlugin, localeTag: String) {
 
         if (!configFile.exists()) {
             plugin.saveResource(configFile.name, false)
+            config.load(configFile)
         } else {
             val defaultConfigFile = plugin.getResource(configFile.name) ?: plugin.getResource("locale-en.yml")!!
             val defaultConfig = YamlConfiguration.loadConfiguration(InputStreamReader(defaultConfigFile))
