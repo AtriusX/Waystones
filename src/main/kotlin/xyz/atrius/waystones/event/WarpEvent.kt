@@ -23,7 +23,7 @@ import xyz.atrius.waystones.utility.sendActionMessage
 
 object WarpEvent : Listener {
 
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler
     fun onClick(event: PlayerInteractEvent) {
         val player = event.player
         // Don't start warp while flying with elytra, not right-clicking, or a lodestone was clicked
