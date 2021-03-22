@@ -29,6 +29,7 @@ class WaystoneHandler(
 
     override fun handle(): HandleState {
         return when (state) {
+            is WarpActiveState.Infinite -> Success
             is WarpActiveState -> {
                 // Calculate range, sync ratio and distance from warp
                 val range    = state.range / if (interDimension) configuration.worldRatio() else 1
