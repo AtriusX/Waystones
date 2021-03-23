@@ -10,12 +10,12 @@ object ReloadCommand : SimpleCommand("reload", "rl") {
 
     override fun execute(sender: CommandSender, args: Array<String>) {
         if (!sender.hasPermission("waystones.reload")) {
-            sender.message(localization.localize("command-no-permission"))
+            sender.message(localization["command-no-permission"])
             return
         }
 
         ConfigManager.reload()
         localization.reload(configuration.localization())
-        sender.message(localization.localize("command-reload"))
+        sender.message(localization["command-reload"])
     }
 }

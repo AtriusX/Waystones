@@ -10,7 +10,7 @@ object ConfigCommand : SimpleCommand("config", "conf", "co", "c") {
     override fun execute(sender: CommandSender, args: Array<String>) {
         // Permissions Check
         if (!sender.hasPermission("waystones.config"))
-            return sender.message(localization.localize("command-no-permission"))
+            return sender.message(localization["command-no-permission"])
         // Pull arguments from args
         val setting = args.getOrNull(0)
         val new = args.getOrNull(1)
@@ -20,12 +20,12 @@ object ConfigCommand : SimpleCommand("config", "conf", "co", "c") {
         val prop = ConfigManager[setting]
         // Return the existing config value
         if (new == null)
-            return sender.message(localization.localize("command-config-view", setting, prop))
+            return sender.message(localization["command-config-view", setting, prop])
         // Assign the new config value to the system and print result of action
         if (prop?.invoke(new) == true)
-            sender.message(localization.localize("command-config-set", setting, prop))
+            sender.message(localization["command-config-set", setting, prop])
         else
-            sender.message(localization.localize("command-config-set-fail", setting))
+            sender.message(localization["command-config-set-fail", setting])
     }
 
     private fun listOptions(sender: CommandSender) {

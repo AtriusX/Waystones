@@ -24,7 +24,7 @@ object NameEvent : Listener {
         when (handler.handle()) {
             Success -> {
                 val name = handler.createName() ?: return
-                player.sendActionMessage(localization.localize("waystone-set-name", name))
+                player.sendActionMessage(localization["waystone-set-name", name])
                 player.playSound(player.location, Sound.BLOCK_RESPAWN_ANCHOR_SET_SPAWN, 1f, 2f)
                 event.cancel()
             }

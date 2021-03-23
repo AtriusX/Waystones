@@ -64,9 +64,9 @@ class WaystoneHandler(
                 PotionEffect(PotionEffectType.CONFUSION, 600, 9),
                 PotionEffect(PotionEffectType.BLINDNESS, 100, 9)
             )
-            player.sendActionMessage(localization.localize("warp-sickness"))
+            player.sendActionMessage(localization["warp-sickness"])
         } else {
-            player.sendActionMessage(localization.localize("warp-safely"))
+            player.sendActionMessage(localization["warp-safely"])
         }
         // Determine how power is depleted from the warp
         val power = configuration.requirePower()
@@ -79,5 +79,5 @@ class WaystoneHandler(
     }
 
     private fun distanceError(name: String, distance: Double, range: Int): String =
-        localization.localize("warp-out-of-range", name, distance - range)
+        localization["warp-out-of-range", name, distance - range]
 }

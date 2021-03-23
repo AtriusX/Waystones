@@ -19,12 +19,12 @@ typealias KotlinPlugin =
     JavaPlugin
 
 private val DEFAULT_LORE: List<String> =
-        listOf(localization.localize("key-lore"))
+        listOf(localization["key-lore"])
 
 fun defaultWarpKey(amount: Int = 1): ItemStack = ItemStack(Material.COMPASS, amount).update<CompassMeta> {
     this["is_warp_key", INTEGER] = 1
     lore = DEFAULT_LORE
-    setDisplayName(localization.localize("key-name"))
+    setDisplayName(localization["key-name"])
 }
 
 fun KotlinPlugin.registerEvents(vararg listeners: Listener) {

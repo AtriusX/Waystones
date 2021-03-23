@@ -20,7 +20,7 @@ class SimpleTeleportEffect(warp: WaystoneHandler) : TeleportEffect {
 
     override fun animation(timer: Long) {
         val seconds = ceil(timer / 20.0).toInt() // TODO: Should this be moved elsewhere?
-        player.sendActionMessage(localization.localize("warp-wait", name, seconds))
+        player.sendActionMessage(localization["warp-wait", name, seconds])
         // Play warp animation if enabled
         if (!configuration.warpAnimations())
             return

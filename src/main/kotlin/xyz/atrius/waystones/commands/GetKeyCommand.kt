@@ -28,12 +28,12 @@ object GetKeyCommand : SimpleCommand("getkey", "gk", "key", "k") {
             || !sender.hasPermission("waystones.getkey.all")
             && sender != player
         ) {
-            sender.message(localization.localize("command-no-permission"))
+            sender.message(localization["command-no-permission"])
             return
         }
         // Add WarpKey(s) to Player inventory
         player.inventory.addItem(defaultWarpKey(amount))
         // Inform Player of given WarpKey
-        sender.message(localization.localize("command-give-key", amount, player.displayName))
+        sender.message(localization["command-give-key", amount, player.displayName])
     }
 }

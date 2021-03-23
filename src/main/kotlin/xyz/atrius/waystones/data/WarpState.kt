@@ -7,33 +7,33 @@ sealed class WarpState(
     private val range: Int
 ) {
     override fun toString(): String {
-        return localization.localize("waystone-status", status, range)
+        return localization["waystone-status", status, range]
     }
 }
 
 sealed class WarpErrorState(
     private val message: String,
-    status: String = localization.localize("waystone-status-unknown"),
+    status: String = localization["waystone-status-unknown"],
 ) : WarpState(status, -2) {
 
-    object None : WarpErrorState(localization.localize("warp-error"))
+    object None : WarpErrorState(localization["warp-error"])
 
-    object Inhibited : WarpErrorState(localization.localize("warp-error-inhibited"),
-            localization.localize("waystone-status-inhibited"))
+    object Inhibited : WarpErrorState(localization["warp-error-inhibited"],
+            localization["waystone-status-inhibited"])
 
-    object Unpowered : WarpErrorState(localization.localize("warp-error-unpowered"),
-            localization.localize("waystone-status-unpowered"))
+    object Unpowered : WarpErrorState(localization["warp-error-unpowered"],
+            localization["waystone-status-unpowered"])
 
-    object Obstructed : WarpErrorState(localization.localize("warp-error-obstructed"),
-            localization.localize("waystone-status-obstructed"))
+    object Obstructed : WarpErrorState(localization["warp-error-obstructed"],
+            localization["waystone-status-obstructed"])
 
     open fun message(name: String): String =
-        message.format(name)
+        localization.format(message, name)
 }
 
 sealed class WarpActiveState(
     val range: Int
-) : WarpState(localization.localize("waystone-status-active"), range) {
+) : WarpState(localization["waystone-status-active"], range) {
 
     class Active(range: Int) : WarpActiveState(range)
 

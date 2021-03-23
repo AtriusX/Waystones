@@ -38,7 +38,7 @@ object WarpEvent : Listener {
         }
         // Make sure the key is connected before we continue
         val location = key.getLocation() ?: return
-        val name = WarpNameService[location] ?: localization.localize("unnamed-waystone")
+        val name = WarpNameService[location] ?: localization["unnamed-waystone"]
         // Handle key actions and terminate if handler fails
         val warp = WaystoneHandler(player, location, name)
         when (val result = warp.handle()) {
@@ -48,7 +48,7 @@ object WarpEvent : Listener {
                 TeleportManager.queueEvent(player, warp) {
                     key.useKey()
                     warp.teleport()
-                    player.sendActionMessage(localization.localize("warp-success"))
+                    player.sendActionMessage(localization["warp-success"])
                 }
                 event.cancel()
             }
@@ -63,7 +63,7 @@ object WarpEvent : Listener {
         if (player !in TeleportManager)
             return
         TeleportManager.cancel(player)
-        player.sendActionError(localization.localize("warp-cancel"))
+        player.sendActionError(localization["warp-cancel"])
     }
 
     @EventHandler
@@ -75,6 +75,6 @@ object WarpEvent : Listener {
         if (entity !in TeleportManager)
             return
         TeleportManager.cancel(entity)
-        entity.sendActionError(localization.localize("warp-interrupt"))
+        entity.sendActionError(localization["warp-interrupt"])
     }
 }

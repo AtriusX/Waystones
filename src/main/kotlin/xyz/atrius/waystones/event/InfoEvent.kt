@@ -26,12 +26,12 @@ object InfoEvent: Listener {
         // Make sure the correct block/item pair is used
         if (block?.type != Material.LODESTONE || !item.isWarpKey())
             return
-        val name = WarpNameService[block.location] ?: localization.localize("unnamed-waystone")
+        val name = WarpNameService[block.location] ?: localization["unnamed-waystone"]
         val state = block.getWarpState(player)
         // Skip any non-warp blocks
         if (state == WarpErrorState.None)
             return
-        player.sendActionMessage(localization.localize("waystone-info", name, state))
+        player.sendActionMessage(localization["waystone-info", name, state])
         event.cancel()
     }
 }
