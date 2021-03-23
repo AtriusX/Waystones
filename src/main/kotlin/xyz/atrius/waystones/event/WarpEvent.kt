@@ -4,6 +4,7 @@ import net.md_5.bungee.api.ChatColor
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
+import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action.RIGHT_CLICK_AIR
 import org.bukkit.event.entity.EntityDamageEvent
@@ -55,7 +56,7 @@ object WarpEvent : Listener {
         }
     }
 
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     fun onMove(event: PlayerMoveEvent) {
         if (!event.hasMovedBlock())
             return
@@ -66,7 +67,7 @@ object WarpEvent : Listener {
         player.sendActionError("Teleportation cancelled")
     }
 
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     fun onDamage(event: EntityDamageEvent) {
         val entity = event.entity
         if (!configuration.damageStopsWarping() || entity !is Player)

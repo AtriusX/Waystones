@@ -3,6 +3,7 @@ package xyz.atrius.waystones.event
 import org.bukkit.Material
 import org.bukkit.block.Block
 import org.bukkit.event.EventHandler
+import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.block.BlockExplodeEvent
@@ -11,17 +12,17 @@ import xyz.atrius.waystones.service.WarpNameService
 
 object DestroyEvent : Listener {
 
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     fun onBreak(event: BlockBreakEvent) {
         val block = event.block
         if (block.type == Material.LODESTONE)
             WarpNameService.remove(block.location)
     }
 
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     fun onExplode(event: BlockExplodeEvent) = destroy(event.blockList())
 
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     fun onEntityExplode(event: EntityExplodeEvent) = destroy(event.blockList())
 
     private fun destroy(blocks: List<Block>) =
