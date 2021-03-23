@@ -23,14 +23,14 @@ class LinkHandler(
             return Ignore
         // Check if the player is able to link to this waystone
         if (!player.hasPermission("waystones.link"))
-            return Fail(localization["link-no-permission"].toString())
+            return Fail(localization["link-no-permission"])
         // Prevent linking if relinking is disabled
         val meta = item.itemMeta as CompassMeta
         return if (!configuration.relinkableKeys() && meta.hasLodestone())
-            Fail(localization["link-not-relinkable"].toString())
+            Fail(localization["link-not-relinkable"])
         // Prevent relinking if the location is the same
         else if (!player.immortal && meta.lodestone == block.location)
-            Fail(localization["link-already-linked"].toString())
+            Fail(localization["link-already-linked"])
         else Success
     }
 

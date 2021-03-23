@@ -25,7 +25,7 @@ class KeyHandler(
     private val keyState: KeyState = item.getKeyState(player)
 
     override fun handle(): HandleState {
-        return Fail(keyState.message?.toString() ?: return Success)
+        return Fail(keyState.message ?: return Success)
     }
 
     fun getLocation(): Location? =

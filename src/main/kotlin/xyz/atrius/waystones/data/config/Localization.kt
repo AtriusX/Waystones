@@ -21,7 +21,7 @@ class Localization(val plugin: KotlinPlugin, localeTag: String) {
     }
 
     fun localize(key: String, vararg args: Any?): LocalizedString {
-        return LocalizedString(key, args)
+        return LocalizedString(key, *args)
     }
 
     fun format(string: String, vararg args: Any?): String {

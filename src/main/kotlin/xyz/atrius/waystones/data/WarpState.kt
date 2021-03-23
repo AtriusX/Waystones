@@ -17,23 +17,20 @@ sealed class WarpState(
 }
 
 sealed class WarpErrorState(
-    private val message: LocalizedString,
+    val message_key: String,
     status: LocalizedString = localization["waystone-status-unknown"],
 ) : WarpState(status, -2) {
 
-    object None : WarpErrorState(localization["warp-error"])
+    object None : WarpErrorState("warp-error")
 
-    object Inhibited : WarpErrorState(localization["warp-error-inhibited"],
+    object Inhibited : WarpErrorState("warp-error-inhibited",
             localization["waystone-status-inhibited"])
 
-    object Unpowered : WarpErrorState(localization["warp-error-unpowered"],
+    object Unpowered : WarpErrorState("warp-error-unpowered",
             localization["waystone-status-unpowered"])
 
-    object Obstructed : WarpErrorState(localization["warp-error-obstructed"],
+    object Obstructed : WarpErrorState("warp-error-obstructed",
             localization["waystone-status-obstructed"])
-
-    open fun message(name: String): String =
-            message.format(name)
 }
 
 sealed class WarpActiveState(
