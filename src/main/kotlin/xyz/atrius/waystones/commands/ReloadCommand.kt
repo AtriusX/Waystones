@@ -15,7 +15,7 @@ object ReloadCommand : SimpleCommand("reload", "rl") {
         }
 
         ConfigManager.reload()
-        localization.reload(configuration.localization())
+        localization.reload()
         sender.message(localization["command-reload"])
     }
 }

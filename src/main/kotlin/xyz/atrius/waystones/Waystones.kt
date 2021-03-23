@@ -22,7 +22,7 @@ class Waystones : KotlinPlugin() {
     override fun onEnable() {
         plugin        = this
         configuration = Config(this)
-        localization  = Localization(this, configuration.localization())
+        localization  = Localization(this)
         // Load services
         WarpNameService.load()
         WorldRatioService.load()
