@@ -37,7 +37,7 @@ class Property<T>(
     }
 
     private fun <T> update(property: String, new: T) {
-        config.set(property, if (new is Enum<*>) new.toString() else new)
+        config.set(property, new.toString())
         plugin.saveConfig()
     }
 
