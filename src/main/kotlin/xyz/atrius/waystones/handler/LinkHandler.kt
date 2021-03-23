@@ -23,14 +23,14 @@ class LinkHandler(
             return Ignore
         // Check if the player is able to link to this waystone
         if (!player.hasPermission("waystones.link"))
-            return Fail(localization["link-no-permission"])
+            return Fail(localization["link-no-permission"].toString())
         // Prevent linking if relinking is disabled
         val meta = item.itemMeta as CompassMeta
         return if (!configuration.relinkableKeys() && meta.hasLodestone())
-            Fail(localization["link-not-relinkable"])
+            Fail(localization["link-not-relinkable"].toString())
         // Prevent relinking if the location is the same
         else if (!player.immortal && meta.lodestone == block.location)
-            Fail(localization["link-already-linked"])
+            Fail(localization["link-already-linked"].toString())
         else Success
     }
 
@@ -44,6 +44,6 @@ class LinkHandler(
         lodestone = block.location
         isLodestoneTracked = true
         val name = WarpNameService[block.location] ?: localization["unnamed-waystone"]
-        lore = listOf(localization["link-key-lore", name, lodestone?.locationCode])
+        lore = listOf(localization["link-key-lore", name, lodestone?.locationCode].toString())
     }
 }

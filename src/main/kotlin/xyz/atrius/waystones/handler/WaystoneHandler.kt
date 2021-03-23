@@ -79,5 +79,5 @@ class WaystoneHandler(
     }
 
     private fun distanceError(name: String, distance: Double, range: Int): String =
-        localization["warp-out-of-range", name, distance - range]
+        localization["warp-out-of-range", name, distance - range].toString()
 }

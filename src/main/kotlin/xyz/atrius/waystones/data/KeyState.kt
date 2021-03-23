@@ -1,9 +1,10 @@
 package xyz.atrius.waystones.data
 
 import org.bukkit.Location
+import xyz.atrius.waystones.data.config.LocalizedString
 import xyz.atrius.waystones.localization
 
-sealed class KeyState(val message: String?) {
+sealed class KeyState(val message: LocalizedString?) {
 
     object None : KeyState(null)
 

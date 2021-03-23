@@ -18,13 +18,12 @@ import xyz.atrius.waystones.plugin
 typealias KotlinPlugin =
     JavaPlugin
 
-private val DEFAULT_LORE: List<String> =
-        listOf(localization["key-lore"])
+private val DEFAULT_LORE: List<String> = listOf(localization["key-lore"].toString())
 
 fun defaultWarpKey(amount: Int = 1): ItemStack = ItemStack(Material.COMPASS, amount).update<CompassMeta> {
     this["is_warp_key", INTEGER] = 1
     lore = DEFAULT_LORE
-    setDisplayName(localization["key-name"])
+    setDisplayName(localization["key-name"].toString())
 }
 
 fun KotlinPlugin.registerEvents(vararg listeners: Listener) {

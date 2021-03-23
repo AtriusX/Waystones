@@ -38,7 +38,7 @@ object WarpEvent : Listener {
         }
         // Make sure the key is connected before we continue
         val location = key.getLocation() ?: return
-        val name = WarpNameService[location] ?: localization["unnamed-waystone"]
+        val name = WarpNameService[location] ?: localization["unnamed-waystone"].toString()
         // Handle key actions and terminate if handler fails
         val warp = WaystoneHandler(player, location, name)
         when (val result = warp.handle()) {
