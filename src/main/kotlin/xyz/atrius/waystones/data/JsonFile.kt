@@ -25,6 +25,6 @@ open class JsonFile<T>(name: String) {
 
     fun save() {
         val json = json.toJson(data)
-        Files.write(file.toPath(), json.toByteArray(), CREATE, WRITE)
+        Files.write(file.toPath(), json.toByteArray())
     }
 }
