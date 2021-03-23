@@ -10,14 +10,13 @@ import java.text.MessageFormat
 import java.util.*
 import kotlin.collections.HashMap
 
-class Localization(val plugin: KotlinPlugin, localeTag: String) {
-    private var configFile = File(plugin.dataFolder, "locale-$localeTag.yml")
+class Localization(private val plugin: KotlinPlugin, private val locale: Locale) {
+    private var configFile = File(plugin.dataFolder, "locale-${locale.toLanguageTag()}.yml")
     private val config = YamlConfiguration()
     private val cachedMessageFormat = HashMap<String, MessageFormat>()
-    var locale: Locale = Locale.getDefault()
 
     init {
-        reload(localeTag)
+        reload(locale)
     }
 
     fun localize(key: String, vararg args: Any?): LocalizedString {
@@ -38,8 +37,8 @@ class Localization(val plugin: KotlinPlugin, localeTag: String) {
         return localize(key, *args)
     }
 
-    fun reload(localeTag: String) {
-        configFile = File(plugin.dataFolder, "locale-$localeTag.yml")
+    fun reload(locale: Locale) {
+        configFile = File(plugin.dataFolder, "locale-${locale.toLanguageTag()}.yml")
 
         if (!configFile.exists()) {
             plugin.saveResource(configFile.name, false)
@@ -56,6 +55,5 @@ class Localization(val plugin: KotlinPlugin, localeTag: String) {
         }
 
         cachedMessageFormat.clear()
-        locale = Locale.forLanguageTag(config.getString("locale"))
     }
 }

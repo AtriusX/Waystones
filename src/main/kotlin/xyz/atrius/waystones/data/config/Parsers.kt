@@ -1,5 +1,6 @@
 package xyz.atrius.waystones.data.config
 
+import java.util.Locale
 import kotlin.reflect.KClass
 
 interface ArgumentParser<T> {
@@ -57,6 +58,12 @@ object PercentageParser : ArgumentParser<Double> {
 object BooleanParser : ArgumentParser<Boolean> {
     override fun parse(input: String?): Boolean? =
         if (input?.toLowerCase() in arrayOf("true", "false")) input.toBoolean() else null
+}
+
+object LocaleParser : ArgumentParser<Locale> {
+    override fun parse(input: String?): Locale? = input?.let { Locale.forLanguageTag(input) }
+
+    override fun toString(value: Locale): String = value.toLanguageTag()
 }
 
 class EnumParser<E : Enum<E>>(private val enum: KClass<E>) : ArgumentParser<E> {
