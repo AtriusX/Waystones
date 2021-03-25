@@ -17,7 +17,7 @@ class Config(plugin: KotlinPlugin) {
 
     // The localization to be used
     val locale: Property<Locale> =
-        Property("localization", Locale.ENGLISH, LocaleParser, { localization.reload() })
+        Property("localization", Locale.ENGLISH, LocaleParser) { localization.reload() }
 
     // The amount of ticks to wait before teleporting
     val waitTime: Property<Int> =
