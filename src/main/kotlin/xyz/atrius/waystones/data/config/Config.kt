@@ -5,6 +5,7 @@ import xyz.atrius.waystones.Power.INTER_DIMENSION
 import xyz.atrius.waystones.SicknessOption
 import xyz.atrius.waystones.SicknessOption.DAMAGE_ON_TELEPORT
 import xyz.atrius.waystones.data.Property
+import xyz.atrius.waystones.localization
 import xyz.atrius.waystones.utility.KotlinPlugin
 import java.util.*
 
@@ -15,8 +16,8 @@ class Config(plugin: KotlinPlugin) {
     }
 
     // The localization to be used
-    val localization: Property<Locale> =
-        Property("localization", Locale.ENGLISH, LocaleParser)
+    val locale: Property<Locale> =
+        Property("localization", Locale.ENGLISH, LocaleParser, { localization.reload() })
 
     // The amount of ticks to wait before teleporting
     val waitTime: Property<Int> =

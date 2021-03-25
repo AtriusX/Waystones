@@ -9,7 +9,7 @@ import java.io.InputStreamReader
 import java.text.MessageFormat
 
 class Localization(private val plugin: KotlinPlugin) {
-    private var configFile = File(plugin.dataFolder, "locale-${configuration.localization().toLanguageTag()}.yml")
+    private var configFile = File(plugin.dataFolder, "locale-${configuration.locale().toLanguageTag()}.yml")
     private val config = YamlConfiguration()
     private val cachedMessageFormat = HashMap<String, MessageFormat>()
 
@@ -22,13 +22,13 @@ class Localization(private val plugin: KotlinPlugin) {
     }
 
     fun format(string: String, vararg args: Any?): String {
-        return MessageFormat(string, configuration.localization()).format(args).translateColors()
+        return MessageFormat(string, configuration.locale()).format(args).translateColors()
     }
 
     fun getTemplate(key: String): MessageFormat {
         val template = config.get(key)
                 ?: throw IllegalArgumentException("$key does not exist in localization file!")
-        return cachedMessageFormat.getOrPut(key, { MessageFormat(template as String, configuration.localization()) })
+        return cachedMessageFormat.getOrPut(key, { MessageFormat(template as String, configuration.locale()) })
     }
 
     operator fun get(key: String, vararg args: Any?): LocalizedString {
@@ -36,7 +36,7 @@ class Localization(private val plugin: KotlinPlugin) {
     }
 
     fun reload() {
-        configFile = File(plugin.dataFolder, "locale-${configuration.localization().toLanguageTag()}.yml")
+        configFile = File(plugin.dataFolder, "locale-${configuration.locale().toLanguageTag()}.yml")
 
         if (!configFile.exists()) {
             plugin.saveResource(configFile.name, false)

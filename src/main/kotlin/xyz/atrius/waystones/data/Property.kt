@@ -10,7 +10,8 @@ import kotlin.reflect.KProperty
 class Property<T>(
     property: String,
     default: T,
-    private val parser: ArgumentParser<T>
+    private val parser: ArgumentParser<T>,
+    private val onUpdate: () -> Unit = {}
 ) {
     private val config: FileConfiguration
         get() = plugin.config
@@ -29,6 +30,7 @@ class Property<T>(
 
     operator fun invoke(input: String?): Boolean {
         value = parser.parse(input) ?: return false
+        onUpdate()
         return true
     }
 
