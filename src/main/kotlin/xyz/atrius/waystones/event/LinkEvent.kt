@@ -12,7 +12,7 @@ import xyz.atrius.waystones.utility.sendActionError
 
 object LinkEvent : Listener {
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     fun onSet(event: PlayerInteractEvent) {
         if (event.action != Action.RIGHT_CLICK_BLOCK)
             return
