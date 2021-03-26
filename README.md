@@ -25,6 +25,7 @@ Players can create and warp to a waystone by creating a lodestone and linking it
 
 ### Configuration Options:  
   
+- **locale *[default: en]***: The localization file to be used (named lang-locale.yml). This will also affect how numbers or date are formatted if the locale matches any [BCP 47](https://www.iana.org/assignments/language-subtag-registry/language-subtag-registry) language tag, or the language/country neutral format will be used.
 - **wait-time *[default: 60]***: The amount of time (in ticks) to wait before teleporting to the waystone. Moving will cancel the teleport.
 - **damage-stops-warping *[default: true]***: Whether or not taking damage will prevent the player from teleporting.
 - **limit-distance *[default: true]***: Limits the range of a waystone to the base distance plus the total boost value.
