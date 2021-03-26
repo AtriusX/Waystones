@@ -1,6 +1,5 @@
 package xyz.atrius.waystones.event
 
-import net.md_5.bungee.api.ChatColor
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -15,6 +14,7 @@ import xyz.atrius.waystones.handler.HandleState.Fail
 import xyz.atrius.waystones.handler.HandleState.Success
 import xyz.atrius.waystones.handler.KeyHandler
 import xyz.atrius.waystones.handler.WaystoneHandler
+import xyz.atrius.waystones.localization
 import xyz.atrius.waystones.service.WarpNameService
 import xyz.atrius.waystones.utility.cancel
 import xyz.atrius.waystones.utility.hasMovedBlock
@@ -38,7 +38,7 @@ object WarpEvent : Listener {
         }
         // Make sure the key is connected before we continue
         val location = key.getLocation() ?: return
-        val name = WarpNameService[location] ?: "Waystone"
+        val name = WarpNameService[location] ?: localization["unnamed-waystone"].toString()
         // Handle key actions and terminate if handler fails
         val warp = WaystoneHandler(player, location, name)
         when (val result = warp.handle()) {
@@ -48,7 +48,7 @@ object WarpEvent : Listener {
                 TeleportManager.queueEvent(player, warp) {
                     key.useKey()
                     warp.teleport()
-                    player.sendActionMessage("Teleportation Successful", ChatColor.GREEN)
+                    player.sendActionMessage(localization["warp-success"])
                 }
                 event.cancel()
             }
@@ -63,7 +63,7 @@ object WarpEvent : Listener {
         if (player !in TeleportManager)
             return
         TeleportManager.cancel(player)
-        player.sendActionError("Teleportation cancelled")
+        player.sendActionError(localization["warp-cancel"])
     }
 
     @EventHandler
@@ -75,6 +75,6 @@ object WarpEvent : Listener {
         if (entity !in TeleportManager)
             return
         TeleportManager.cancel(entity)
-        entity.sendActionError("Teleportation interrupted")
+        entity.sendActionError(localization["warp-interrupt"])
     }
 }

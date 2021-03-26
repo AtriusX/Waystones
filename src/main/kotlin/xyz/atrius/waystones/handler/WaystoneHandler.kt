@@ -1,6 +1,5 @@
 package xyz.atrius.waystones.handler
 
-import net.md_5.bungee.api.ChatColor
 import org.bukkit.Location
 import org.bukkit.block.data.type.RespawnAnchor
 import org.bukkit.entity.Player
@@ -12,8 +11,10 @@ import xyz.atrius.waystones.SicknessOption
 import xyz.atrius.waystones.configuration
 import xyz.atrius.waystones.data.WarpActiveState
 import xyz.atrius.waystones.data.WarpErrorState
+import xyz.atrius.waystones.data.config.LocalizedString
 import xyz.atrius.waystones.handler.HandleState.Fail
 import xyz.atrius.waystones.handler.HandleState.Success
+import xyz.atrius.waystones.localization
 import xyz.atrius.waystones.utility.*
 import kotlin.random.Random
 
@@ -39,7 +40,7 @@ class WaystoneHandler(
                 if (distance > range)
                     Fail(distanceError(name, distance, range)) else Success
             }
-            is WarpErrorState -> Fail(state.message(name))
+            is WarpErrorState -> Fail(localization[state.message_key, name])
         }
     }
 
@@ -65,9 +66,9 @@ class WaystoneHandler(
                 PotionEffect(PotionEffectType.CONFUSION, 600, 9),
                 PotionEffect(PotionEffectType.BLINDNESS, 100, 9)
             )
-            player.sendActionMessage("You feel a chill in your bones...", ChatColor.DARK_GRAY)
+            player.sendActionMessage(localization["warp-sickness"])
         } else {
-            player.sendActionMessage("Warped to $name", ChatColor.DARK_GREEN)
+            player.sendActionMessage(localization["warp-safely"])
         }
         // Determine how power is depleted from the warp
         val power = configuration.requirePower()
@@ -79,6 +80,6 @@ class WaystoneHandler(
         }
     }
 
-    private fun distanceError(name: String, distance: Double, range: Int): String =
-        "$name is out of warp range [%.1f block(s)]".format(distance - range)
+    private fun distanceError(name: String, distance: Double, range: Int): LocalizedString =
+        localization["warp-out-of-range", name, distance - range]
 }

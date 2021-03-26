@@ -1,43 +1,43 @@
 package xyz.atrius.waystones.data
 
+import xyz.atrius.waystones.data.config.LocalizedString
+import xyz.atrius.waystones.localization
+
 sealed class WarpState(
-    private val status: String
+    private val status: LocalizedString,
+    private val range: Int
 ) {
     override fun toString(): String {
-        return "Status: $status"
+        return toLocalizedString().toString()
+    }
+
+    fun toLocalizedString(): LocalizedString {
+        return localization["waystone-status", status, range]
     }
 }
 
 sealed class WarpErrorState(
-    private val message: String,
-    status: String = "Unknown",
-) : WarpState(status) {
+    val message_key: String,
+    status: LocalizedString = localization["waystone-status-unknown"],
+) : WarpState(status, -2) {
 
-    object None : WarpErrorState("The connection to %s has been severed")
+    object None : WarpErrorState("warp-error")
 
-    object Inhibited : WarpErrorState("%s has been suppressed", "Inhibited")
+    object Inhibited : WarpErrorState("warp-error-inhibited",
+            localization["waystone-status-inhibited"])
 
-    object Unpowered : WarpErrorState("%s does not currently have power", "Unpowered")
+    object Unpowered : WarpErrorState("warp-error-unpowered",
+            localization["waystone-status-unpowered"])
 
-    object Obstructed : WarpErrorState("%s is obstructed and cannot be used", "Obstructed")
-
-    open fun message(name: String): String =
-        message.format(name)
+    object Obstructed : WarpErrorState("warp-error-obstructed",
+            localization["waystone-status-obstructed"])
 }
 
 sealed class WarpActiveState(
     val range: Int
-) : WarpState("Active") {
+) : WarpState(localization["waystone-status-active"], range) {
 
     class Active(range: Int) : WarpActiveState(range)
 
     object Infinite : WarpActiveState(-1)
-
-    override fun toString(): String {
-        val range = when (range) {
-            -1 -> "Infinite"
-            else -> this.range.toString()
-        }
-        return "${super.toString()} | Range: $range"
-    }
 }

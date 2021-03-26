@@ -13,18 +13,27 @@ import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import xyz.atrius.waystones.SicknessOption.PREVENT_TELEPORT
 import xyz.atrius.waystones.configuration
+import xyz.atrius.waystones.data.config.LocalizedString
 import xyz.atrius.waystones.handler.HandleState
-import xyz.atrius.waystones.handler.Handler
 
 val Player.immortal: Boolean
     get() = gameMode in listOf(GameMode.CREATIVE, GameMode.SPECTATOR)
 
-fun Player.sendActionMessage(message: String?, color: ChatColor = ChatColor.WHITE) = if (message != null)
-    spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent("${color}${ChatColor.BOLD}$message"))
+fun Player.sendActionMessage(message: LocalizedString?) = if (message != null)
+    sendActionMessage(message.toString())
 else Unit
 
-fun Player.sendActionError(message: String?) =
-    sendActionMessage(message, ChatColor.RED)
+fun Player.sendActionMessage(message: String?) = if (message != null)
+    spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent(message))
+else Unit
+
+fun Player.sendActionError(message: LocalizedString?) = if (message != null)
+    sendActionError(message.toString())
+else Unit
+
+fun Player.sendActionError(message: String?) = if (message != null)
+    sendActionMessage("${ChatColor.RED}${ChatColor.BOLD}$message")
+else Unit
 
 fun Player.sendActionError(fail: HandleState.Fail) =
     sendActionError(fail.error)
@@ -63,6 +72,9 @@ fun Player.canWarp(): Boolean =
 
 fun Player.addPotionEffects(vararg effects: PotionEffect) =
     addPotionEffects(arrayListOf(*effects))
+
+fun CommandSender.message(message: LocalizedString, colorCode: Char = '&') =
+    message(message.toString(), colorCode)
 
 fun CommandSender.message(message: String, colorCode: Char = '&') =
     sendMessage(message.translateColors(colorCode))
