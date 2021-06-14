@@ -33,6 +33,8 @@ class WaystoneHandler(
             is WarpActiveState.Infinite -> Success
             is WarpActiveState -> {
                 // Calculate range, sync ratio and distance from warp
+                if (interDimension && !configuration.jumpWorlds())
+                    return Fail(localization["world-jump-disabled"])
                 val range    = state.range / if (interDimension) configuration.worldRatio() else 1
                 val type     = location.synchronize(warpLocation)
                 val distance = location.toVector()
