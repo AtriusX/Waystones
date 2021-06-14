@@ -23,6 +23,18 @@ Players can create and warp to a waystone by creating a lodestone and linking it
 - A crafting recipe for warp keys can be enabled.
 	- This allows compasses to function as normal, and creates a custom item to use as the warp key!
 
+## Crafting a Warp Key:
+
+The crafting recipe for the warp key is as follows:
+
+|            | Crafting Recipe |            |
+| :--------: | :-------------: | :--------: |
+|            | Iron Ingot      |            |
+| Iron Ingot | Redstone Block  | Iron Ingot |
+|            | Iron Ingot      |            |
+
+Please note that this recipe is only used if **enable-key-items** is set to `true` in the configuration file. In future updates this recipe may also potentially be customizable via the config.
+
 ### Configuration Options:  
   
 - **locale *[default: en]***: The localization file to be used (named lang-locale.yml). This will also affect how numbers or date are formatted if the locale matches any [BCP 47](https://www.iana.org/assignments/language-subtag-registry/language-subtag-registry) language tag, or the language/country neutral format will be used.
