@@ -17,7 +17,7 @@ class Property<T>(
         get() = plugin.config
 
     private var value: T by observable(
-        parser.parse(config.getString(property))
+        parser.parse(config.get(property))
             ?: default.also { update(property, it) },
         observe(property)
     )
@@ -39,7 +39,10 @@ class Property<T>(
     }
 
     private fun <T> update(property: String, new: T) {
-        config.set(property, new.toString())
+        if (new is List<*>)
+            config.set(property, new)
+        else
+            config.set(property, new.toString())
         plugin.saveConfig()
     }
 
