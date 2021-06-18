@@ -18,12 +18,12 @@ portal-sickness-damage: 5.0
 relinkable-keys: true
 enable-key-items: true
 key-recipe:
-  - ""
-  - "IRON_INGOT"
-  - ""
-  - "IRON_INGOT"
-  - "REDSTONE_BLOCK"
-  - "IRON_INGOT"
-  - ""
-  - "IRON_INGOT"
-  - ""
+  - ''
+  - IRON_INGOT
+  - ''
+  - IRON_INGOT
+  - REDSTONE_BLOCK
+  - IRON_INGOT
+  - ''
+  - IRON_INGOT
+  - ''
