@@ -13,3 +13,6 @@ fun String.toKey() = NamespacedKey(plugin, this)
 // Split a multiline string into a spreadable array
 fun String.splitMultiline() =
     split("\n").toTypedArray()
+
+// Glues a list together into a single string
+fun <T> List<T>.glue(): String = joinToString("")
