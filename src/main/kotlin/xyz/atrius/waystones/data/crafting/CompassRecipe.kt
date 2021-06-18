@@ -13,7 +13,7 @@ object CompassRecipe : CraftingRecipe("is_warp_key".toKey(), defaultWarpKey()) {
         val recipe = configuration.keyRecipe()
         val size = sqrt(recipe.size.toFloat()).toInt()
         // Map each item to a hashcode and join them into a multiline string
-        recipe.map { it.hashCode() }
+        recipe.map { it.hashCode().toChar() }
             .chunked(size).joinToString("\n") { it.joinToString("") }
     }
 
