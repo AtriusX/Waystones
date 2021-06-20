@@ -92,7 +92,9 @@ class Config(plugin: KotlinPlugin) {
 
     val keyRecipe: Property<List<String>> =
         Property("key-recipe", listOf(
-            "", "IRON_INGOT", "", "IRON_INGOT", "REDSTONE_BLOCK", "IRON_INGOT", "", "IRON_INGOT", ""
+            "AIR", "IRON_INGOT", "AIR",
+            "IRON_INGOT", "REDSTONE_BLOCK", "IRON_INGOT",
+            "AIR", "IRON_INGOT", "AIR"
         ), ListParser(StringParser))
 
     // Netherite grants the max amount of boost per block
