@@ -22,7 +22,7 @@ object CompassRecipe : CraftingRecipe("is_warp_key".toKey(), defaultWarpKey()) {
 
     override val items = hashMapOf<Char, Material>().apply {
         // For each item in the recipe, map it's material to it's hashcode
-        for (item in keyRecipe.toHashSet()) this[item.hashChar()] =
-            if (item.isEmpty()) Material.AIR else Material.valueOf(item) // Empty items default to air
+        for (item in keyRecipe.toHashSet())
+            this[item.hashChar()] = Material.valueOf(item)
     }
 }
