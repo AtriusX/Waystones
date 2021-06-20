@@ -4,6 +4,7 @@ import org.bukkit.configuration.file.FileConfiguration
 import xyz.atrius.waystones.data.config.ArgumentParser
 import xyz.atrius.waystones.data.config.ConfigManager
 import xyz.atrius.waystones.plugin
+import java.util.*
 import kotlin.properties.Delegates.observable
 import kotlin.reflect.KProperty
 
@@ -39,7 +40,11 @@ class Property<T>(
     }
 
     private fun <T> update(property: String, new: T) {
-        config.set(property, new)
+        config.set(property, when (new) {
+            is Enum<*> -> new.name
+            is Locale -> new.toString()
+            else -> new
+        })
         plugin.saveConfig()
     }
 
