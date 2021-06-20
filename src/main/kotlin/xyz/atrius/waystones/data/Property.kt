@@ -28,7 +28,7 @@ class Property<T>(
 
     operator fun invoke(): T = value
 
-    operator fun invoke(input: String?): Boolean {
+    operator fun invoke(input: Any?): Boolean {
         value = parser.parse(input) ?: return false
         onUpdate()
         return true
@@ -39,10 +39,7 @@ class Property<T>(
     }
 
     private fun <T> update(property: String, new: T) {
-        if (new is List<*>)
-            config.set(property, new)
-        else
-            config.set(property, new.toString())
+        config.set(property, new)
         plugin.saveConfig()
     }
 
