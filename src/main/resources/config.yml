@@ -17,3 +17,13 @@ portal-sickness-warping: DAMAGE_ON_TELEPORT
 portal-sickness-damage: 5.0
 relinkable-keys: true
 enable-key-items: true
+key-recipe:
+  - AIR
+  - IRON_INGOT
+  - AIR
+  - IRON_INGOT
+  - REDSTONE_BLOCK
+  - IRON_INGOT
+  - AIR
+  - IRON_INGOT
+  - AIR

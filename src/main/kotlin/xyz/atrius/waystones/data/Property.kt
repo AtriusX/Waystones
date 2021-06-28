@@ -4,6 +4,7 @@ import org.bukkit.configuration.file.FileConfiguration
 import xyz.atrius.waystones.data.config.ArgumentParser
 import xyz.atrius.waystones.data.config.ConfigManager
 import xyz.atrius.waystones.plugin
+import java.util.*
 import kotlin.properties.Delegates.observable
 import kotlin.reflect.KProperty
 
@@ -17,7 +18,7 @@ class Property<T>(
         get() = plugin.config
 
     private var value: T by observable(
-        parser.parse(config.getString(property))
+        parser.parse(config.get(property))
             ?: default.also { update(property, it) },
         observe(property)
     )
@@ -28,7 +29,7 @@ class Property<T>(
 
     operator fun invoke(): T = value
 
-    operator fun invoke(input: String?): Boolean {
+    operator fun invoke(input: Any?): Boolean {
         value = parser.parse(input) ?: return false
         onUpdate()
         return true
@@ -39,7 +40,11 @@ class Property<T>(
     }
 
     private fun <T> update(property: String, new: T) {
-        config.set(property, new.toString())
+        config.set(property, when (new) {
+            is Enum<*> -> new.name
+            is Locale -> new.toString()
+            else -> new
+        })
         plugin.saveConfig()
     }
 

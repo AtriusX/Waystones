@@ -1,6 +1,6 @@
 package xyz.atrius.waystones.data.config
 
-import java.util.Locale
+import java.util.*
 import kotlin.reflect.KClass
 
 interface ArgumentParser<T> {
@@ -14,25 +14,25 @@ interface ArgumentParser<T> {
      * @property T The parser return type. Null if error occurs.
      * @return The parsed data, or null if an error occurred.
      */
-    fun parse(input: String?): T?
+    fun parse(input: Any?): T?
 
     fun toString(value: T): String =
         value.toString()
 }
 
 object StringParser : ArgumentParser<String> {
-    override fun parse(input: String?) = input
+    override fun parse(input: Any?) = input.toString()
 }
 
 sealed class IntParser : ArgumentParser<Int> {
-    override fun parse(input: String?): Int? = input?.toIntOrNull()
+    override fun parse(input: Any?): Int? = input?.toString()?.toIntOrNull()
 
     companion object : IntParser()
 }
 
 object PositiveValueParser : IntParser() {
 
-    override fun parse(input: String?): Int? {
+    override fun parse(input: Any?): Int? {
         val num = super.parse(input) ?: return null
         return if (isValid(num)) num else null
     }
@@ -41,33 +41,37 @@ object PositiveValueParser : IntParser() {
 }
 
 object DoubleParser : ArgumentParser<Double> {
-    override fun parse(input: String?): Double? = input?.toDoubleOrNull()
+    override fun parse(input: Any?): Double? = input?.toString()?.toDoubleOrNull()
 }
 
 object PercentageParser : ArgumentParser<Double> {
     private val regex = "^[0-9]+(.[0-9]+)?%$".toRegex()
 
-    override fun parse(input: String?): Double? =
-        if (input?.matches(regex) == true)
-            input.dropLast(1).toDouble() / 100 else null
+    override fun parse(input: Any?): Double? {
+        val str = input?.toString()
+        return if (str?.matches(regex) == true)
+            str.dropLast(1).toDouble() / 100 else null
+    }
 
     override fun toString(value: Double): String =
         "${value * 100}%"
 }
 
 object BooleanParser : ArgumentParser<Boolean> {
-    override fun parse(input: String?): Boolean? =
-        if (input?.toLowerCase() in arrayOf("true", "false")) input.toBoolean() else null
+    override fun parse(input: Any?): Boolean? {
+        val str = input?.toString()
+        return if (str?.toLowerCase() in arrayOf("true", "false")) str?.toBoolean() else null
+    }
 }
 
 object LocaleParser : ArgumentParser<Locale> {
-    override fun parse(input: String?): Locale? = input?.let { Locale.forLanguageTag(input) }
+    override fun parse(input: Any?): Locale? = input?.let { Locale.forLanguageTag(input.toString()) }
 
     override fun toString(value: Locale): String = value.toLanguageTag()
 }
 
 class EnumParser<E : Enum<E>>(private val enum: KClass<E>) : ArgumentParser<E> {
-    override fun parse(input: String?): E? {
+    override fun parse(input: Any?): E? {
         input ?: return null
         val values = enum.java.enumConstants
         return values.firstOrNull { it.name == input }
@@ -76,10 +80,13 @@ class EnumParser<E : Enum<E>>(private val enum: KClass<E>) : ArgumentParser<E> {
 
 class ListParser<T>(private val parser: ArgumentParser<T>) : ArgumentParser<List<T>> {
     @Suppress("UNCHECKED_CAST")
-    override fun parse(input: String?): List<T>? {
+    override fun parse(input: Any?): List<T>? {
+        if (input is List<*>)
+            return input as List<T>?
+        val str = input?.toString()
         // Parse data in either list or vararg form
-        val data = input?.removeSurrounding("[", "]")
-            ?.split(" |, *".toRegex()) ?: return null
+        val data = str?.removeSurrounding("[", "]")
+            ?.split("[ ,] *".toRegex()) ?: return null
         val arr = mutableListOf<Any>()
         // Populate the array
         for (item in data)
