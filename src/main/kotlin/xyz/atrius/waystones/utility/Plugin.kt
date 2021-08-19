@@ -10,6 +10,7 @@ import org.bukkit.persistence.PersistentDataType.INTEGER
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.scheduler.BukkitScheduler
 import xyz.atrius.waystones.commands.CommandNamespace
+import xyz.atrius.waystones.data.advancement.Advancement
 import xyz.atrius.waystones.data.crafting.CraftingRecipe
 import xyz.atrius.waystones.localization
 import xyz.atrius.waystones.plugin
@@ -36,6 +37,12 @@ fun KotlinPlugin.registerRecipes(vararg recipes: Recipe) = recipes.forEach {
         it.setup()
     server.addRecipe(it)
 }
+
+@Suppress("DEPRECATION")
+fun KotlinPlugin.registerAdvancements(vararg advancements: Pair<String, Advancement>) = advancements.forEach { (key, adv) ->
+    server.unsafe.loadAdvancement(key.toKey(), adv.toJson())
+}
+
 
 fun BukkitScheduler.scheduleRepeatingAutoCancelTask(
     delay: Long, period: Long = 1, task: (Long) -> Unit, finish: Runnable? = null
