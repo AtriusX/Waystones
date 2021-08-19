@@ -97,6 +97,9 @@ class Config(plugin: KotlinPlugin) {
             "AIR", "IRON_INGOT", "AIR"
         ), ListParser(StringParser))
 
+    val advancements: Property<Boolean> =
+        Property("enable-advancements", true, BooleanParser)
+
     // Netherite grants the max amount of boost per block
     fun netheriteBoost(): Int = maxBoost()
 
