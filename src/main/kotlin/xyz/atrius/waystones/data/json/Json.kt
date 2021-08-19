@@ -1,11 +1,10 @@
-package xyz.atrius.waystones.data
+package xyz.atrius.waystones.data.json
 
 import com.google.gson.Gson
 
 interface Json<T> {
 
-    fun toJsonString(): String =
-        Gson().toJson(this)
+    fun toJson(): String
 
     companion object {
         inline fun <reified  T : Json<T>> parse(input: String): T =
