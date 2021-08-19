@@ -1,16 +1,14 @@
 package xyz.atrius.waystones
 
 import xyz.atrius.waystones.commands.*
+import xyz.atrius.waystones.data.advancement.SUBSPACE_TUNNEL
 import xyz.atrius.waystones.data.config.Config
 import xyz.atrius.waystones.data.config.Localization
 import xyz.atrius.waystones.data.crafting.CompassRecipe
 import xyz.atrius.waystones.event.*
 import xyz.atrius.waystones.service.WarpNameService
 import xyz.atrius.waystones.service.WorldRatioService
-import xyz.atrius.waystones.utility.KotlinPlugin
-import xyz.atrius.waystones.utility.registerEvents
-import xyz.atrius.waystones.utility.registerNamespaces
-import xyz.atrius.waystones.utility.registerRecipes
+import xyz.atrius.waystones.utility.*
 
 lateinit var plugin       : KotlinPlugin
 lateinit var configuration: Config
@@ -37,6 +35,10 @@ class Waystones : KotlinPlugin() {
         // Register warp key recipe if enabled
         if (configuration.keyItems()) registerRecipes(
             CompassRecipe
+        )
+        // Register plugin advancements
+        if (configuration.advancements()) registerAdvancements(
+            SUBSPACE_TUNNEL
         )
         // Register command namespaces
         registerNamespaces(
