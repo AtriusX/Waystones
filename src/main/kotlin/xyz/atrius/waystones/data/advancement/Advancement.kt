@@ -8,49 +8,61 @@ import xyz.atrius.waystones.plugin
 import xyz.atrius.waystones.utility.toKey
 import org.bukkit.advancement.Advancement as SpigotAdvancement
 
-data class Advancement(
-    val item: Material,
-    val title: String,
-    val description: String,
-    @Language("JSON") val nbt: String = "{}",
+data class Text(
+    val text: String
+)
+
+data class Icon(
+    val item: String,
+    @Language("JSON") val nbt: String? = null,
+)
+
+data class Trigger(
+    val trigger: String
+)
+
+class Criteria(vararg items: Pair<String, String>) : Map<String, Trigger>
+    by items.associate({ (name, trig) -> name to Trigger(trig) })
+
+data class Display(
+    val title: Text,
+    val description: Text,
+    val icon: Icon,
     val showToast: Boolean = true,
     val announceToChat: Boolean = true,
-    val hidden: Boolean = false,
+    val hidden: Boolean = false
+) {
+    val background = "minecraft:textures/block/chiseled_quartz_block.png"
+}
+
+data class Advancement(
+    val display: Display,
+    val criteria: Criteria,
+    val parent: String? = null
 ) : Json<Advancement> {
 
-    @Language("JSON")
-    override fun toJson(): String {
-        val data = nbt.replace("\n", "").replace("\"", "\\\"")
-        return """
-            |{
-            |  "display": {
-            |    "title": {
-            |      "text": "$title"
-            |    },
-            |    "description": {
-            |      "text": "$description"
-            |    },  
-            |    "icon": {
-            |      "item": "${item.key}",
-            |      "nbt": "$data"
-            |    },
-            |    "show_toast": $showToast,
-            |    "announce_to_chat": $announceToChat,
-            |    "hidden": $hidden,
-            |    "background": "minecraft:textures/block/chiseled_quartz_block.png"
-            |  },
-            |  "criteria": {
-            |    "command": {
-            |      "trigger": "minecraft:impossible"
-            |    }
-            |  }
-            |}
-        """.trimMargin()
-    }
+    constructor(
+        item: Material,
+        title: String,
+        description: String,
+    ) : this(
+        Display(
+            Text(title),
+            Text(description),
+            Icon(item.key.toString())
+        ),
+        IMPOSSIBLE
+    )
 
     fun toInstance(): SpigotAdvancement =
-        plugin.server.getAdvancement(title.toKey())!!
+        plugin.server.getAdvancement(display.title.text.toKey())!!
 
     fun paired(): Pair<NamespacedKey, Advancement> =
-        title.toLowerCase().replace(" ", "_").toKey() to this
+        display.title.text.toLowerCase().replace(" ", "_").toKey() to this
+
+    companion object {
+        val IMPOSSIBLE = Criteria(
+            "command" to "minecraft:impossible"
+        )
+    }
 }
