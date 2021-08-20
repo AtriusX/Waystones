@@ -48,13 +48,15 @@ data class Advancement(
         item: Material,
         title: String,
         description: String,
+        parent: Advancement? = null
     ) : this(
         Display(
             Text(title),
             Text(description),
             Icon(item.key.toString())
         ),
-        IMPOSSIBLE
+        IMPOSSIBLE,
+        parent?.paired()?.first.toString()
     )
 
     fun toInstance(): SpigotAdvancement =
