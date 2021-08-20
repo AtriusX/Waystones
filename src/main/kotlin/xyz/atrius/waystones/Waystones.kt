@@ -33,13 +33,19 @@ class Waystones : KotlinPlugin() {
             LinkEvent
         )
         // Register warp key recipe if enabled
-        if (configuration.keyItems()) registerRecipes(
-            CompassRecipe
-        )
+        if (configuration.keyItems()) {
+            logger.info("Loading recipes!")
+            registerRecipes(
+                CompassRecipe
+            )
+        }
         // Register plugin advancements
-        if (configuration.advancements()) registerAdvancements(
-            SUBSPACE_TUNNEL
-        )
+        if (configuration.advancements()){
+            logger.info("Loading advancements!")
+            registerAdvancements(
+                SUBSPACE_TUNNEL
+            )
+        }
         // Register command namespaces
         registerNamespaces(
             CommandNamespace("waystones").register(
