@@ -1,6 +1,7 @@
 package xyz.atrius.waystones.utility
 
 import org.bukkit.Material
+import org.bukkit.NamespacedKey
 import org.bukkit.command.CommandExecutor
 import org.bukkit.event.Listener
 import org.bukkit.inventory.ItemStack
@@ -39,8 +40,10 @@ fun KotlinPlugin.registerRecipes(vararg recipes: Recipe) = recipes.forEach {
 }
 
 @Suppress("DEPRECATION")
-fun KotlinPlugin.registerAdvancements(vararg advancements: Pair<String, Advancement>) = advancements.forEach { (key, adv) ->
-    server.unsafe.loadAdvancement(key.toKey(), adv.toJson())
+fun KotlinPlugin.registerAdvancements(vararg advancements: Pair<NamespacedKey, Advancement>) = advancements.forEach { (key, adv) ->
+    server.unsafe.removeAdvancement(key)
+    if (server.getAdvancement(key) == null)
+        server.unsafe.loadAdvancement(key, adv.toJson())
 }
 
 
