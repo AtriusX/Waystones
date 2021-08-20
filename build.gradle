@@ -22,7 +22,7 @@ dependencies {
 }
 
 group = 'xyz.atrius'
-version = '0.1.0'
+version = '1.1.0'
 description = 'Waystones'
 sourceCompatibility = '1.8'
 
