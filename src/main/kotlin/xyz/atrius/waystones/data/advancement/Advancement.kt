@@ -1,6 +1,7 @@
 package xyz.atrius.waystones.data.advancement
 
 import org.bukkit.Material
+import org.bukkit.NamespacedKey
 import org.intellij.lang.annotations.Language
 import xyz.atrius.waystones.data.json.Json
 import xyz.atrius.waystones.plugin
@@ -14,37 +15,42 @@ data class Advancement(
     @Language("JSON") val nbt: String = "{}",
     val showToast: Boolean = true,
     val announceToChat: Boolean = true,
-    val hidden: Boolean = false
+    val hidden: Boolean = false,
 ) : Json<Advancement> {
+
     @Language("JSON")
-    override fun toJson(): String = """
-        |{
-        |  "display": {
-        |    "title": {
-        |      "text": $title
-        |    }
-        |  },
-        |  "description": {
-        |    "text": $description
-        |  },
-        |  "icon": {
-        |    "item": ${item.key},
-        |    "nbt": "$nbt"
-        |  },
-        |  "criteria": {
-        |    "command": {
-        |      "trigger": "minecraft:impossible"
-        |    }
-        |  }
-        |  "show_toast": $showToast,
-        |  "announce_to_chat": $announceToChat,
-        |  "hidden": $hidden
-        |}
-    """.trimMargin()
+    override fun toJson(): String {
+        val data = nbt.replace("\n", "").replace("\"", "\\\"")
+        return """
+            |{
+            |  "display": {
+            |    "title": {
+            |      "text": "$title"
+            |    },
+            |    "description": {
+            |      "text": "$description"
+            |    },  
+            |    "icon": {
+            |      "item": "${item.key}",
+            |      "nbt": "$data"
+            |    },
+            |    "show_toast": $showToast,
+            |    "announce_to_chat": $announceToChat,
+            |    "hidden": $hidden,
+            |    "background": "minecraft:textures/block/chiseled_quartz_block.png"
+            |  },
+            |  "criteria": {
+            |    "command": {
+            |      "trigger": "minecraft:impossible"
+            |    }
+            |  }
+            |}
+        """.trimMargin()
+    }
 
     fun toInstance(): SpigotAdvancement =
         plugin.server.getAdvancement(title.toKey())!!
 
-    fun paired(): Pair<String, Advancement> =
-        title.toLowerCase().replace(" ", "_") to this
+    fun paired(): Pair<NamespacedKey, Advancement> =
+        title.toLowerCase().replace(" ", "_").toKey() to this
 }
