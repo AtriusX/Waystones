@@ -1,7 +1,7 @@
 package xyz.atrius.waystones
 
 import xyz.atrius.waystones.commands.*
-import xyz.atrius.waystones.data.advancement.SUBSPACE_TUNNEL
+import xyz.atrius.waystones.data.advancement.*
 import xyz.atrius.waystones.data.config.Config
 import xyz.atrius.waystones.data.config.Localization
 import xyz.atrius.waystones.data.crafting.CompassRecipe
@@ -43,7 +43,14 @@ class Waystones : KotlinPlugin() {
         if (configuration.advancements()){
             logger.info("Loading advancements!")
             registerAdvancements(
-                SUBSPACE_TUNNEL
+                A_NEW_KIND_OF_TUNNEL,
+                GIGAWARPS,
+                I_DONT_FEEL_SO_GOOD,
+                UNLIMITED_POWER,
+                QUANTUM_DOMESTICATION,
+                BLOCKED,
+                SHOOT_THE_MESSENGER,
+                CLEAN_ENERGY
             )
         }
         // Register command namespaces
