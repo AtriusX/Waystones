@@ -53,14 +53,15 @@ data class Advancement(
             Icon(item.key.toString())
         ),
         IMPOSSIBLE,
-        parent?.paired()?.first.toString()
+        parent?.paired()?.first?.toString()
     )
 
     fun toInstance(): SpigotAdvancement =
         plugin.server.getAdvancement(display.title.text.toKey())!!
 
     fun paired(): Pair<NamespacedKey, Advancement> =
-        display.title.text.toLowerCase().replace(" ", "_").toKey() to this
+        display.title.text.toLowerCase().replace(" ", "_")
+            .replace("[^\\w]".toRegex(), "").toKey() to this
 
     companion object {
         val IMPOSSIBLE = Criteria(
