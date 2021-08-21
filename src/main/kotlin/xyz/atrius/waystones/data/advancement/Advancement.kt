@@ -1,6 +1,5 @@
 package xyz.atrius.waystones.data.advancement
 
-import com.google.gson.annotations.SerializedName
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.intellij.lang.annotations.Language
@@ -29,9 +28,7 @@ data class Display(
     val title: Text,
     val description: Text,
     val icon: Icon,
-    @SerializedName("show_toast")
     val showToast: Boolean = true,
-    @SerializedName("announce_to_chat")
     val announceToChat: Boolean = true,
     val hidden: Boolean = false
 ) {
