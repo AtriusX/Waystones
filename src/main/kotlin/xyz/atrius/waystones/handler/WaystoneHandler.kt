@@ -1,6 +1,8 @@
 package xyz.atrius.waystones.handler
 
 import org.bukkit.Location
+import org.bukkit.Material
+import org.bukkit.block.Beacon
 import org.bukkit.block.data.type.RespawnAnchor
 import org.bukkit.entity.Player
 import org.bukkit.potion.PotionEffect
@@ -9,8 +11,10 @@ import org.bukkit.util.Vector
 import xyz.atrius.waystones.Power
 import xyz.atrius.waystones.SicknessOption
 import xyz.atrius.waystones.configuration
+import xyz.atrius.waystones.data.FloodFill
 import xyz.atrius.waystones.data.WarpActiveState
 import xyz.atrius.waystones.data.WarpErrorState
+import xyz.atrius.waystones.data.advancement.CLEAN_ENERGY
 import xyz.atrius.waystones.data.advancement.GIGAWARPS
 import xyz.atrius.waystones.data.advancement.I_DONT_FEEL_SO_GOOD
 import xyz.atrius.waystones.data.config.LocalizedString
@@ -89,6 +93,18 @@ class WaystoneHandler(
     fun gigawarpAdvancement() {
         if (distance > configuration.maxDistance() / 2)
             player.awardAdvancement(GIGAWARPS)
+    }
+
+    fun cleanEnergyAdvancement() {
+        val fill = FloodFill(
+            warpLocation,
+            configuration.maxWarpSize(),
+            *configuration.defaultBlocks,
+            Material.BEACON
+        )
+        if (fill.breakdown.any { (block) ->
+            with (block.state) { this is Beacon && isActive() }
+        }) player.awardAdvancement(CLEAN_ENERGY)
     }
 
     private fun distanceError(name: String, distance: Double, range: Int): LocalizedString =

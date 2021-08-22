@@ -42,7 +42,7 @@ class Waystones : KotlinPlugin() {
             )
         }
         // Register plugin advancements
-        if (configuration.advancements()){
+        if (configuration.advancements()) {
             logger.info("Loading advancements!")
             loadAdvancements(
                 WAYSTONES,
