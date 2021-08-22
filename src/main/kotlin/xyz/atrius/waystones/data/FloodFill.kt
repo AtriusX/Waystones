@@ -16,7 +16,7 @@ class FloodFill(
 
     init {
         fill()
-        breakdown = StackSet(toList().map { it })
+        breakdown = StackSet(toList())
     }
 
     private tailrec fun fill(blocks: Set<Block> = setOf(startPosition.block)) {
