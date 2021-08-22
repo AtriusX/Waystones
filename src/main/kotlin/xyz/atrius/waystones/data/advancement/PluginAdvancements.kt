@@ -2,6 +2,8 @@ package xyz.atrius.waystones.data.advancement
 
 import org.bukkit.Material
 
+// TODO: Update this to rely on localized messages
+
 val WAYSTONES = Advancement(
     Material.LODESTONE,
     "Waystones",
