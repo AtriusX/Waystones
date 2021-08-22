@@ -114,4 +114,8 @@ class Config(plugin: KotlinPlugin) {
 
     // Iron grants 20% of the max boost per block
     fun ironBoost(): Int = maxBoost() / 5
+
+    // Returns the max warp distance any waystone can have
+    fun maxDistance(): Int =
+        baseDistance() + maxBoost() * maxWarpSize()
 }

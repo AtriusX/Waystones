@@ -53,6 +53,7 @@ object WarpEvent : Listener {
                     warp.teleport()
                     player.sendActionMessage(localization["warp-success"])
                     player.awardAdvancement(SECRET_TUNNEL)
+                    warp.gigawarpAdvancement()
                 }
                 event.cancel()
             }
