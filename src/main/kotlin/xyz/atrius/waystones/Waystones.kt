@@ -27,6 +27,7 @@ class Waystones : KotlinPlugin() {
         // Register listeners
         registerEvents(
             ExplodeEvent,
+            SuppressEvent,
             WarpEvent,
             NameEvent,
             DestroyEvent,
