@@ -11,6 +11,7 @@ import xyz.atrius.waystones.SicknessOption
 import xyz.atrius.waystones.configuration
 import xyz.atrius.waystones.data.WarpActiveState
 import xyz.atrius.waystones.data.WarpErrorState
+import xyz.atrius.waystones.data.advancement.I_DONT_FEEL_SO_GOOD
 import xyz.atrius.waystones.data.config.LocalizedString
 import xyz.atrius.waystones.handler.HandleState.Fail
 import xyz.atrius.waystones.handler.HandleState.Success
@@ -69,6 +70,7 @@ class WaystoneHandler(
                 PotionEffect(PotionEffectType.BLINDNESS, 100, 9)
             )
             player.sendActionMessage(localization["warp-sickness"])
+            player.awardAdvancement(I_DONT_FEEL_SO_GOOD)
         } else {
             player.sendActionMessage(localization["warp-safely"])
         }

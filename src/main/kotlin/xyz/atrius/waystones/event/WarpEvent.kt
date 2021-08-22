@@ -11,16 +11,14 @@ import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerMoveEvent
 import xyz.atrius.waystones.TeleportManager
 import xyz.atrius.waystones.configuration
+import xyz.atrius.waystones.data.advancement.SECRET_TUNNEL
 import xyz.atrius.waystones.handler.HandleState.Fail
 import xyz.atrius.waystones.handler.HandleState.Success
 import xyz.atrius.waystones.handler.KeyHandler
 import xyz.atrius.waystones.handler.WaystoneHandler
 import xyz.atrius.waystones.localization
 import xyz.atrius.waystones.service.WarpNameService
-import xyz.atrius.waystones.utility.cancel
-import xyz.atrius.waystones.utility.hasMovedBlock
-import xyz.atrius.waystones.utility.sendActionError
-import xyz.atrius.waystones.utility.sendActionMessage
+import xyz.atrius.waystones.utility.*
 
 object WarpEvent : Listener {
 
@@ -50,6 +48,7 @@ object WarpEvent : Listener {
                     key.useKey()
                     warp.teleport()
                     player.sendActionMessage(localization["warp-success"])
+                    player.awardAdvancement(SECRET_TUNNEL)
                 }
                 event.cancel()
             }
