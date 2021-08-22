@@ -38,3 +38,24 @@ key-name: "&6传送石钥匙"
 key-lore: "&5传送石: [&kUNKNOWN&5]"
 world-jump-disabled: "&c不同世界之间的干扰阻碍了你的传送之路..."
 command-bad-sender: "&c该命令不能由 {0} 执行."
+# Advancements
+waystones:
+waysyones-desc:
+secret-tunnel:
+secret-tunnel-desc:
+gigawarps:
+gigawarps-desc:
+i-dont-feel-so-good:
+i-dont-feel-so-good-desc:
+unlimited-power:
+unlimited-power-desc:
+quantum-domestication:
+quantum-domestication-desc:
+blocked:
+blocked-desc:
+shoot-the-messenger:
+shoot-the-messenger-desc:
+clean-energy:
+clean-energy-desc:
+how-low-can-you-go:
+how-low-can-you-go-desc:

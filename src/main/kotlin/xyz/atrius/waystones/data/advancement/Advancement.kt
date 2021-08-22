@@ -4,6 +4,7 @@ import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.intellij.lang.annotations.Language
 import xyz.atrius.waystones.data.json.Json
+import xyz.atrius.waystones.localization
 import xyz.atrius.waystones.plugin
 import xyz.atrius.waystones.utility.toKey
 import org.bukkit.advancement.Advancement as SpigotAdvancement
@@ -24,6 +25,7 @@ data class Trigger(
 class Criteria(vararg items: Pair<String, String>) : Map<String, Trigger>
     by items.associate({ (name, trig) -> name to Trigger(trig) })
 
+@Suppress("unused")
 data class Display(
     val title: Text,
     val description: Text,
@@ -43,13 +45,12 @@ data class Advancement(
 
     constructor(
         item: Material,
-        title: String,
-        description: String,
+        base: String,
         parent: Advancement? = null
     ) : this(
         Display(
-            Text(title),
-            Text(description),
+            Text(localization[base].toString()),
+            Text(localization["$base-desc"].toString()),
             Icon(item.key.toString())
         ),
         IMPOSSIBLE,
