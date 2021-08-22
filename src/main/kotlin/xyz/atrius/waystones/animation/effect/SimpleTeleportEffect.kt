@@ -28,8 +28,8 @@ class SimpleTeleportEffect(warp: WaystoneHandler) : TeleportEffect {
         val ratio = timer * 2 + 1
         val period = (System.currentTimeMillis() / 3).toDouble()
         val world  = player.world
-        world.spawnParticle(Particle.ASH, player.location.rotateY(period, timer.toDouble() / amp), 200)
-        world.spawnParticle(
+        world.forceParticle(Particle.ASH, player.location.rotateY(period, timer.toDouble() / amp), 200)
+        world.forceParticle(
             Particle.SMOKE_LARGE, location, 250 / ratio.toInt(), 0.2, 0.5, 0.2, 0.0
         )
     }
