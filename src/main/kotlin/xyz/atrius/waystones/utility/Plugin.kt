@@ -39,10 +39,15 @@ fun KotlinPlugin.registerRecipes(vararg recipes: Recipe) = recipes.forEach {
 }
 
 @Suppress("DEPRECATION")
-fun KotlinPlugin.registerAdvancements(vararg advancements: Advancement) = advancements.forEach {
+fun KotlinPlugin.unloadAdvancements(vararg advancements: Advancement) = advancements.forEach {
+    server.unsafe.removeAdvancement(it.paired().first)
+}
+
+@Suppress("DEPRECATION")
+fun KotlinPlugin.loadAdvancements(vararg advancements: Advancement) = advancements.forEach {
     val (key, adv) = it.paired()
-    server.unsafe.removeAdvancement(key)
-    if (server.getAdvancement(key) == null)
+    val spigotAdv = server.getAdvancement(key)
+    if (spigotAdv == null)
         server.unsafe.loadAdvancement(key, adv.toJson())
 }
 

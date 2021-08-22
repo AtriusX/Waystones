@@ -42,7 +42,8 @@ class Waystones : KotlinPlugin() {
         // Register plugin advancements
         if (configuration.advancements()){
             logger.info("Loading advancements!")
-            registerAdvancements(
+            loadAdvancements(
+                WAYSTONES,
                 A_NEW_KIND_OF_TUNNEL,
                 GIGAWARPS,
                 I_DONT_FEEL_SO_GOOD,

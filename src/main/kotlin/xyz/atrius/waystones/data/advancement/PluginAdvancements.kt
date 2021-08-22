@@ -2,10 +2,17 @@ package xyz.atrius.waystones.data.advancement
 
 import org.bukkit.Material
 
-val A_NEW_KIND_OF_TUNNEL = Advancement(
+val WAYSTONES = Advancement(
     Material.LODESTONE,
+    "Waystones",
+    "There and back again"
+)
+
+val A_NEW_KIND_OF_TUNNEL = Advancement(
+    Material.COMPASS,
     "A New Kind of Tunnel",
-    "Use a waystone for the first time."
+    "Use a waystone for the first time",
+    WAYSTONES
 )
 
 val GIGAWARPS = Advancement(
