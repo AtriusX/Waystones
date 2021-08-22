@@ -2,13 +2,17 @@ package xyz.atrius.waystones
 
 import xyz.atrius.waystones.commands.*
 import xyz.atrius.waystones.data.advancement.*
+import xyz.atrius.waystones.data.config.AdvancementManager
 import xyz.atrius.waystones.data.config.Config
 import xyz.atrius.waystones.data.config.Localization
 import xyz.atrius.waystones.data.crafting.CompassRecipe
 import xyz.atrius.waystones.event.*
 import xyz.atrius.waystones.service.WarpNameService
 import xyz.atrius.waystones.service.WorldRatioService
-import xyz.atrius.waystones.utility.*
+import xyz.atrius.waystones.utility.KotlinPlugin
+import xyz.atrius.waystones.utility.registerEvents
+import xyz.atrius.waystones.utility.registerNamespaces
+import xyz.atrius.waystones.utility.registerRecipes
 
 lateinit var plugin       : KotlinPlugin
 lateinit var configuration: Config
@@ -44,7 +48,7 @@ class Waystones : KotlinPlugin() {
         // Register plugin advancements
         if (configuration.advancements()) {
             logger.info("Loading advancements!")
-            loadAdvancements(
+            AdvancementManager.register(
                 WAYSTONES,
                 SECRET_TUNNEL,
                 GIGAWARPS,
