@@ -85,7 +85,9 @@ fun Player.awardAdvancement(adv: Pair<String, Advancement>) = awardAdvancement(a
 
 fun Player.awardAdvancement(adv: Advancement) = awardAdvancement(adv.toInstance())
 
-fun Player.awardAdvancement(adv: SpigotAdvancement) {
+fun Player.awardAdvancement(adv: SpigotAdvancement?) {
+    if (adv == null || !configuration.advancements())
+        return
     val criteria = getAdvancementProgress(adv)
     criteria.remainingCriteria
         .forEach(criteria::awardCriteria)

@@ -57,8 +57,8 @@ data class Advancement(
         parent?.paired()?.first?.toString()
     )
 
-    fun toInstance(): SpigotAdvancement =
-        plugin.server.getAdvancement(key())!!
+    fun toInstance(): SpigotAdvancement? =
+        plugin.server.getAdvancement(key())
 
     fun key(): NamespacedKey =
         display.title.text.toLowerCase().replace(" ", "_")
