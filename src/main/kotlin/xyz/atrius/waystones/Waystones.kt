@@ -26,6 +26,7 @@ class Waystones : KotlinPlugin() {
         WorldRatioService.load()
         // Register listeners
         registerEvents(
+            ExplodeEvent,
             WarpEvent,
             NameEvent,
             DestroyEvent,
@@ -44,7 +45,7 @@ class Waystones : KotlinPlugin() {
             logger.info("Loading advancements!")
             loadAdvancements(
                 WAYSTONES,
-                A_NEW_KIND_OF_TUNNEL,
+                SECRET_TUNNEL,
                 GIGAWARPS,
                 I_DONT_FEEL_SO_GOOD,
                 UNLIMITED_POWER,
