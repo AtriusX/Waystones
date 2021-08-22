@@ -1,17 +1,21 @@
 package xyz.atrius.waystones.event
 
 import org.bukkit.Material
+import org.bukkit.entity.Arrow
 import org.bukkit.entity.Player
+import org.bukkit.entity.Skeleton
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action.RIGHT_CLICK_AIR
+import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerMoveEvent
 import xyz.atrius.waystones.TeleportManager
 import xyz.atrius.waystones.configuration
 import xyz.atrius.waystones.data.advancement.SECRET_TUNNEL
+import xyz.atrius.waystones.data.advancement.SHOOT_THE_MESSENGER
 import xyz.atrius.waystones.handler.HandleState.Fail
 import xyz.atrius.waystones.handler.HandleState.Success
 import xyz.atrius.waystones.handler.KeyHandler
@@ -76,5 +80,14 @@ object WarpEvent : Listener {
             return
         TeleportManager.cancel(entity)
         entity.sendActionError(localization["warp-interrupt"])
+        waystoneAdvancement(entity)
+    }
+
+    private fun waystoneAdvancement(player: Player) {
+        val attacker = (player.lastDamageCause as? EntityDamageByEntityEvent)?.damager
+        if (attacker !is Arrow || attacker.shooter !is Skeleton)
+            return
+        if (player.health in 1.0..2.0)
+            player.awardAdvancement(SHOOT_THE_MESSENGER)
     }
 }
