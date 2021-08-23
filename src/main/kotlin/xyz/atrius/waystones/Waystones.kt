@@ -30,6 +30,7 @@ class Waystones : KotlinPlugin() {
         WorldRatioService.load()
         // Register listeners
         registerEvents(
+            PlaceEvent,
             ExplodeEvent,
             SuppressEvent,
             WarpEvent,
@@ -51,13 +52,14 @@ class Waystones : KotlinPlugin() {
             AdvancementManager.register(
                 WAYSTONES,
                 SECRET_TUNNEL,
-                GIGAWARPS,
                 I_DONT_FEEL_SO_GOOD,
+                HEAVY_ARTILLERY,
+                CLEAN_ENERGY,
+                GIGAWARPS,
                 UNLIMITED_POWER,
                 QUANTUM_DOMESTICATION,
                 BLOCKED,
-                SHOOT_THE_MESSENGER,
-                CLEAN_ENERGY
+                SHOOT_THE_MESSENGER
             )
         }
         // Register command namespaces

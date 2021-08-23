@@ -1,6 +1,8 @@
 package xyz.atrius.waystones.data.advancement
 
 import org.bukkit.Material
+import xyz.atrius.waystones.data.advancement.AdvancementType.CHALLENGE
+import xyz.atrius.waystones.data.advancement.AdvancementType.GOAL
 
 val WAYSTONES = Advancement(
     Material.LODESTONE, "waystones"
@@ -10,16 +12,24 @@ val SECRET_TUNNEL = Advancement(
     Material.COMPASS, "secret-tunnel", WAYSTONES
 )
 
-val GIGAWARPS = Advancement(
-    Material.REDSTONE_BLOCK, "gigawarps", SECRET_TUNNEL
-)
-
 val I_DONT_FEEL_SO_GOOD = Advancement(
     Material.WITHER_ROSE, "i-dont-feel-so-good", SECRET_TUNNEL
 )
 
+val HEAVY_ARTILLERY = Advancement(
+    Material.NETHERITE_BLOCK, "heavy-artillery", SECRET_TUNNEL, GOAL
+)
+
+val CLEAN_ENERGY = Advancement(
+    Material.BEACON, "clean-energy", HEAVY_ARTILLERY, GOAL
+)
+
+val GIGAWARPS = Advancement(
+    Material.REDSTONE_BLOCK, "gigawarps", CLEAN_ENERGY, CHALLENGE
+)
+
 val UNLIMITED_POWER = Advancement(
-    Material.TNT, "unlimited-power", SECRET_TUNNEL
+    Material.GLOWSTONE, "unlimited-power", HEAVY_ARTILLERY, CHALLENGE
 )
 
 val QUANTUM_DOMESTICATION = Advancement(
@@ -31,11 +41,7 @@ val BLOCKED = Advancement(
 )
 
 val SHOOT_THE_MESSENGER = Advancement(
-    Material.SKELETON_SKULL, "shoot-the-messenger", SECRET_TUNNEL
-)
-
-val CLEAN_ENERGY = Advancement(
-    Material.BEACON, "clean-energy", SECRET_TUNNEL
+    Material.SKELETON_SKULL, "shoot-the-messenger", UNLIMITED_POWER, CHALLENGE
 )
 
 @Suppress("unused")
