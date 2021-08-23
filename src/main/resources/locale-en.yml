@@ -39,7 +39,7 @@ world-jump-disabled: "&cDimensional interference has blocked your path..."
 command-bad-sender: "&cCannot run this command through {0}."
 # Advancements
 waystones: "Waystones"
-waysyones-desc: "There and back again"
+waystones-desc: "There and back again"
 secret-tunnel: "Secret Tunnel"
 secret-tunnel-desc: "Use a waystone for the first time"
 gigawarps: "1.21 Gigawarps"

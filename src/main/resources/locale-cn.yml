@@ -40,7 +40,7 @@ world-jump-disabled: "&c不同世界之间的干扰阻碍了你的传送之路..
 command-bad-sender: "&c该命令不能由 {0} 执行."
 # Advancements
 waystones:
-waysyones-desc:
+waystones-desc:
 secret-tunnel:
 secret-tunnel-desc:
 gigawarps:
