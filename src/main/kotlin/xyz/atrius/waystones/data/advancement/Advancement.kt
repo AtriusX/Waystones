@@ -32,7 +32,8 @@ data class Display(
     val icon: Icon,
     val showToast: Boolean = true,
     val announceToChat: Boolean = true,
-    val hidden: Boolean = false
+    val hidden: Boolean = false,
+    val frame: AdvancementType? = null
 ) {
     val background = "minecraft:textures/block/chiseled_quartz_block.png"
 }
@@ -40,18 +41,20 @@ data class Display(
 data class Advancement(
     val display: Display,
     val criteria: Criteria,
-    val parent: String? = null
+    val parent: String? = null,
 ) : Json<Advancement> {
 
     constructor(
         item: Material,
         base: String,
-        parent: Advancement? = null
+        parent: Advancement? = null,
+        frame: AdvancementType? = null
     ) : this(
         Display(
             Text(localization[base].toString()),
             Text(localization["$base-desc"].toString()),
-            Icon(item.key.toString())
+            Icon(item.key.toString()),
+            frame = frame
         ),
         IMPOSSIBLE,
         parent?.paired()?.first?.toString()
