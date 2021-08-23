@@ -1,5 +1,5 @@
 {
-  "world": 1,
-  "world_nether": 8,
-  "world_end": 1
+  "normal": 1,
+  "nether": 8,
+  "the_end": 1
 }
