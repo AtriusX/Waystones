@@ -16,7 +16,7 @@ object GetKeyCommand : SimpleCommand("getkey", "gk", "key", "k") {
         return player to amount
     }
 
-    override fun execute(sender: CommandSender, args: Array<String>) {
+    override fun execute(sender: CommandSender, args: Array<String>, flags: Flags) {
         // Set Amount and Player to give WarpKeys to
         val (player, amount) = getPlayerAndAmount(
             sender as? Player,

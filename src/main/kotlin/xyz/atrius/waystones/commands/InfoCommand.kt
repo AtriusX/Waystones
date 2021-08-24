@@ -23,6 +23,6 @@ object InfoCommand : SimpleCommand("info", "i") {
         |&7---------------&b-&d-&f-&d-&b-&7---------------
     """.trimMargin().translateColors()
 
-    override fun execute(sender: CommandSender, args: Array<String>) =
+    override fun execute(sender: CommandSender, args: Array<String>, flags: Flags) =
         sender.sendMessage(infoMsg)
 }

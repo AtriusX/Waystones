@@ -5,6 +5,7 @@ import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
 import xyz.atrius.waystones.data.MultiReferencable
 import xyz.atrius.waystones.utility.message
+import xyz.atrius.waystones.utility.split
 
 class CommandNamespace(
     override vararg val aliases: String
@@ -31,7 +32,12 @@ class CommandNamespace(
         // Execute the given command
         for (c in commands) {
             if (args[0] in c.aliases) {
-                c.execute(sender, args.drop(1).toTypedArray())
+                val (arguments, flags) = args.drop(1).split { !it.startsWith("-") }
+                c.execute(
+                    sender,
+                    arguments.map(String::toLowerCase).toTypedArray(),
+                    Flags(flags.toSet())
+                )
                 return true
             }
         }
