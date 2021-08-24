@@ -5,10 +5,10 @@ import xyz.atrius.waystones.data.JsonFile
 
 object WorldRatioService : JsonFile<Double>("ratios"), Iterable<Map.Entry<String, Double>> {
 
-    operator fun get(world: World, asEnvironment: Boolean = false): Double {
-        val key = if (asEnvironment) world.environment.name else "name:${world.name}"
-        return data.getOrDefault(key.toLowerCase(), 1.0)
-    }
+    operator fun get(world: World): Double =
+        data["name${world.name.toLowerCase()}"]
+        ?: data[world.environment.name.toLowerCase()]
+        ?: 1.0
 
     fun add(world: World, asEnvironment: Boolean, ratio: Double) {
         val key = if (asEnvironment) world.environment.name else "name:${world.name}"
