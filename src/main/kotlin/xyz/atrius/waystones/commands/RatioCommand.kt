@@ -1,6 +1,5 @@
 package xyz.atrius.waystones.commands
 
-import org.bukkit.Bukkit
 import org.bukkit.World
 import org.bukkit.command.CommandSender
 import org.bukkit.command.ConsoleCommandSender
@@ -32,37 +31,41 @@ object RatioCommand : SimpleCommand("ratio", "ra", "r") {
     private fun set(sender: CommandSender, args: Array<String>, world: World?, environment: Boolean) {
         if (args.size < 2)
             return sender.message(localization["command-no-arguments"])
-        val selection = args.getOrNull(2)?.let(Bukkit::getWorld) ?: world
+        val selection = args.getOrNull(2)
+            ?: if (environment) world?.environment?.name else world?.name
         val message = if (args.size > 2)
             localization["command-ratio-world-not-found", environment.toInt(), args[2]]
         else
             localization["command-ratio-bad-sender"]
         WorldRatioService.add(
-            selection
+            selection?.toLowerCase()
                 ?: return sender.message(message),
             environment,
             args[1].toDoubleOrNull()
                 ?: return sender.message(localization["command-ratio-bad-ratio", args[1]])
         )
-        val name = if (environment) selection.environment.name else selection.name
-        sender.message(localization["command-ratio-added-successfully", environment.toInt(), name.capitalize(), args[1]])
+        sender.message(
+            localization["command-ratio-added-successfully", environment.toInt(), selection.capitalize(), args[1]]
+        )
     }
 
     private fun remove(sender: CommandSender, args: Array<String>, world: World?, environment: Boolean) {
         if (args.size < 2 && sender is ConsoleCommandSender)
             return sender.message(localization["command-no-arguments"])
-        val selection = Bukkit.getWorld(args[1]) ?: world
+        val selection = args.getOrNull(1)
+            ?: if (environment) world?.environment?.name else world?.name
         val message = if (args.size > 1)
             localization["command-ratio-world-not-found", environment.toInt(), args[1]]
         else
             localization["command-ratio-bad-sender"]
         WorldRatioService.remove(
-            selection
-            ?: return sender.message(message),
+            selection?.toLowerCase()
+                ?: return sender.message(message),
             environment
         )
-        val name = if (environment) selection.environment.name else selection.name
-        sender.message(localization["command-ratio-removed-successfully", environment.toInt(), name.capitalize()])
+        sender.message(
+            localization["command-ratio-removed-successfully", environment.toInt(), selection.capitalize()]
+        )
     }
 
     private fun list(sender: CommandSender) {
