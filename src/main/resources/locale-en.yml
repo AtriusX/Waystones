@@ -9,7 +9,9 @@ command-no-arguments: "&7[&dWaystones&7] &cNo arguments were provided for the su
 command-ratio-bad-sender: "&7[&dWaystones&7] &cConsole users must supply a world or environment to use this command."
 command-ratio-world-not-found: "&7[&dWaystones&7] &cThe {0,choice,0#world|1#environment} {1} could not be found."
 command-ratio-added-successfully: "&7[&dWaystones&7] &aThe {0,choice,0#world|1#environment} {1} was added successfully!"
+command-ratio-addition-failed: "&7[&dWaystones&7] &cFailed to add {0} to the config."
 command-ratio-removed-successfully: '&7[&dWaystones&7] &aThe {0,choice,0#world|1#environment} {1} was successfully removed!'
+command-ratio-removal-failed: "&7[&dWaystones&7] &cFailed to remove {0} from the config."
 command-ratio-no-ratios: "&7[&dWaystones&7] &bNo ratios currently set!"
 waystone-info: "&3&lName: {0} | {1}"
 waystone-status: "Status: {0}{1,choice,-2#|-1#' | Range: {1,choice,-1#Infinity|0#{1}}'}"

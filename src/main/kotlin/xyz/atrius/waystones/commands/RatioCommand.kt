@@ -9,8 +9,6 @@ import xyz.atrius.waystones.service.WorldRatioService
 import xyz.atrius.waystones.utility.message
 import xyz.atrius.waystones.utility.toInt
 
-
-// /waystones ratio [ set <value> [name] [-environment] | remove [name] [-environment] | list ]
 object RatioCommand : SimpleCommand("ratio", "ra", "r") {
 
     override fun execute(sender: CommandSender, args: Array<String>, flags: Flags) {
@@ -31,13 +29,13 @@ object RatioCommand : SimpleCommand("ratio", "ra", "r") {
     private fun set(sender: CommandSender, args: Array<String>, world: World?, environment: Boolean) {
         if (args.size < 2)
             return sender.message(localization["command-no-arguments"])
-        val selection = args.getOrNull(2)
-            ?: if (environment) world?.environment?.name else world?.name
+        val selection = (args.getOrNull(2)
+            ?: if (environment) world?.environment?.name else world?.name)?.capitalize()
         val message = if (args.size > 2)
             localization["command-ratio-world-not-found", environment.toInt(), args[2]]
         else
             localization["command-ratio-bad-sender"]
-        WorldRatioService.add(
+        val added = WorldRatioService.add(
             selection?.toLowerCase()
                 ?: return sender.message(message),
             environment,
@@ -45,26 +43,32 @@ object RatioCommand : SimpleCommand("ratio", "ra", "r") {
                 ?: return sender.message(localization["command-ratio-bad-ratio", args[1]])
         )
         sender.message(
-            localization["command-ratio-added-successfully", environment.toInt(), selection.capitalize(), args[1]]
+            if (added)
+                localization["command-ratio-added-successfully", environment.toInt(), selection, args[1]]
+            else
+                localization["command-ratio-addition-failed", selection]
         )
     }
 
     private fun remove(sender: CommandSender, args: Array<String>, world: World?, environment: Boolean) {
         if (args.size < 2 && sender is ConsoleCommandSender)
             return sender.message(localization["command-no-arguments"])
-        val selection = args.getOrNull(1)
-            ?: if (environment) world?.environment?.name else world?.name
+        val selection = (args.getOrNull(1)
+            ?: if (environment) world?.environment?.name else world?.name)?.capitalize()
         val message = if (args.size > 1)
             localization["command-ratio-world-not-found", environment.toInt(), args[1]]
         else
             localization["command-ratio-bad-sender"]
-        WorldRatioService.remove(
+        val added = WorldRatioService.remove(
             selection?.toLowerCase()
                 ?: return sender.message(message),
             environment
         )
         sender.message(
-            localization["command-ratio-removed-successfully", environment.toInt(), selection.capitalize()]
+            if (added)
+                localization["command-ratio-removed-successfully", environment.toInt(), selection]
+            else
+                localization["command-ratio-removal-failed", selection]
         )
     }
 
