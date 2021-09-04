@@ -1,6 +1,7 @@
 package xyz.atrius.waystones.utility
 
 import org.bukkit.Material
+import org.bukkit.block.Beacon
 import org.bukkit.block.Block
 import org.bukkit.block.data.type.RespawnAnchor
 import org.bukkit.entity.Player
@@ -45,4 +46,10 @@ fun Block.getWarpState(player: Player): WarpState = when {
     !location.isSafe -> Obstructed
     hasInfinitePower() -> Infinite
     else -> Active(location.range())
+}
+
+fun Beacon.isActive(): Boolean {
+    return tier > 0 && ((y + 1)..world.maxHeight).all {
+        !world.getBlockAt(x, it, z).type.isSolid
+    }
 }

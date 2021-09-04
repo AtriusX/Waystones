@@ -2,7 +2,6 @@ package xyz.atrius.waystones.utility
 
 import org.bukkit.Bukkit
 import org.bukkit.Location
-import org.bukkit.Material.*
 import org.bukkit.Sound
 import org.bukkit.World
 import org.bukkit.util.Vector
@@ -54,16 +53,11 @@ val Location.isSafe: Boolean
 fun Location.range(): Int {
     val config = configuration
     return config.baseDistance() + FloodFill(
-        this, config.maxWarpSize(), NETHERITE_BLOCK, EMERALD_BLOCK, DIAMOND_BLOCK, GOLD_BLOCK, IRON_BLOCK
-    ).breakdown.entries.sumBy {
-        it.value * when(it.key) {
-            NETHERITE_BLOCK -> config.netheriteBoost()
-            EMERALD_BLOCK   -> config.emeraldBoost()
-            DIAMOND_BLOCK   -> config.diamondBoost()
-            GOLD_BLOCK      -> config.goldBoost()
-            IRON_BLOCK      -> config.ironBoost()
-            else            -> 1
-        }
+        this,
+        config.maxWarpSize(),
+        *config.defaultBlocks
+    ).breakdown.entries.sumBy { (key, value) ->
+        value * (config.blockMappings[key.type]?.invoke() ?: 1)
     }
 }
 
