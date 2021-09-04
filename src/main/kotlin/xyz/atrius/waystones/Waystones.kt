@@ -68,7 +68,8 @@ class Waystones : KotlinPlugin() {
                 InfoCommand,
                 GetKeyCommand,
                 ReloadCommand,
-                ConfigCommand
+                ConfigCommand,
+                RatioCommand
             )
         )
         logger.info("Waystones loaded!")

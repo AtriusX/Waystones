@@ -16,3 +16,16 @@ fun String.splitMultiline() =
 
 // Glues a list together into a single string
 fun <T> List<T>.glue(): String = joinToString("")
+
+inline fun <reified T> Collection<T>.split(splitter: (T) -> Boolean): Pair<Array<T>, Array<T>> {
+    val match = mutableListOf<T>()
+    val rest = mutableListOf<T>()
+    for (item in this)
+        if (splitter(item)) match += item else rest += item
+    return match.toTypedArray() to rest.toTypedArray()
+}
+
+operator fun <T> List<T>.contains(values: Set<T>): Boolean =
+    values.any(::contains)
+
+fun Boolean.toInt(): Int = if (this) 1 else 0

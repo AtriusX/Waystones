@@ -7,7 +7,7 @@ import xyz.atrius.waystones.localization
 import xyz.atrius.waystones.utility.message
 
 object ReloadCommand : SimpleCommand("reload", "rl") {
-
+  
     override fun execute(sender: CommandSender, args: Array<String>) {
         if (!sender.hasPermission("waystones.reload"))
             return sender.message(localization["command-no-permission"])
