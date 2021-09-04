@@ -64,7 +64,7 @@ data class Advancement(
         plugin.server.getAdvancement(key())
 
     fun key(): NamespacedKey =
-        display.title.text.toLowerCase().replace(" ", "_")
+        display.title.text.lowercase().replace(" ", "_")
             .replace("[^\\w]".toRegex(), "").toKey()
 
     fun paired(): Pair<NamespacedKey, Advancement> =

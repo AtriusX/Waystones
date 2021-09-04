@@ -7,7 +7,7 @@ import xyz.atrius.waystones.utility.message
 
 object ConfigCommand : SimpleCommand("config", "conf", "co", "c") {
 
-    override fun execute(sender: CommandSender, args: Array<String>) {
+    override fun execute(sender: CommandSender, args: Array<String>, flags: Flags) {
         // Permissions Check
         if (!sender.hasPermission("waystones.config"))
             return sender.message(localization["command-no-permission"])

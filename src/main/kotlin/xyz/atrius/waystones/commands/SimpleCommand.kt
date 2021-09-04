@@ -13,5 +13,5 @@ abstract class SimpleCommand(
         }
     }
 
-    abstract fun execute(sender: CommandSender, args: Array<String>)
+    abstract fun execute(sender: CommandSender, args: Array<String>, flags: Flags)
 }

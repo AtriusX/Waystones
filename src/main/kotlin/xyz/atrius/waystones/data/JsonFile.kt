@@ -5,8 +5,6 @@ import xyz.atrius.waystones.plugin
 import java.io.File
 import java.io.FileReader
 import java.nio.file.Files
-import java.nio.file.StandardOpenOption.CREATE
-import java.nio.file.StandardOpenOption.WRITE
 
 open class JsonFile<T>(name: String) {
     private val file = File(plugin.dataFolder, "$name.json")
@@ -23,7 +21,9 @@ open class JsonFile<T>(name: String) {
         data = json.fromJson(FileReader(file), HashMap<String, T>()::class.java)
     }
 
-    fun save() {
+    fun save(forceLowercase: Boolean = false) {
+        if (forceLowercase)
+            data.mapKeysTo(data) { (key) -> key.lowercase() }
         val json = json.toJson(data)
         Files.write(file.toPath(), json.toByteArray())
     }

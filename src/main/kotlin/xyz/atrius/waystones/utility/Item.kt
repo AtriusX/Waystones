@@ -17,7 +17,7 @@ operator fun ItemMeta.get(key: String) =
     persistentDataContainer.get(NamespacedKey(plugin, key), INTEGER)
 
 operator fun <T> ItemMeta.set(key: String, type: PersistentDataType<T, T>, value: T) =
-    persistentDataContainer.set(NamespacedKey(plugin, key), type, value)
+    persistentDataContainer.set(NamespacedKey(plugin, key), type, value ?: throw IllegalStateException("Value must be provided!"))
 
 fun ItemStack.isWarpKey() = if (configuration.keyItems())
     itemMeta?.get("is_warp_key") == 1 else type == Material.COMPASS

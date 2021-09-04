@@ -60,8 +60,10 @@ Please note that this recipe is only used if **enable-key-items** is set to `tru
 
 ### Commands
 - **/waystones**: Provides info about the plugin
-- **/waystones getkey [ count | player [count] ]***: Gives warpkeys to players
+- **/waystones getkey [ count | player [count] ]**: Gives warpkeys to players
+- **/waystones ratio [ set <value> [name] [-environment] | remove [name] [-environment] | list ]**: Manages the plugin's ratios
 
 ### Permissions
 - **waystones.getkey.self** - Allows using the `getkey` command to give yourself a Warp Key
 - **waystones.getkey.all** - Allows using the `getkey` command to give any player a Warp Key
+- **waystones.ratios** - Allows use of the `ratio` command to manage teleport ratios

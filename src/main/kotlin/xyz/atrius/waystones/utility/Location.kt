@@ -56,7 +56,7 @@ fun Location.range(): Int {
         this,
         config.maxWarpSize(),
         *config.defaultBlocks
-    ).breakdown.entries.sumBy { (key, value) ->
+    ).breakdown.entries.sumOf { (key, value) ->
         value * (config.blockMappings[key.type]?.invoke() ?: 1)
     }
 }
@@ -65,7 +65,7 @@ fun Location.rotateY(angle: Double, amp: Double = 1.0) =
     add(Vector(cos(angle) * amp, 2.0, sin(angle) * amp))
 
 fun Location.sameDimension(other: Location) =
-    world == other.world ?: false
+    world == other.world
 
 /*
  * Synchronizes the world coordinates between 2 trans-dimensional locations. This is
@@ -76,7 +76,7 @@ fun Location.synchronize(other: Location): TeleportType =
     if (sameDimension(other.world)) Normal else Interdimensional(world, other.world)
 
 fun Location.sameDimension(world: World?) =
-    world == this.world ?: false
+    world == this.world
 
 fun Location.playSound(sound: Sound, volume: Float = 1f, pitch: Float = 1f) = Bukkit.getOnlinePlayers()
     .forEach { if (it.world == world) it.playSound(this, sound, volume, pitch)  }
