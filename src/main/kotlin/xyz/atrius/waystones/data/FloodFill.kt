@@ -12,11 +12,11 @@ class FloodFill(
     maxFill: Int = Int.MAX_VALUE,
     private vararg val materials: Material
 ) : SizedHashSet<Block>(maxFill) {
-    var breakdown: StackSet<Material>
+    var breakdown: StackSet<Block>
 
     init {
         fill()
-        breakdown = StackSet(toList().map { it.type })
+        breakdown = StackSet(toList())
     }
 
     private tailrec fun fill(blocks: Set<Block> = setOf(startPosition.block)) {

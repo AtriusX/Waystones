@@ -1,5 +1,7 @@
 package xyz.atrius.waystones.data.config
 
+import org.bukkit.Material
+import org.bukkit.Material.*
 import xyz.atrius.waystones.Power
 import xyz.atrius.waystones.Power.INTER_DIMENSION
 import xyz.atrius.waystones.SicknessOption
@@ -97,18 +99,38 @@ class Config(plugin: KotlinPlugin) {
             "AIR", "IRON_INGOT", "AIR"
         ), ListParser(StringParser))
 
+    val advancements: Property<Boolean> =
+        Property("enable-advancements", true, BooleanParser)
+
+    // Default block list for power blocks
+    val blockMappings: Map<Material, () -> Int> = mapOf(
+        NETHERITE_BLOCK to ::netheriteBoost,
+        EMERALD_BLOCK to ::emeraldBoost,
+        DIAMOND_BLOCK to ::diamondBoost,
+        GOLD_BLOCK to ::goldBoost,
+        IRON_BLOCK to ::ironBoost
+    )
+
+    // Default block function mappings
+    val defaultBlocks: Array<Material> =
+        blockMappings.keys.toTypedArray()
+
+    // Returns the max warp distance any waystone can have
+    fun maxDistance(): Int =
+        baseDistance() + maxBoost() * maxWarpSize()
+
     // Netherite grants the max amount of boost per block
-    fun netheriteBoost(): Int = maxBoost()
+    private fun netheriteBoost(): Int = maxBoost()
 
     // Emerald grants 75% of the max boost per block
-    fun emeraldBoost(): Int = (maxBoost() * 0.75).toInt()
+    private fun emeraldBoost(): Int = (maxBoost() * 0.75).toInt()
 
     // Diamond grants 50% of the max boost per block
-    fun diamondBoost(): Int = maxBoost() / 2
+    private fun diamondBoost(): Int = maxBoost() / 2
 
     // Gold grants 33% of the max boost per block
-    fun goldBoost(): Int = maxBoost() / 3
+    private fun goldBoost(): Int = maxBoost() / 3
 
     // Iron grants 20% of the max boost per block
-    fun ironBoost(): Int = maxBoost() / 5
+    private fun ironBoost(): Int = maxBoost() / 5
 }

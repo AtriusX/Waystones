@@ -13,8 +13,10 @@ import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import xyz.atrius.waystones.SicknessOption.PREVENT_TELEPORT
 import xyz.atrius.waystones.configuration
+import xyz.atrius.waystones.data.advancement.Advancement
 import xyz.atrius.waystones.data.config.LocalizedString
 import xyz.atrius.waystones.handler.HandleState
+import org.bukkit.advancement.Advancement as SpigotAdvancement
 
 val Player.immortal: Boolean
     get() = gameMode in listOf(GameMode.CREATIVE, GameMode.SPECTATOR)
@@ -78,3 +80,15 @@ fun CommandSender.message(message: LocalizedString, colorCode: Char = '&') =
 
 fun CommandSender.message(message: String, colorCode: Char = '&') =
     sendMessage(message.translateColors(colorCode))
+
+fun Player.awardAdvancement(adv: Pair<String, Advancement>) = awardAdvancement(adv.second)
+
+fun Player.awardAdvancement(adv: Advancement) = awardAdvancement(adv.toInstance())
+
+fun Player.awardAdvancement(adv: SpigotAdvancement?) {
+    if (adv == null || !configuration.advancements())
+        return
+    val criteria = getAdvancementProgress(adv)
+    criteria.remainingCriteria
+        .forEach(criteria::awardCriteria)
+}

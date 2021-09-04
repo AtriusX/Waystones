@@ -1,6 +1,8 @@
 package xyz.atrius.waystones
 
 import xyz.atrius.waystones.commands.*
+import xyz.atrius.waystones.data.advancement.*
+import xyz.atrius.waystones.data.config.AdvancementManager
 import xyz.atrius.waystones.data.config.Config
 import xyz.atrius.waystones.data.config.Localization
 import xyz.atrius.waystones.data.crafting.CompassRecipe
@@ -28,6 +30,9 @@ class Waystones : KotlinPlugin() {
         WorldRatioService.load()
         // Register listeners
         registerEvents(
+            PlaceEvent,
+            ExplodeEvent,
+            SuppressEvent,
             WarpEvent,
             NameEvent,
             DestroyEvent,
@@ -35,9 +40,28 @@ class Waystones : KotlinPlugin() {
             LinkEvent
         )
         // Register warp key recipe if enabled
-        if (configuration.keyItems()) registerRecipes(
-            CompassRecipe
-        )
+        if (configuration.keyItems()) {
+            logger.info("Loading recipes!")
+            registerRecipes(
+                CompassRecipe
+            )
+        }
+        // Register plugin advancements
+        if (configuration.advancements()) {
+            logger.info("Loading advancements!")
+            AdvancementManager.register(
+                WAYSTONES,
+                SECRET_TUNNEL,
+                I_DONT_FEEL_SO_GOOD,
+                HEAVY_ARTILLERY,
+                CLEAN_ENERGY,
+                GIGAWARPS,
+                UNLIMITED_POWER,
+                QUANTUM_DOMESTICATION,
+                BLOCKED,
+                SHOOT_THE_MESSENGER
+            )
+        }
         // Register command namespaces
         registerNamespaces(
             CommandNamespace("waystones").register(

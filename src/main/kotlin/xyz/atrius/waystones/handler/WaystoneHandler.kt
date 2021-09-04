@@ -1,6 +1,8 @@
 package xyz.atrius.waystones.handler
 
 import org.bukkit.Location
+import org.bukkit.Material
+import org.bukkit.block.Beacon
 import org.bukkit.block.data.type.RespawnAnchor
 import org.bukkit.entity.Player
 import org.bukkit.potion.PotionEffect
@@ -9,8 +11,12 @@ import org.bukkit.util.Vector
 import xyz.atrius.waystones.Power
 import xyz.atrius.waystones.SicknessOption
 import xyz.atrius.waystones.configuration
+import xyz.atrius.waystones.data.FloodFill
 import xyz.atrius.waystones.data.WarpActiveState
 import xyz.atrius.waystones.data.WarpErrorState
+import xyz.atrius.waystones.data.advancement.CLEAN_ENERGY
+import xyz.atrius.waystones.data.advancement.GIGAWARPS
+import xyz.atrius.waystones.data.advancement.I_DONT_FEEL_SO_GOOD
 import xyz.atrius.waystones.data.config.LocalizedString
 import xyz.atrius.waystones.handler.HandleState.Fail
 import xyz.atrius.waystones.handler.HandleState.Success
@@ -23,10 +29,11 @@ class WaystoneHandler(
     val warpLocation: Location,
     val name: String
 ) : PlayerHandler {
-    val location       = player.location
-    val interDimension = !warpLocation.sameDimension(location)
-    val block          = warpLocation.block
-    val state          = block.getWarpState(player)
+    private val location       = player.location
+    private val interDimension = !warpLocation.sameDimension(location)
+    private val block          = warpLocation.block
+    private val state          = block.getWarpState(player)
+    private var distance       = -1.0
 
     override fun handle(): HandleState {
         return when (state) {
@@ -37,7 +44,7 @@ class WaystoneHandler(
                     return Fail(localization["world-jump-disabled"])
                 val range    = state.range / if (interDimension) configuration.worldRatio() else 1
                 val type     = location.synchronize(warpLocation)
-                val distance = location.toVector()
+                distance = location.toVector()
                     .distance(warpLocation.toVector().multiply(Vector(type.getRatio(), 1.0, type.getRatio())))
                 if (distance > range)
                     Fail(distanceError(name, distance, range)) else Success
@@ -52,7 +59,7 @@ class WaystoneHandler(
             it.yaw   = location.yaw
             it.pitch = location.pitch
         })
-        // Skip debuffs if the player is immortal
+        // Skip de-buffs if the player is immortal
         if (player.immortal)
             return
         val sick = player.hasPortalSickness()
@@ -69,6 +76,7 @@ class WaystoneHandler(
                 PotionEffect(PotionEffectType.BLINDNESS, 100, 9)
             )
             player.sendActionMessage(localization["warp-sickness"])
+            player.awardAdvancement(I_DONT_FEEL_SO_GOOD)
         } else {
             player.sendActionMessage(localization["warp-safely"])
         }
@@ -80,6 +88,23 @@ class WaystoneHandler(
                 charges -= configuration.powerCost()
             }
         }
+    }
+
+    fun gigawarpAdvancement() {
+        if (distance > configuration.maxDistance() / 2)
+            player.awardAdvancement(GIGAWARPS)
+    }
+
+    fun cleanEnergyAdvancement() {
+        val fill = FloodFill(
+            warpLocation,
+            configuration.maxWarpSize(),
+            *configuration.defaultBlocks,
+            Material.BEACON
+        )
+        if (fill.breakdown.any { (block) ->
+            with (block.state) { this is Beacon && isActive() }
+        }) player.awardAdvancement(CLEAN_ENERGY)
     }
 
     private fun distanceError(name: String, distance: Double, range: Int): LocalizedString =
