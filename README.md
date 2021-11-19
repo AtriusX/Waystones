@@ -1,5 +1,5 @@
 
-# Waystones  
+# Waystones [![Badge](badge/support.svg)](https://www.spigotmc.org/resources/waystones.93917/) [![Paper](badge/paper.svg)](https://papermc.io/) [![Kotlin](badge/kotlin.svg)](https://kotlinlang.org)
 
 Waystones is a minecraft server plugin that brings teleportation to your worlds without needing to rely on commands. This plugin works great in survival worlds where command teleporting is often out of place or just overpowered in general.  
   
