@@ -74,7 +74,7 @@ class EnumParser<E : Enum<E>>(private val enum: KClass<E>) : ArgumentParser<E> {
     override fun parse(input: Any?): E? {
         input ?: return null
         val values = enum.java.enumConstants
-        return values.firstOrNull { it.name == input }
+        return values.firstOrNull { it.name.equals(input.toString(), true) }
     }
 }
 
