@@ -44,6 +44,7 @@ compileKotlin {
         useIR = true
     }
 }
+
 compileTestKotlin {
     kotlinOptions {
         jvmTarget = "1.8"
