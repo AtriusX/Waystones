@@ -17,15 +17,18 @@ object ConfigCommand : SimpleCommand("config", "conf", "co", "c") {
         // List all arguments if the argument list is empty
         if (args.isEmpty())
             return listOptions(sender)
-        val prop = ConfigManager[setting]
+        // Return an error message if the property is not present
+        val prop = ConfigManager[setting] ?:
+            return sender.message(localization["command-config-invalid-prop", setting?.lowercase()])
         // Return the existing config value
         if (new == null)
             return sender.message(localization["command-config-view", setting, prop])
         // Assign the new config value to the system and print result of action
-        if (prop?.invoke(new) == true)
-            sender.message(localization["command-config-set", setting, prop])
+        sender.message(if (prop(new))
+            localization["command-config-set", setting, prop]
         else
-            sender.message(localization["command-config-set-fail", setting])
+            localization["command-config-set-fail", setting]
+        )
     }
 
     private fun listOptions(sender: CommandSender) {

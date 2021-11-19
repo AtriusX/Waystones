@@ -2,6 +2,7 @@ command-no-permission: "&7[&dWaystones&7] &cYou don't have permission to run thi
 command-config-view: "&7[&dWaystones&7] &f{0}&7: &b{1}"
 command-config-set: "&7[&dWaystones&7] &bSuccessfully updated &e{0} &bto &a{1}!"
 command-config-set-fail: "&7[&dWaystones&7] &cFailed to update setting {0}."
+command-config-invalid-prop: "&7[&dWaystones&7] &cSetting {0} does not exist."
 command-give-key: "&7[&dWaystones&7]&f Gave &bx{0}&r {0,choice,1#WarpKey|1<WarpKeys} to &a{1}&r"
 command-reload: "&7[&dWaystones&7] &aReloaded config!"
 command-ratio-invalid-command: "&7[&dWaystones&7] &cInvalid subcommand: {0}"
