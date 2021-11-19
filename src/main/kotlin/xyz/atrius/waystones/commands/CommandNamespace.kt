@@ -45,9 +45,8 @@ class CommandNamespace(
         return true
     }
 
-    fun register(vararg command: SimpleCommand): CommandNamespace {
+    fun register(vararg command: SimpleCommand): CommandNamespace = also {
         commands += command
-        return this
     }
 
     private fun listCommands(sender: CommandSender) {
