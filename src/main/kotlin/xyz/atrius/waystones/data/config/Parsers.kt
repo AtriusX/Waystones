@@ -40,6 +40,14 @@ object PositiveValueParser : IntParser() {
     private fun isValid(value: Int): Boolean = value >= 0
 }
 
+class RangeParser(private val range: IntRange) : IntParser() {
+
+    override fun parse(input: Any?): Int? {
+        val value = super.parse(input)
+        return if (value in range) value else null
+    }
+}
+
 object DoubleParser : ArgumentParser<Double> {
     override fun parse(input: Any?): Double? = input?.toString()?.toDoubleOrNull()
 }

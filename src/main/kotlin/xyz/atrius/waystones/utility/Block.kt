@@ -22,7 +22,7 @@ val Block.isPowered: Boolean
     get() = !isInhibited() && (hasInfinitePower() || hasNormalPower())
 
 fun Block.hasNormalPower(): Boolean =
-    ((powerBlock?.blockData as? RespawnAnchor)?.charges ?: 0) > 0
+    ((powerBlock?.blockData as? RespawnAnchor)?.charges ?: 0) >= configuration.powerCost()
 
 fun Block.isWaystone(): Boolean =
     type == Material.LODESTONE

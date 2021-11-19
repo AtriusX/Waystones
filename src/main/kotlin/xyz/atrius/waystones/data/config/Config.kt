@@ -65,10 +65,11 @@ class Config(plugin: KotlinPlugin) {
     val requirePower: Property<Power> =
         Property("require-power", INTER_DIMENSION, EnumParser(Power::class))
 
+    // How much power is required for a waystone to be used
     val powerCost: Property<Int> =
-        Property("power-cost", 1, PositiveValueParser)
+        Property("power-cost", 1, RangeParser(1 .. 4))
 
-    // Whether or not debuff effects are enabled
+    // Whether the debuff effects are enabled
     val portalSickness: Property<Boolean> =
         Property("enable-portal-sickness", true, BooleanParser)
 
