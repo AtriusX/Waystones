@@ -5,6 +5,7 @@ import org.bukkit.World
 import org.bukkit.block.data.type.RespawnAnchor
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
+import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
 import xyz.atrius.waystones.data.advancement.UNLIMITED_POWER
 import xyz.atrius.waystones.utility.awardAdvancement
@@ -16,7 +17,7 @@ object ExplodeEvent : Listener {
     fun onClick(event: PlayerInteractEvent) {
         val player = event.player
         val block = event.clickedBlock
-        if (block?.type != Material.RESPAWN_ANCHOR)
+        if (block?.type != Material.RESPAWN_ANCHOR || event.action != Action.RIGHT_CLICK_BLOCK)
             return
         val anchor = (block.blockData as RespawnAnchor)
         val canExplode = block.world.environment == World.Environment.NORMAL
@@ -24,7 +25,6 @@ object ExplodeEvent : Listener {
         if (anchor.charges == anchor.maximumCharges
             && above.isWaystone()
             && canExplode
-        )
-            player.awardAdvancement(UNLIMITED_POWER)
+        ) player.awardAdvancement(UNLIMITED_POWER)
     }
 }
