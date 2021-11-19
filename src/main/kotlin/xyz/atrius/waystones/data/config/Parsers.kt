@@ -60,7 +60,11 @@ object PercentageParser : ArgumentParser<Double> {
 object BooleanParser : ArgumentParser<Boolean> {
     override fun parse(input: Any?): Boolean? {
         val str = input?.toString()
-        return if (str?.lowercase() in arrayOf("true", "false")) str?.toBoolean() else null
+        return when (str?.lowercase()) {
+            "1", "t", "true"  -> true
+            "0", "f", "false" -> false
+            else              -> null
+        }
     }
 }
 
