@@ -30,7 +30,7 @@ fun Block.isWaystone(): Boolean =
 fun Block.hasPower(player: Player): Boolean = when(configuration.requirePower()) {
     INTER_DIMENSION -> location.sameDimension(player.location) || isPowered
     ALL -> isPowered
-    else -> false
+    else -> true
 }
 
 fun Block.isInhibited(): Boolean =
