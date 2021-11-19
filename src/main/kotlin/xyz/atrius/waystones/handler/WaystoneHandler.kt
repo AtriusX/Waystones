@@ -85,7 +85,7 @@ class WaystoneHandler(
         if (power == Power.ALL || (interDimension && power == Power.INTER_DIMENSION)) {
             // Only deplete power if the power is not infinite
             if (!block.hasInfinitePower()) block.powerBlock?.update<RespawnAnchor> {
-                charges -= configuration.powerCost()
+                charges -= configuration.powerCost().coerceIn(0, 4)
             }
         }
     }
