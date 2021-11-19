@@ -30,7 +30,7 @@ Players can create and warp to a waystone by creating a lodestone and linking it
 
 The default crafting recipe for the warp key is as follows:
 
-![Warp Key Recipe](https://i.imgur.com/N2t9pn1.png)
+<img alt="Warp Key Recipe" src="https://i.imgur.com/N2t9pn1.png" width="500"/>
 
 Please note that this recipe is only used if **enable-key-items** is set to `true` in the configuration file. In future updates this recipe may also potentially be customizable via the config.
 
