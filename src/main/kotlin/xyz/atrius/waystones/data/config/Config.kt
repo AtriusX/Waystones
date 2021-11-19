@@ -25,7 +25,7 @@ class Config(plugin: KotlinPlugin) {
     val waitTime: Property<Int> =
         Property("wait-time", 60, PositiveValueParser)
 
-    // Whether or not the player receiving damage will force cancel the warp
+    // Whether the player receiving damage will force cancel the warp
     val damageStopsWarping: Property<Boolean> =
         Property("damage-stops-warping", true, BooleanParser)
 
@@ -57,7 +57,7 @@ class Config(plugin: KotlinPlugin) {
     val warpAnimations: Property<Boolean> =
         Property("warp-animations", true, BooleanParser)
 
-    // Determines whether or not warping with a compass deletes the item after use
+    // Determines whether warping with a compass deletes the item after use
     val singleUse: Property<Boolean> =
         Property("single-use", false, BooleanParser)
 
