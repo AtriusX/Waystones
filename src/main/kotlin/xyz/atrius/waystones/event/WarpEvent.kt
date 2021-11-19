@@ -16,8 +16,7 @@ import xyz.atrius.waystones.TeleportManager
 import xyz.atrius.waystones.configuration
 import xyz.atrius.waystones.data.advancement.SECRET_TUNNEL
 import xyz.atrius.waystones.data.advancement.SHOOT_THE_MESSENGER
-import xyz.atrius.waystones.handler.HandleState.Fail
-import xyz.atrius.waystones.handler.HandleState.Success
+import xyz.atrius.waystones.handler.HandleState.*
 import xyz.atrius.waystones.handler.KeyHandler
 import xyz.atrius.waystones.handler.WaystoneHandler
 import xyz.atrius.waystones.localization
@@ -38,6 +37,7 @@ object WarpEvent : Listener {
         val key = KeyHandler(player, event)
         when (val result = key.handle()) {
             is Fail -> return player.sendActionError(result)
+            else    -> Unit
         }
         // Make sure the key is connected before we continue
         val location = key.getLocation() ?: return
@@ -45,7 +45,8 @@ object WarpEvent : Listener {
         // Handle key actions and terminate if handler fails
         val warp = WaystoneHandler(player, location, name)
         when (val result = warp.handle()) {
-            is Fail -> return player.sendActionError(result)
+            is Fail    -> return player.sendActionError(result)
+            is Ignore  -> Unit
             is Success -> {
                 // Queue the teleport then use key and warp on success
                 TeleportManager.queueEvent(player, warp) {
