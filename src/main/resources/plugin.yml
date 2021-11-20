@@ -1,7 +1,7 @@
 name: Waystones
-version: 1.0-1.16.3
+version: 1.1.0-1.16.5
 main: xyz.atrius.waystones.Waystones
-api-version: 1.16
+api-version: 1.16.5
 prefix: Waystones
 authors: [Atrius, Sepshun, NewbieOrange]
 description: Warp stones for survival
@@ -15,9 +15,14 @@ permissions:
   waystones.*:
     description: Gives access to all Waystones commands
     children:
+      waystones.link: true
       waystones.getkey.all: true
       waystones.reload: true
       waystones.config: true
+      waystones.ratios: true
+  waystones.link:
+    description: Allows users to link a waystone to a warp key
+    default: true
   waystones.getkey.all:
     description: Allows giving warpkeys to all players
     children:
@@ -30,4 +35,7 @@ permissions:
     default: op
   waystones.config:
     description: Allows viewing and editing plugin config
+    default: op
+  waystones.ratios:
+    description: Allows use of the ratio command to manage teleport ratios
     default: op
