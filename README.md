@@ -41,7 +41,7 @@ Please note that this recipe is only used if **enable-key-items** is set to `tru
 - **damage-stops-warping *[default: true]***: Whether taking damage will prevent the player from teleporting.
 - **limit-distance *[default: true]***: Limits the range of a waystone to the base distance plus the total boost value.
 - **base-distance *[default: 100]***: The minimum amount of blocks in range a waystone will have.
-- **max-boost: *[default: 150]***: The max boost amount permitted per block of a waystone. 
+- **max-boost *[default: 150]***: The max boost amount permitted per block of a waystone. 
 - **max-warp-size *[default: 50]***: The max number of boost blocks a warp is able to use.
 - **jump-worlds *[default: true]***: Whether teleporting across dimensions is allowed.
 - **world-ratio *[default: 8]***: The amount of blocks to divide the max warp range by during inter-dimensional teleports. 
