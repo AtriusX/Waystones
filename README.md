@@ -73,7 +73,7 @@ Please note that this recipe is only used if **enable-key-items** is set to `tru
 - **waystones.getkey.self**: Allows using the `getkey` command to give yourself a warp key
 - **waystones.getkey.all**: Allows using the `getkey` command to give any player a warp key
 - **waystones.config**: Allows viewing and modifying the plugin configuration
-  **waystones.reload**: Allows reloading of the plugin configuration
+- **waystones.reload**: Allows reloading of the plugin configuration
 - **waystones.ratios**: Allows use of the `ratio` command to manage teleport ratios
 
 ### Advancements
