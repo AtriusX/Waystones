@@ -109,7 +109,6 @@ class Config(plugin: KotlinPlugin) {
         EMERALD_BLOCK to ::emeraldBoost,
         DIAMOND_BLOCK to ::diamondBoost,
         GOLD_BLOCK to ::goldBoost,
-        COPPER_BLOCK to ::copperBoost,
         IRON_BLOCK to ::ironBoost
     )
 
@@ -132,9 +131,6 @@ class Config(plugin: KotlinPlugin) {
 
     // Gold grants 33% of the max boost per block
     private fun goldBoost(): Int = maxBoost() / 3
-
-    // Copper grants 25% of the max boost per block
-    private fun copperBoost(): Int = maxBoost() / 4
 
     // Iron grants 20% of the max boost per block
     private fun ironBoost(): Int = maxBoost() / 5
