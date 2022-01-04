@@ -14,13 +14,14 @@ import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerMoveEvent
 import xyz.atrius.waystones.TeleportManager
 import xyz.atrius.waystones.configuration
+import xyz.atrius.waystones.data.Waystone
 import xyz.atrius.waystones.data.advancement.SECRET_TUNNEL
 import xyz.atrius.waystones.data.advancement.SHOOT_THE_MESSENGER
 import xyz.atrius.waystones.handler.HandleState.*
 import xyz.atrius.waystones.handler.KeyHandler
 import xyz.atrius.waystones.handler.WaystoneHandler
 import xyz.atrius.waystones.localization
-import xyz.atrius.waystones.service.WarpNameService
+import xyz.atrius.waystones.service.WarpService
 import xyz.atrius.waystones.utility.*
 
 object WarpEvent : Listener {
@@ -41,7 +42,10 @@ object WarpEvent : Listener {
         }
         // Make sure the key is connected before we continue
         val location = key.getLocation() ?: return
-        val name = WarpNameService[location] ?: localization["unnamed-waystone"].toString()
+        val name = when (val node = WarpService[location]) {
+            is Waystone -> node.name ?: localization["unnamed-waystone"].toString()
+            else        -> localization["unnamed-waystone"].toString()
+        }
         // Handle key actions and terminate if handler fails
         val warp = WaystoneHandler(player, location, name)
         when (val result = warp.handle()) {
