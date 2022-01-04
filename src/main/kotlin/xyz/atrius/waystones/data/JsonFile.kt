@@ -5,26 +5,35 @@ import xyz.atrius.waystones.plugin
 import java.io.File
 import java.io.FileReader
 import java.nio.file.Files
+import kotlin.collections.MutableMap.MutableEntry
 
-open class JsonFile<T>(name: String) {
-    private val file = File(plugin.dataFolder, "$name.json")
+open class JsonFile<T>(name: String) : File(plugin.dataFolder, "$name.json") {
     private val json = GsonBuilder().setPrettyPrinting().create()
     protected lateinit var data: HashMap<String, T>
 
     fun load() {
-        try {
-            if (!file.exists())
-                plugin.saveResource(file.name, false)
-        } catch (e: Exception) {
-            e.printStackTrace()
+        if (!exists()) runCatching {
+            plugin.saveResource(name, false)
+        }.onFailure {
+            it.printStackTrace()
         }
-        data = json.fromJson(FileReader(file), HashMap<String, T>()::class.java)
+        data = json.fromJson(FileReader(this), HashMap<String, T>()::class.java)
+        onLoad()
     }
 
-    fun save(forceLowercase: Boolean = false) {
+    open fun onLoad() {}
+
+    fun save(forceLowercase: Boolean = false, action: () -> Unit = {}) {
+        action()
         if (forceLowercase)
             data.mapKeysTo(data) { (key) -> key.lowercase() }
         val json = json.toJson(data)
-        Files.write(file.toPath(), json.toByteArray())
+        Files.write(toPath(), json.toByteArray())
+        onSave()
     }
+
+    open fun onSave() {}
+
+    operator fun iterator(): Iterator<MutableEntry<String, T>> =
+        data.iterator()
 }
