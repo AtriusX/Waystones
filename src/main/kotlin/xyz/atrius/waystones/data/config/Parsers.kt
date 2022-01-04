@@ -1,5 +1,8 @@
 package xyz.atrius.waystones.data.config
 
+import org.bukkit.Bukkit
+import org.bukkit.Location
+import xyz.atrius.waystones.utility.locationCode
 import java.util.*
 import kotlin.reflect.KClass
 
@@ -80,6 +83,23 @@ object LocaleParser : ArgumentParser<Locale> {
     override fun parse(input: Any?): Locale? = input?.let { Locale.forLanguageTag(input.toString()) }
 
     override fun toString(value: Locale): String = value.toLanguageTag()
+}
+
+object LocationParser : ArgumentParser<Location> {
+    private val regex = "^(\\w+)@(-?\\d+):(-?\\d+):(-?\\d+)$".toRegex()
+
+    override fun parse(input: Any?): Location? {
+        val match = regex.find(input.toString())?.groupValues ?: return null
+        return Location(
+            Bukkit.getWorld(match[1]),
+            match[2].toDouble(),
+            match[3].toDouble(),
+            match[4].toDouble()
+        )
+    }
+
+    override fun toString(value: Location): String =
+        value.locationCode
 }
 
 class EnumParser<E : Enum<E>>(private val enum: KClass<E>) : ArgumentParser<E> {
