@@ -7,7 +7,7 @@ import xyz.atrius.waystones.data.config.Config
 import xyz.atrius.waystones.data.config.Localization
 import xyz.atrius.waystones.data.crafting.CompassRecipe
 import xyz.atrius.waystones.event.*
-import xyz.atrius.waystones.service.WarpNameService
+import xyz.atrius.waystones.service.WarpService
 import xyz.atrius.waystones.service.WorldRatioService
 import xyz.atrius.waystones.utility.KotlinPlugin
 import xyz.atrius.waystones.utility.registerEvents
@@ -26,7 +26,7 @@ class Waystones : KotlinPlugin() {
         configuration = Config(this)
         localization  = Localization(this)
         // Load services
-        WarpNameService.load()
+        WarpService.load()
         WorldRatioService.load()
         // Register listeners
         registerEvents(
