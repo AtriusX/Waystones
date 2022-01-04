@@ -2,14 +2,10 @@ package xyz.atrius.waystones.service
 
 import org.bukkit.Location
 import xyz.atrius.waystones.data.JsonFile
+import xyz.atrius.waystones.data.Waystone
 import xyz.atrius.waystones.data.config.LocationParser
-import xyz.atrius.waystones.data.json.Json
 import xyz.atrius.waystones.log
 import xyz.atrius.waystones.utility.locationCode
-
-data class Waystone(
-    val name: String?
-) : Json<Waystone>
 
 object WarpService : JsonFile<Waystone>("warps") {
 
