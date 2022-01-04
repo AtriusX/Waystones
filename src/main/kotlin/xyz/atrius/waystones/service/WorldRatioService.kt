@@ -4,7 +4,7 @@ import org.bukkit.Bukkit
 import org.bukkit.World
 import xyz.atrius.waystones.data.JsonFile
 
-object WorldRatioService : JsonFile<Double>("ratios"), Iterable<Map.Entry<String, Double>> {
+object WorldRatioService : JsonFile<Double>("ratios") {
 
     operator fun get(world: World): Double =
         data["name${world.name.lowercase()}"]
@@ -39,7 +39,4 @@ object WorldRatioService : JsonFile<Double>("ratios"), Iterable<Map.Entry<String
 
     fun isEmpty(): Boolean =
         data.isEmpty()
-
-    override fun iterator(): Iterator<Map.Entry<String, Double>> =
-        data.iterator()
 }
