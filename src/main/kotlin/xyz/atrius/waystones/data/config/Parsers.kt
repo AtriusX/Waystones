@@ -89,12 +89,13 @@ object LocationParser : Parser<Location> {
         .toRegex(RegexOption.IGNORE_CASE)
 
     override fun parse(input: Any?): Location? {
-        val match = regex.find(input.toString())?.groupValues ?: return null
+        val (_, world, x, y, z) =
+            regex.find(input.toString())?.groupValues ?: return null
         return Location(
-            Bukkit.getWorld(match[1]),
-            match[2].toDouble(),
-            match[3].toDouble(),
-            match[4].toDouble()
+            Bukkit.getWorld(world),
+            x.toDouble(),
+            y.toDouble(),
+            z.toDouble()
         )
     }
 
