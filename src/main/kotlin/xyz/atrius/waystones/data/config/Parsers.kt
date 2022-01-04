@@ -85,7 +85,8 @@ object LocaleParser : Parser<Locale> {
 }
 
 object LocationParser : Parser<Location> {
-    private val regex = "^(\\w+)@(-?\\d+):(-?\\d+):(-?\\d+)$".toRegex()
+    private val regex = "^(\\w+)@([0-9A-F]{8})([0-9A-F]{8})([0-9A-F]{8})$"
+        .toRegex(RegexOption.IGNORE_CASE)
 
     override fun parse(input: Any?): Location? {
         val match = regex.find(input.toString())?.groupValues ?: return null
