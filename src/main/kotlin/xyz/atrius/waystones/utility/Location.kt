@@ -43,8 +43,21 @@ val Location.neighbors: List<Location>
     get() = listOf(UP, DOWN, NORTH, SOUTH, WEST, EAST)
 
 // Returns the code of this location
+@Deprecated("Will be removed later in favor of LocationParser", ReplaceWith(""))
 val Location.locationCode
     get() = "${world?.name}@$blockX:$blockY:$blockZ"
+
+@Deprecated("Temporary for use in migrating old codes")
+fun String.toLocation(): Location? {
+    val regex = "^(\\w+)@(-?\\d+):(-?\\d+):(-?\\d+)$".toRegex()
+    val match = regex.find(this)?.groupValues ?: return null
+    return Location(
+        Bukkit.getWorld(match[1]),
+        match[2].toDouble(),
+        match[3].toDouble(),
+        match[4].toDouble()
+    )
+}
 
 // Determines if the selected block is safe to spawn on
 val Location.isSafe: Boolean

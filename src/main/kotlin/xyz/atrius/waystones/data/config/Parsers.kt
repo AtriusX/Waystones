@@ -2,11 +2,10 @@ package xyz.atrius.waystones.data.config
 
 import org.bukkit.Bukkit
 import org.bukkit.Location
-import xyz.atrius.waystones.utility.locationCode
 import java.util.*
 import kotlin.reflect.KClass
 
-interface ArgumentParser<T> {
+interface Parser<T> {
 
     /**
      * Parses the given data into the specified output type
@@ -23,11 +22,11 @@ interface ArgumentParser<T> {
         value.toString()
 }
 
-object StringParser : ArgumentParser<String> {
+object StringParser : Parser<String> {
     override fun parse(input: Any?) = input.toString()
 }
 
-sealed class IntParser : ArgumentParser<Int> {
+sealed class IntParser : Parser<Int> {
     override fun parse(input: Any?): Int? = input?.toString()?.toIntOrNull()
 
     companion object : IntParser()
@@ -51,11 +50,11 @@ class RangeParser(private val range: IntRange) : IntParser() {
     }
 }
 
-object DoubleParser : ArgumentParser<Double> {
+object DoubleParser : Parser<Double> {
     override fun parse(input: Any?): Double? = input?.toString()?.toDoubleOrNull()
 }
 
-object PercentageParser : ArgumentParser<Double> {
+object PercentageParser : Parser<Double> {
     private val regex = "^[0-9]+(.[0-9]+)?%$".toRegex()
 
     override fun parse(input: Any?): Double? {
@@ -68,7 +67,7 @@ object PercentageParser : ArgumentParser<Double> {
         "${value * 100}%"
 }
 
-object BooleanParser : ArgumentParser<Boolean> {
+object BooleanParser : Parser<Boolean> {
     override fun parse(input: Any?): Boolean? {
         val str = input?.toString()
         return when (str?.lowercase()) {
@@ -79,13 +78,13 @@ object BooleanParser : ArgumentParser<Boolean> {
     }
 }
 
-object LocaleParser : ArgumentParser<Locale> {
+object LocaleParser : Parser<Locale> {
     override fun parse(input: Any?): Locale? = input?.let { Locale.forLanguageTag(input.toString()) }
 
     override fun toString(value: Locale): String = value.toLanguageTag()
 }
 
-object LocationParser : ArgumentParser<Location> {
+object LocationParser : Parser<Location> {
     private val regex = "^(\\w+)@(-?\\d+):(-?\\d+):(-?\\d+)$".toRegex()
 
     override fun parse(input: Any?): Location? {
@@ -99,10 +98,13 @@ object LocationParser : ArgumentParser<Location> {
     }
 
     override fun toString(value: Location): String =
-        value.locationCode
+        "${value.world}@{${value.blockX.toHex()}${value.blockY.toHex()}${value.blockZ.toHex()}"
+
+    private fun Int.toHex() =
+        toString(16).padStart(8, '0')
 }
 
-class EnumParser<E : Enum<E>>(private val enum: KClass<E>) : ArgumentParser<E> {
+class EnumParser<E : Enum<E>>(private val enum: KClass<E>) : Parser<E> {
     override fun parse(input: Any?): E? {
         input ?: return null
         val values = enum.java.enumConstants
@@ -110,7 +112,7 @@ class EnumParser<E : Enum<E>>(private val enum: KClass<E>) : ArgumentParser<E> {
     }
 }
 
-class ListParser<T>(private val parser: ArgumentParser<T>) : ArgumentParser<List<T>> {
+class ListParser<T>(private val parser: Parser<T>) : Parser<List<T>> {
     @Suppress("UNCHECKED_CAST")
     override fun parse(input: Any?): List<T>? {
         if (input is List<*>)
