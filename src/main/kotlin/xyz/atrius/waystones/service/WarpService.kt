@@ -2,12 +2,13 @@ package xyz.atrius.waystones.service
 
 import org.bukkit.Location
 import xyz.atrius.waystones.data.JsonFile
+import xyz.atrius.waystones.data.Node
 import xyz.atrius.waystones.data.Waystone
 import xyz.atrius.waystones.data.config.LocationParser
 import xyz.atrius.waystones.log
-import xyz.atrius.waystones.utility.locationCode
+import xyz.atrius.waystones.utility.toLocation
 
-object WarpService : JsonFile<Waystone>("warps") {
+object WarpService : JsonFile<Node<*>>("warps") {
 
     /* This is temporary code that is used to migrate our existing data from
      * our legacy name service. Once migration is complete the service will be
@@ -22,7 +23,7 @@ object WarpService : JsonFile<Waystone>("warps") {
             log.info("Existing warpnames.json file detected! Attempting to migrate.")
             WarpNameService.load()
             for ((code, name) in WarpNameService) {
-                val location = LocationParser.parse(code)
+                val location = code.toLocation()
                 if (location != null)
                     add(location, Waystone(name))
             }
@@ -31,15 +32,17 @@ object WarpService : JsonFile<Waystone>("warps") {
         }
     }
 
-    fun add(location: Location, waystone: Waystone) = save {
-        data[location.locationCode] = waystone
+    fun add(location: Location, waystone: Node<*>) = save {
+        data[LocationParser.toString(location)] = waystone
     }
 
     fun remove(location: Location) = save {
-        data.remove(location.locationCode)
+        data.remove(LocationParser.toString(location))
     }
 
-    operator fun get(location: Location?): Waystone? =
-        data[location?.locationCode]
+    operator fun get(location: Location?): Node<*>? {
+        location ?: return null
+        return data[LocationParser.toString(location)]
+    }
 }
 

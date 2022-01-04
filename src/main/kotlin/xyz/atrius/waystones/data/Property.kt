@@ -1,7 +1,7 @@
 package xyz.atrius.waystones.data
 
 import org.bukkit.configuration.file.FileConfiguration
-import xyz.atrius.waystones.data.config.ArgumentParser
+import xyz.atrius.waystones.data.config.Parser
 import xyz.atrius.waystones.data.config.ConfigManager
 import xyz.atrius.waystones.plugin
 import java.util.*
@@ -11,7 +11,7 @@ import kotlin.reflect.KProperty
 class Property<T>(
     property: String,
     default: T,
-    private val parser: ArgumentParser<T>,
+    private val parser: Parser<T>,
     private val onUpdate: () -> Unit = {}
 ) {
     private val config: FileConfiguration
