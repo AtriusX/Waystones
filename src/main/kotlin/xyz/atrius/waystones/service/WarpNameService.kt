@@ -4,6 +4,7 @@ import org.bukkit.Location
 import xyz.atrius.waystones.data.JsonFile
 import xyz.atrius.waystones.utility.locationCode
 
+@Deprecated("Warp name service will be removed in a later update.")
 object WarpNameService : JsonFile<String>("warpnames") {
 
     fun add(location: Location, name: String) {
