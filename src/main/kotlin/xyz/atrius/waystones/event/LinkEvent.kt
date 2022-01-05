@@ -27,7 +27,7 @@ object LinkEvent : Listener {
                 player.sendActionError(result)
                 event.cancel()
             }
-            Success -> {
+            is Success -> {
                 linker.link()
                 event.cancel()
                 player.awardAdvancement(WAYSTONES)
