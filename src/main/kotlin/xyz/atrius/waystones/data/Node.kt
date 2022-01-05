@@ -16,7 +16,3 @@ sealed class Node<T>(
 
     class Beacon : Node<Beacon>(NodeType.BEACON)
 }
-
-
-
-
