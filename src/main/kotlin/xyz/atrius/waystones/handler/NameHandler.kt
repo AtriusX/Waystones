@@ -5,7 +5,7 @@ import org.bukkit.Material
 import org.bukkit.block.Block
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
-import xyz.atrius.waystones.data.Waystone
+import xyz.atrius.waystones.data.Node.Waystone
 import xyz.atrius.waystones.handler.HandleState.Ignore
 import xyz.atrius.waystones.handler.HandleState.Success
 import xyz.atrius.waystones.service.WarpService

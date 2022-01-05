@@ -14,7 +14,7 @@ import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerMoveEvent
 import xyz.atrius.waystones.TeleportManager
 import xyz.atrius.waystones.configuration
-import xyz.atrius.waystones.data.Waystone
+import xyz.atrius.waystones.data.Node.Waystone
 import xyz.atrius.waystones.data.advancement.SECRET_TUNNEL
 import xyz.atrius.waystones.data.advancement.SHOOT_THE_MESSENGER
 import xyz.atrius.waystones.handler.HandleState.*

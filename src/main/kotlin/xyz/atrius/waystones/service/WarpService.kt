@@ -3,7 +3,7 @@ package xyz.atrius.waystones.service
 import org.bukkit.Location
 import xyz.atrius.waystones.data.JsonFile
 import xyz.atrius.waystones.data.Node
-import xyz.atrius.waystones.data.Waystone
+import xyz.atrius.waystones.data.Node.Waystone
 import xyz.atrius.waystones.data.config.LocationParser
 import xyz.atrius.waystones.log
 import xyz.atrius.waystones.utility.toLocation

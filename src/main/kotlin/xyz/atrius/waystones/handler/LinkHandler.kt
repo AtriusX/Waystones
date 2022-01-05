@@ -7,7 +7,7 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.CompassMeta
 import xyz.atrius.waystones.configuration
-import xyz.atrius.waystones.data.Waystone
+import xyz.atrius.waystones.data.Node.Waystone
 import xyz.atrius.waystones.data.config.LocationParser
 import xyz.atrius.waystones.handler.HandleState.*
 import xyz.atrius.waystones.localization

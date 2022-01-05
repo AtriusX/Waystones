@@ -5,8 +5,8 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
+import xyz.atrius.waystones.data.Node.Waystone
 import xyz.atrius.waystones.data.WarpErrorState
-import xyz.atrius.waystones.data.Waystone
 import xyz.atrius.waystones.localization
 import xyz.atrius.waystones.service.WarpService
 import xyz.atrius.waystones.utility.cancel

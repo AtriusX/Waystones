@@ -6,13 +6,17 @@ enum class NodeType {
     WAYSTONE, BEACON
 }
 
-open class Node<T : Node<T>>(
+sealed class Node<T>(
     val type: NodeType
-) : Json<T>
+) : Json<T> {
 
-data class Waystone(
-    val name: String? = null
-) : Node<Waystone>(NodeType.WAYSTONE)
+    data class Waystone(
+        val name: String? = null
+    ) : Node<Waystone>(NodeType.WAYSTONE)
+
+    class Beacon : Node<Beacon>(NodeType.BEACON)
+}
 
 
-class Beacon : Node<Beacon>(NodeType.BEACON)
+
+
