@@ -2,13 +2,13 @@ package xyz.atrius.waystones.data
 
 import xyz.atrius.waystones.data.json.Json
 
-enum class NodeType {
-    WAYSTONE, BEACON
-}
-
 sealed class Node<T>(
     val type: NodeType
 ) : Json<T> {
+
+    enum class NodeType {
+        WAYSTONE, BEACON
+    }
 
     data class Waystone(
         val name: String? = null
