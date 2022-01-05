@@ -44,5 +44,8 @@ object WarpService : JsonFile<Node<*>>("warps") {
         location ?: return null
         return data[LocationParser.toString(location)]
     }
+
+    operator fun contains(location: Location): Boolean =
+        this[location] != null
 }
 
