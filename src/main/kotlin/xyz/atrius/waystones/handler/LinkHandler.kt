@@ -41,7 +41,7 @@ class LinkHandler(
         player.inventory.addItemNaturally(item, defaultWarpKey().link(block))
         player.playSound(Sound.ITEM_LODESTONE_COMPASS_LOCK)
         if (block.location !in WarpService)
-            WarpService.add(block.location, Waystone())
+            WarpService.add(block.location)
     }
 
     private fun ItemStack.link(block: Block) = update<CompassMeta> {

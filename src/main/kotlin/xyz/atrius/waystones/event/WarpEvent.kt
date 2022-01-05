@@ -52,6 +52,8 @@ object WarpEvent : Listener {
             is Fail    -> return player.sendActionError(result)
             is Ignore  -> Unit
             is Success -> {
+                if (location !in WarpService)
+                    WarpService.add(location)
                 // Queue the teleport then use key and warp on success
                 TeleportManager.queueEvent(player, warp) {
                     key.useKey()

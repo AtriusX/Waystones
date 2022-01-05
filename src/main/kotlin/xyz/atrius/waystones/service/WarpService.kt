@@ -32,7 +32,7 @@ object WarpService : JsonFile<Node<*>>("warps") {
         }
     }
 
-    fun add(location: Location, waystone: Node<*>) = save {
+    fun add(location: Location, waystone: Node<*> = Waystone()) = save {
         data[LocationParser.toString(location)] = waystone
     }
 
