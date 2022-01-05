@@ -55,3 +55,7 @@ shadowJar {
     archiveClassifier.set('')
     archiveVersion.set(pluginVersion)
 }
+
+build {
+    build.dependsOn shadowJar
+}
