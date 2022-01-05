@@ -7,15 +7,17 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.CompassMeta
 import xyz.atrius.waystones.configuration
+import xyz.atrius.waystones.data.Node.Waystone
+import xyz.atrius.waystones.data.config.LocationParser
 import xyz.atrius.waystones.handler.HandleState.*
 import xyz.atrius.waystones.localization
-import xyz.atrius.waystones.service.WarpNameService
+import xyz.atrius.waystones.service.WarpService
 import xyz.atrius.waystones.utility.*
 
 class LinkHandler(
-        override val player: Player,
-        private val item: ItemStack,
-        private val block: Block
+    override val player: Player,
+    private val item: ItemStack,
+    private val block: Block,
 ) : PlayerHandler {
 
     override fun handle(): HandleState {
@@ -38,12 +40,17 @@ class LinkHandler(
         // Add item to players inventory
         player.inventory.addItemNaturally(item, defaultWarpKey().link(block))
         player.playSound(Sound.ITEM_LODESTONE_COMPASS_LOCK)
+        if (block.location !in WarpService)
+            WarpService.add(block.location)
     }
 
     private fun ItemStack.link(block: Block) = update<CompassMeta> {
         lodestone = block.location
         isLodestoneTracked = true
-        val name = WarpNameService[block.location] ?: localization["unnamed-waystone"]
-        lore = listOf(localization["link-key-lore", name, lodestone?.locationCode].toString())
+        val name: String = when (val node = WarpService[block.location]) {
+            is Waystone -> node.name ?: localization["unnamed-waystone"].toString()
+            else        -> localization["unnamed-waystone"].toString()
+        }
+        lore = listOf(localization["link-key-lore", name, LocationParser.toString(lodestone!!)].toString())
     }
 }

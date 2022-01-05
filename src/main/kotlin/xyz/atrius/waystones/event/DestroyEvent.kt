@@ -8,7 +8,7 @@ import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.block.BlockExplodeEvent
 import org.bukkit.event.entity.EntityExplodeEvent
-import xyz.atrius.waystones.service.WarpNameService
+import xyz.atrius.waystones.service.WarpService
 
 object DestroyEvent : Listener {
 
@@ -16,7 +16,7 @@ object DestroyEvent : Listener {
     fun onBreak(event: BlockBreakEvent) {
         val block = event.block
         if (block.type == Material.LODESTONE)
-            WarpNameService.remove(block.location)
+            WarpService.remove(block.location)
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -25,6 +25,7 @@ object DestroyEvent : Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     fun onEntityExplode(event: EntityExplodeEvent) = destroy(event.blockList())
 
-    private fun destroy(blocks: List<Block>) =
-        WarpNameService.remove(blocks.firstOrNull { it.type == Material.LODESTONE }?.location)
+    private fun destroy(blocks: List<Block>) {
+        WarpService.remove(blocks.firstOrNull { it.type == Material.LODESTONE }?.location ?: return)
+    }
 }

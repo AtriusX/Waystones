@@ -7,16 +7,18 @@ import xyz.atrius.waystones.data.config.Config
 import xyz.atrius.waystones.data.config.Localization
 import xyz.atrius.waystones.data.crafting.CompassRecipe
 import xyz.atrius.waystones.event.*
-import xyz.atrius.waystones.service.WarpNameService
+import xyz.atrius.waystones.service.WarpService
 import xyz.atrius.waystones.service.WorldRatioService
 import xyz.atrius.waystones.utility.KotlinPlugin
 import xyz.atrius.waystones.utility.registerEvents
 import xyz.atrius.waystones.utility.registerNamespaces
 import xyz.atrius.waystones.utility.registerRecipes
+import java.util.logging.Logger
 
 lateinit var plugin       : KotlinPlugin
 lateinit var configuration: Config
 lateinit var localization : Localization
+lateinit var log          : Logger
 
 @Suppress("unused")
 class Waystones : KotlinPlugin() {
@@ -25,8 +27,9 @@ class Waystones : KotlinPlugin() {
         plugin        = this
         configuration = Config(this)
         localization  = Localization(this)
+        log           = this.logger
         // Load services
-        WarpNameService.load()
+        WarpService.load()
         WorldRatioService.load()
         // Register listeners
         registerEvents(
@@ -41,14 +44,14 @@ class Waystones : KotlinPlugin() {
         )
         // Register warp key recipe if enabled
         if (configuration.keyItems()) {
-            logger.info("Loading recipes!")
+            log.info("Loading recipes!")
             registerRecipes(
                 CompassRecipe
             )
         }
         // Register plugin advancements
         if (configuration.advancements()) {
-            logger.info("Loading advancements!")
+            log.info("Loading advancements!")
             AdvancementManager.register(
                 WAYSTONES,
                 SECRET_TUNNEL,
@@ -72,10 +75,10 @@ class Waystones : KotlinPlugin() {
                 RatioCommand
             )
         )
-        logger.info("Waystones loaded!")
+        log.info("Waystones loaded!")
     }
 
     override fun onDisable() {
-        logger.info("Waystones disabled!")
+        log.info("Waystones disabled!")
     }
 }
