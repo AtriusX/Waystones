@@ -57,5 +57,5 @@ shadowJar {
 }
 
 build {
-    build.dependsOn shadowJar
+    dependsOn shadowJar
 }
