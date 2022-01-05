@@ -14,5 +14,5 @@ sealed class Node<T>(
         val name: String? = null
     ) : Node<Waystone>(NodeType.WAYSTONE)
 
-    class Beacon : Node<Beacon>(NodeType.BEACON)
+    object Beacon : Node<Beacon>(NodeType.BEACON)
 }
