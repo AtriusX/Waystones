@@ -14,5 +14,6 @@ sealed class Node<T>(
         val name: String? = null
     ) : Node<Waystone>(NodeType.WAYSTONE)
 
+    @Suppress("unused") // Not currently in use
     object Beacon : Node<Beacon>(NodeType.BEACON)
 }
