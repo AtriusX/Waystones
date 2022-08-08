@@ -22,7 +22,7 @@ import xyz.atrius.waystones.handler.HandleState.Fail
 import xyz.atrius.waystones.handler.HandleState.Success
 import xyz.atrius.waystones.localization
 import xyz.atrius.waystones.utility.*
-import kotlin.random.Random
+import java.util.Random
 
 class WaystoneHandler(
     override val player: Player,
@@ -68,7 +68,7 @@ class WaystoneHandler(
             player.damage(configuration.portalSicknessDamage())
         // Give portal sickness to the player if they aren't immortal, are unlucky, or already are sick
         if (configuration.portalSickness()
-            && (sick || Random.nextDouble() < configuration.portalSicknessChance())
+            && (sick || Random().nextDouble() < configuration.portalSicknessChance())
             && !block.hasInfinitePower()
         ) {
             player.addPotionEffects(
