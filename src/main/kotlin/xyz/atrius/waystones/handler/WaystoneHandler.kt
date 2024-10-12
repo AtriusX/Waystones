@@ -72,7 +72,7 @@ class WaystoneHandler(
             && !block.hasInfinitePower()
         ) {
             player.addPotionEffects(
-                PotionEffect(PotionEffectType.CONFUSION, 600, 9),
+                PotionEffect(PotionEffectType.NAUSEA, 600, 9),
                 PotionEffect(PotionEffectType.BLINDNESS, 100, 9)
             )
             player.sendActionMessage(localization["warp-sickness"])

@@ -2,6 +2,7 @@ package xyz.atrius.waystones.data.advancement
 
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
+import org.bukkit.inventory.ItemStack
 import org.intellij.lang.annotations.Language
 import xyz.atrius.waystones.data.json.Json
 import xyz.atrius.waystones.localization
@@ -11,11 +12,6 @@ import org.bukkit.advancement.Advancement as SpigotAdvancement
 
 data class Text(
     val text: String
-)
-
-data class Icon(
-    val item: String,
-    @Language("JSON") val nbt: String? = null,
 )
 
 data class Trigger(
@@ -29,7 +25,7 @@ class Criteria(vararg items: Pair<String, String>) : Map<String, Trigger>
 data class Display(
     val title: Text,
     val description: Text,
-    val icon: Icon,
+    val icon: ItemStack,
     val showToast: Boolean = true,
     val announceToChat: Boolean = true,
     val hidden: Boolean = false,
@@ -53,7 +49,7 @@ data class Advancement(
         Display(
             Text(localization[base].toString()),
             Text(localization["$base-desc"].toString()),
-            Icon(item.key.toString()),
+            ItemStack.of(item),
             frame = frame
         ),
         IMPOSSIBLE,

@@ -47,7 +47,7 @@ fun Player.playSound(sound: Sound, volume: Float = 1f, pitch: Float = 1f) =
     playSound(location, sound, volume, pitch)
 
 fun Player.hasPortalSickness() =
-    getPotionEffect(PotionEffectType.CONFUSION)?.amplifier ?: 0 >= 4
+    (getPotionEffect(PotionEffectType.NAUSEA)?.amplifier ?: 0) >= 4
 
 fun PlayerInventory.addItemNaturally(original: ItemStack, new: ItemStack) {
     val player = holder as Player
