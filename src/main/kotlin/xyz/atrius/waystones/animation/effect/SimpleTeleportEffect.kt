@@ -30,7 +30,7 @@ class SimpleTeleportEffect(warp: WaystoneHandler) : TeleportEffect {
         val world  = player.world
         world.forceParticle(Particle.ASH, player.location.rotateY(period, timer.toDouble() / amp), 200)
         world.forceParticle(
-            Particle.SMOKE_LARGE, location, 250 / ratio.toInt(), 0.2, 0.5, 0.2, 0.0
+            Particle.LARGE_SMOKE, location, 250 / ratio.toInt(), 0.2, 0.5, 0.2, 0.0
         )
     }
 
@@ -40,7 +40,7 @@ class SimpleTeleportEffect(warp: WaystoneHandler) : TeleportEffect {
 
     override fun endAtLocation(location: Location) {
         player.world.forceParticle(
-            Particle.SMOKE_LARGE, location.UP.center, 400, 0.2, 0.5, 0.2, 0.1
+            Particle.LARGE_SMOKE, location.UP.center, 400, 0.2, 0.5, 0.2, 0.1
         )
         // Warp sound effects
         location.playSound(Sound.ENTITY_STRAY_DEATH, 0.5f, 0f)

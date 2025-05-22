@@ -47,8 +47,11 @@ fun KotlinPlugin.unloadAdvancements(vararg advancements: Advancement) = advancem
 fun KotlinPlugin.loadAdvancements(vararg advancements: Advancement) = advancements.forEach {
     val (key, adv) = it.paired()
     val spigotAdv = server.getAdvancement(key)
-    if (spigotAdv == null)
+    if (spigotAdv == null) {
+        println(adv.toJson())
+
         server.unsafe.loadAdvancement(key, adv.toJson())
+    }
 }
 
 

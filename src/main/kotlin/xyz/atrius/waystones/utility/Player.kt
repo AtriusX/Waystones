@@ -1,8 +1,9 @@
 package xyz.atrius.waystones.utility
 
-import net.md_5.bungee.api.ChatColor
-import net.md_5.bungee.api.ChatMessageType
-import net.md_5.bungee.api.chat.TextComponent
+import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.format.Style
+import net.kyori.adventure.text.format.TextColor
+import net.kyori.adventure.text.format.TextDecoration
 import org.bukkit.GameMode
 import org.bukkit.Sound
 import org.bukkit.command.CommandSender
@@ -25,29 +26,36 @@ fun Player.sendActionMessage(message: LocalizedString?) = if (message != null)
     sendActionMessage(message.toString())
 else Unit
 
-fun Player.sendActionMessage(message: String?) = if (message != null)
-    spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent(message))
-else Unit
+fun Player.sendActionMessage(message: String?) = when (message) {
+    null -> Unit
+    else -> sendActionBar { Component.text(message) }
+}
 
 fun Player.sendActionError(message: LocalizedString?) = if (message != null)
     sendActionError(message.toString())
 else Unit
 
-fun Player.sendActionError(message: String?) = if (message != null)
-    sendActionMessage("${ChatColor.RED}${ChatColor.BOLD}$message")
-else Unit
+fun Player.sendActionError(message: String?) = when(message) {
+    null -> Unit
+    else -> sendActionBar {
+        val style = Style
+            .style()
+            .color(TextColor.color(255, 0, 0))
+            .decorate(TextDecoration.BOLD)
+        Component
+            .text(message)
+            .style(style)
+    }
+}
 
 fun Player.sendActionError(fail: HandleState.Fail) =
     sendActionError(fail.error)
-
-fun Player.clearActionMessage() =
-    sendActionMessage("")
 
 fun Player.playSound(sound: Sound, volume: Float = 1f, pitch: Float = 1f) =
     playSound(location, sound, volume, pitch)
 
 fun Player.hasPortalSickness() =
-    getPotionEffect(PotionEffectType.CONFUSION)?.amplifier ?: 0 >= 4
+    (getPotionEffect(PotionEffectType.NAUSEA)?.amplifier ?: 0) >= 4
 
 fun PlayerInventory.addItemNaturally(original: ItemStack, new: ItemStack) {
     val player = holder as Player

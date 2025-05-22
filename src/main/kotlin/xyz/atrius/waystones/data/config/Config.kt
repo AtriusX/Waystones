@@ -95,9 +95,9 @@ class Config(plugin: KotlinPlugin) {
 
     val keyRecipe: Property<List<String>> =
         Property("key-recipe", listOf(
-            "AIR", "IRON_INGOT", "AIR",
+            " ", "IRON_INGOT", " ",
             "IRON_INGOT", "REDSTONE_BLOCK", "IRON_INGOT",
-            "AIR", "IRON_INGOT", "AIR"
+            " ", "IRON_INGOT", " "
         ), ListParser(StringParser))
 
     val advancements: Property<Boolean> =
