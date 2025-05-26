@@ -7,7 +7,6 @@ import org.bukkit.block.data.type.RespawnAnchor
 import org.bukkit.entity.Player
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
-import org.bukkit.util.Vector
 import xyz.atrius.waystones.Power
 import xyz.atrius.waystones.SicknessOption
 import xyz.atrius.waystones.configuration
@@ -45,7 +44,8 @@ class WaystoneHandler(
                 val range    = state.range / if (interDimension) configuration.worldRatio() else 1
                 val type     = location.synchronize(warpLocation)
                 distance = location.toVector()
-                    .distance(warpLocation.toVector().multiply(Vector(type.getRatio(), 1.0, type.getRatio())))
+                    .distance(warpLocation.toVector())
+                    //.multiply(Vector(type.getRatio(), 1.0, type.getRatio())) TODO Fix this later
                 if (distance > range)
                     Fail(distanceError(name, distance, range)) else Success
             }

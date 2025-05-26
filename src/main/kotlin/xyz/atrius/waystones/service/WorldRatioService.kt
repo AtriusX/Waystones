@@ -2,44 +2,45 @@ package xyz.atrius.waystones.service
 
 import org.bukkit.Bukkit
 import org.bukkit.World
+import org.koin.core.annotation.Single
 import xyz.atrius.waystones.data.JsonFile
+import xyz.atrius.waystones.data.TeleportType
 
-object WorldRatioService : JsonFile<Double>("ratios"), Iterable<Map.Entry<String, Double>> {
+@Single
+class WorldRatioService : JsonFile<Double>("ratios"), Iterable<Pair<String, Double>> {
 
     operator fun get(world: World): Double =
-        data["name${world.name.lowercase()}"]
-        ?: data[world.environment.name.lowercase()]
-        ?: 1.0
+        data[world.name.lowercase()] ?: 1.0
 
-    fun add(item: String, asEnvironment: Boolean, ratio: Double): Boolean {
-        if (!asEnvironment) {
-            val world = Bukkit.getWorld(item)
-            if (world != null)
-                data["${world.name.lowercase()}"] = ratio
-            return world != null
+    fun add(item: String, ratio: Double): Boolean {
+        val world = Bukkit.getWorld(item)
+
+        if (world != null) {
+            data[world.name.lowercase()] = ratio
+            save()
         }
-        val env = World.Environment.values().any { it.name == item.uppercase() }
-        if (env)
-            data[item.lowercase()] = ratio
-        return env
+
+        return world != null
     }
 
-    fun remove(item: String, asEnvironment: Boolean): Boolean {
-        if (!asEnvironment) {
-            val world = Bukkit.getWorld(item)
-            if (world != null)
-                data.remove("${world.name.lowercase()}")
-            return world != null
+    fun remove(item: String): Boolean {
+        val world = Bukkit.getWorld(item)
+
+        if (world != null) {
+            data.remove(world.name.lowercase())
+            save()
         }
-        val env = World.Environment.values().any { it.name == item.uppercase() }
-        if (env)
-            data.remove(item.lowercase())
-        return env
+
+        return world != null
     }
 
-    fun isEmpty(): Boolean =
-        data.isEmpty()
+    fun getRatio(type: TeleportType): Double = when (type) {
+        is TeleportType.Normal -> 1.0
+        is TeleportType.Interdimensional -> get(type.from) / get(type.to)
+    }
 
-    override fun iterator(): Iterator<Map.Entry<String, Double>> =
-        data.iterator()
+    override fun iterator(): Iterator<Pair<String, Double>> = Bukkit
+        .getWorlds()
+        .map { it.name to get(it) }
+        .iterator()
 }

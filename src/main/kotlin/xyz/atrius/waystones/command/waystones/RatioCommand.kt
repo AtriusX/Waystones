@@ -1,10 +1,9 @@
 package xyz.atrius.waystones.command.waystones
 
 import com.mojang.brigadier.Command
-import com.mojang.brigadier.arguments.IntegerArgumentType
+import com.mojang.brigadier.arguments.DoubleArgumentType
 import com.mojang.brigadier.builder.ArgumentBuilder
 import com.mojang.brigadier.builder.LiteralArgumentBuilder
-import com.mojang.brigadier.exceptions.SimpleCommandExceptionType
 import io.papermc.paper.command.brigadier.CommandSourceStack
 import io.papermc.paper.command.brigadier.Commands.argument
 import io.papermc.paper.command.brigadier.Commands.literal
@@ -17,7 +16,9 @@ import xyz.atrius.waystones.utility.getArgument
 import xyz.atrius.waystones.utility.message
 
 @Single
-class RatioCommand() : WaystoneSubcommand {
+class RatioCommand(
+    private val worldRatioService: WorldRatioService,
+) : WaystoneSubcommand {
 
     override val name: String = "ratio"
 
@@ -27,14 +28,9 @@ class RatioCommand() : WaystoneSubcommand {
             .executes {
                 val sender = it.source.sender
 
-                if (WorldRatioService.isEmpty()) {
-                    throw noWorldRatios.create()
-                }
-
                 sender.message("&7--------- &dWaystones Ratios &7----------&r")
                 // Display each config property
-                for ((item, ratio) in WorldRatioService) {
-
+                for ((item, ratio) in worldRatioService) {
                     sender.message("&f$item&f: &b$ratio")
                 }
 
@@ -49,12 +45,12 @@ class RatioCommand() : WaystoneSubcommand {
     }
 
     private fun setCommand(): LiteralArgumentBuilder<CommandSourceStack> {
-        val ratio = argument("ratio", IntegerArgumentType.integer(1))
+        val ratio = argument("ratio", DoubleArgumentType.doubleArg(0.0))
             .executes {
                 val world = it.getArgument("world", String::class.java)
-                val ratio = it.getArgument("ratio", Int::class.java)
-                val added = WorldRatioService
-                    .add(world, false, ratio.toDouble())
+                val ratio = it.getArgument("ratio", Double::class.java)
+                val added = worldRatioService
+                    .add(world, ratio.toDouble())
                 val message = when (added) {
                     true -> localization["command-ratio-added-successfully", 0, world]
                     else -> localization["command-ratio-addition-failed", world]
@@ -74,8 +70,8 @@ class RatioCommand() : WaystoneSubcommand {
         val world = argument("world", LimitedArgumentType(worlds()))
             .executes {
                 val world = it.getArgument<String>("world")
-                val removed = WorldRatioService
-                    .remove(world, false)
+                val removed = worldRatioService
+                    .remove(world)
                 val message = when (removed) {
                     true -> localization["command-ratio-removed-successfully", 0, world]
                     else -> localization["command-ratio-removal-failed", world]
@@ -94,9 +90,4 @@ class RatioCommand() : WaystoneSubcommand {
         .map { it.name }
         .onEach { println(it) }
         .toTypedArray()
-
-    companion object {
-
-        private val noWorldRatios = SimpleCommandExceptionType { localization["command-ratio-no-ratios"].format() }
-    }
 }

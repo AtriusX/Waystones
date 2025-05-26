@@ -13,8 +13,9 @@ open class JsonFile<T>(name: String) {
 
     fun load() {
         try {
-            if (!file.exists())
+            if (!file.exists()) {
                 plugin.saveResource(file.name, false)
+            }
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -22,8 +23,10 @@ open class JsonFile<T>(name: String) {
     }
 
     fun save(forceLowercase: Boolean = false) {
-        if (forceLowercase)
+        if (forceLowercase) {
             data.mapKeysTo(data) { (key) -> key.lowercase() }
+        }
+
         val json = json.toJson(data)
         Files.write(file.toPath(), json.toByteArray())
     }

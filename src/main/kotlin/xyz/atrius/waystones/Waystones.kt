@@ -6,12 +6,12 @@ import org.koin.ksp.generated.module
 import xyz.atrius.waystones.command.waystones.WaystoneCommand
 import xyz.atrius.waystones.config.PluginModule
 import xyz.atrius.waystones.data.advancement.*
-import xyz.atrius.waystones.data.config.AdvancementManager
 import xyz.atrius.waystones.data.config.Config
 import xyz.atrius.waystones.data.config.Localization
 import xyz.atrius.waystones.data.crafting.CompassRecipe
 import xyz.atrius.waystones.event.*
 import xyz.atrius.waystones.internal.KotlinPlugin
+import xyz.atrius.waystones.manager.AdvancementManager
 import xyz.atrius.waystones.service.WarpNameService
 import xyz.atrius.waystones.service.WorldRatioService
 import xyz.atrius.waystones.utility.registerEvents
@@ -30,7 +30,10 @@ class Waystones : KotlinPlugin(PluginModule.module) {
         localization  = Localization(this)
         // Load services
         WarpNameService.load()
-        WorldRatioService.load()
+
+        val worldRatioService = koin.get<WorldRatioService>()
+
+        worldRatioService.load()
         // Register listeners
         registerEvents(
             PlaceEvent,
@@ -51,8 +54,10 @@ class Waystones : KotlinPlugin(PluginModule.module) {
         }
         // Register plugin advancements
         if (configuration.advancements()) {
+            val advancementManager = koin.get<AdvancementManager>()
+
             logger.info("Loading advancements!")
-            AdvancementManager.register(
+            advancementManager.register(
                 WAYSTONES,
                 SECRET_TUNNEL,
                 I_DONT_FEEL_SO_GOOD,

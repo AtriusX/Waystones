@@ -14,14 +14,14 @@ import org.koin.core.annotation.Single
 import xyz.atrius.waystones.data.config.ConfigProperty
 import xyz.atrius.waystones.data.config.ConfigPropertyBase
 import xyz.atrius.waystones.data.config.ListConfigProperty
-import xyz.atrius.waystones.data.config.NewConfigManager
 import xyz.atrius.waystones.localization
+import xyz.atrius.waystones.manager.ConfigManager
 import xyz.atrius.waystones.utility.getArguments
 import xyz.atrius.waystones.utility.message
 
 @Single
 class ConfigCommand(
-    private val configManager: NewConfigManager,
+    private val configManager: ConfigManager,
 ) : WaystoneSubcommand {
     override val name: String = "config"
 
@@ -38,7 +38,6 @@ class ConfigCommand(
             val configSubcommand = when (option) {
                 is ConfigProperty<*> -> option.toPropertySubcommand()
                 is ListConfigProperty<*> -> option.toPropertySubcommand()
-                else -> continue
             }
 
             configCommand.then(configSubcommand)
