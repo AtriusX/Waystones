@@ -7,15 +7,17 @@ import org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK
 import org.bukkit.event.player.PlayerInteractEvent
 import org.koin.core.annotation.Single
 import xyz.atrius.waystones.data.advancement.QUANTUM_DOMESTICATION
+import xyz.atrius.waystones.data.config.Localization
 import xyz.atrius.waystones.handler.HandleState.Success
 import xyz.atrius.waystones.handler.NameHandler
-import xyz.atrius.waystones.localization
 import xyz.atrius.waystones.utility.awardAdvancement
 import xyz.atrius.waystones.utility.cancel
 import xyz.atrius.waystones.utility.sendActionMessage
 
 @Single
-class NameEvent : Listener {
+class NameEvent(
+    private val localization: Localization,
+) : Listener {
 
     @EventHandler(ignoreCancelled = true)
     fun onClick(event: PlayerInteractEvent) {

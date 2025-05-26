@@ -5,15 +5,16 @@ import com.mojang.brigadier.builder.ArgumentBuilder
 import io.papermc.paper.command.brigadier.CommandSourceStack
 import io.papermc.paper.command.brigadier.Commands.literal
 import org.koin.core.annotation.Single
+import xyz.atrius.waystones.data.config.Localization
 import xyz.atrius.waystones.manager.AdvancementManager
 import xyz.atrius.waystones.manager.ConfigManager
-import xyz.atrius.waystones.localization
 import xyz.atrius.waystones.utility.message
 
 @Single
 class ReloadCommand(
     private val configManager: ConfigManager,
     private val advancementManager: AdvancementManager,
+    private val localization: Localization,
 ) : WaystoneSubcommand {
 
     override val name: String = "reload"

@@ -8,7 +8,8 @@ import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.inventory.ItemStack
 import xyz.atrius.waystones.configuration
 import xyz.atrius.waystones.data.KeyState
-import xyz.atrius.waystones.handler.HandleState.*
+import xyz.atrius.waystones.handler.HandleState.Fail
+import xyz.atrius.waystones.handler.HandleState.Success
 import xyz.atrius.waystones.utility.getKeyState
 import xyz.atrius.waystones.utility.immortal
 
@@ -18,9 +19,9 @@ class KeyHandler(
 ) : PlayerHandler {
     private val inv = player.inventory
 
-    private val item: ItemStack = inv.itemInMainHand.takeIf {
-        event.hand == EquipmentSlot.HAND || it.type == Material.COMPASS
-    } ?: inv.itemInOffHand
+    private val item: ItemStack = inv.itemInMainHand
+        .takeIf { event.hand == EquipmentSlot.HAND || it.type == Material.COMPASS }
+        ?: inv.itemInOffHand
 
     private val keyState: KeyState = item.getKeyState(player)
 

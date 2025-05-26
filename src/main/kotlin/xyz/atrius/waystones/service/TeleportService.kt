@@ -1,11 +1,17 @@
-package xyz.atrius.waystones
+package xyz.atrius.waystones.service
 
 import org.bukkit.entity.Player
+import org.koin.core.annotation.Single
 import xyz.atrius.waystones.animation.AnimationManager
 import xyz.atrius.waystones.animation.effect.SimpleTeleportEffect
+import xyz.atrius.waystones.data.config.Localization
 import xyz.atrius.waystones.handler.WaystoneHandler
 
-object TeleportManager {
+@Single
+class TeleportService(
+    private val animationManager: AnimationManager,
+    private val localization: Localization,
+) {
     private val queuedTeleports = HashMap<Player, Int>()
 
     fun queueEvent(player: Player, warp: WaystoneHandler, onComplete: () -> Unit = {}) {
@@ -13,8 +19,8 @@ object TeleportManager {
         if (contains(player))
             cancel(player)
         // Queue the task and store the task id for if we need to cancel sooner
-        queuedTeleports[player] = AnimationManager.register(
-            SimpleTeleportEffect(warp),
+        queuedTeleports[player] = animationManager.register(
+            SimpleTeleportEffect(warp, localization),
             warp.warpLocation
         ) {
             queuedTeleports.remove(player)
@@ -24,10 +30,9 @@ object TeleportManager {
 
     fun cancel(player: Player) {
         val id = queuedTeleports.remove(player) ?: -1
-        AnimationManager.cancel(id)
+        animationManager.cancel(id)
     }
 
     operator fun contains(player: Player) =
         player in queuedTeleports
 }
-

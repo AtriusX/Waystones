@@ -1,6 +1,7 @@
 package xyz.atrius.waystones.data.config
 
 import org.bukkit.configuration.file.YamlConfiguration
+import org.koin.core.annotation.Single
 import xyz.atrius.waystones.configuration
 import xyz.atrius.waystones.internal.KotlinPlugin
 import xyz.atrius.waystones.utility.translateColors
@@ -8,6 +9,7 @@ import java.io.File
 import java.io.InputStreamReader
 import java.text.MessageFormat
 
+@Single
 class Localization(private val plugin: KotlinPlugin) {
     private var configFile = File(plugin.dataFolder, "locale-${configuration.locale().toLanguageTag()}.yml")
     private val config = YamlConfiguration()

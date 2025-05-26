@@ -2,12 +2,16 @@ package xyz.atrius.waystones.animation
 
 import org.bukkit.Bukkit
 import org.bukkit.Location
+import org.koin.core.annotation.Single
 import xyz.atrius.waystones.animation.effect.TeleportEffect
 import xyz.atrius.waystones.configuration
 import xyz.atrius.waystones.utility.scheduleRepeatingAutoCancelTask
 
-object AnimationManager {
+@Single
+class AnimationManager {
+
     private val scheduler  = Bukkit.getScheduler()
+
     private val animations = hashMapOf<Int, TeleportEffect>()
 
     fun register(effect: TeleportEffect, to: Location, onComplete: () -> Unit = {}) = effect.run {

@@ -16,17 +16,18 @@ import xyz.atrius.waystones.data.WarpErrorState
 import xyz.atrius.waystones.data.advancement.CLEAN_ENERGY
 import xyz.atrius.waystones.data.advancement.GIGAWARPS
 import xyz.atrius.waystones.data.advancement.I_DONT_FEEL_SO_GOOD
+import xyz.atrius.waystones.data.config.Localization
 import xyz.atrius.waystones.data.config.LocalizedString
 import xyz.atrius.waystones.handler.HandleState.Fail
 import xyz.atrius.waystones.handler.HandleState.Success
-import xyz.atrius.waystones.localization
 import xyz.atrius.waystones.utility.*
 import kotlin.random.Random
 
 class WaystoneHandler(
     override val player: Player,
     val warpLocation: Location,
-    val name: String
+    val name: String,
+    private val localization: Localization,
 ) : PlayerHandler {
     private val location       = player.location
     private val interDimension = !warpLocation.sameDimension(location)

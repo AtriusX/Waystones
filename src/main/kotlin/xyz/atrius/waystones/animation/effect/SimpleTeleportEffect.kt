@@ -4,12 +4,15 @@ import org.bukkit.Location
 import org.bukkit.Particle
 import org.bukkit.Sound
 import xyz.atrius.waystones.configuration
+import xyz.atrius.waystones.data.config.Localization
 import xyz.atrius.waystones.handler.WaystoneHandler
-import xyz.atrius.waystones.localization
 import xyz.atrius.waystones.utility.*
 import kotlin.math.ceil
 
-class SimpleTeleportEffect(warp: WaystoneHandler) : TeleportEffect {
+class SimpleTeleportEffect(
+    warp: WaystoneHandler,
+    private val localization: Localization,
+) : TeleportEffect {
     private val player = warp.player
     private val location = player.location
     private val name = warp.name

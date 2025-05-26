@@ -10,7 +10,7 @@ import io.papermc.paper.command.brigadier.Commands.literal
 import org.bukkit.Bukkit
 import org.koin.core.annotation.Single
 import xyz.atrius.waystones.command.resolver.LimitedArgumentType
-import xyz.atrius.waystones.localization
+import xyz.atrius.waystones.data.config.Localization
 import xyz.atrius.waystones.service.WorldRatioService
 import xyz.atrius.waystones.utility.getArgument
 import xyz.atrius.waystones.utility.message
@@ -18,6 +18,7 @@ import xyz.atrius.waystones.utility.message
 @Single
 class RatioCommand(
     private val worldRatioService: WorldRatioService,
+    private val localization: Localization,
 ) : WaystoneSubcommand {
 
     override val name: String = "ratio"
