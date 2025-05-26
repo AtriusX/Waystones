@@ -23,6 +23,7 @@ object NameEvent : Listener {
         val item = player.inventory.itemInMainHand
         val block = event.clickedBlock
         val handler = NameHandler(player, item, block ?: return)
+
         when (handler.handle()) {
             Success -> {
                 val name = handler.createName() ?: return

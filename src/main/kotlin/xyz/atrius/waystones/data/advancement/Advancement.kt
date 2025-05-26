@@ -14,7 +14,7 @@ data class Text(
 )
 
 data class Icon(
-    val item: String,
+    val id: String,
     @Language("JSON") val nbt: String? = null,
 )
 
