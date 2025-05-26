@@ -1,7 +1,7 @@
 package xyz.atrius.waystones.utility
 
+import net.kyori.adventure.text.Component
 import org.bukkit.Material
-import org.bukkit.command.CommandExecutor
 import org.bukkit.event.Listener
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.Recipe
@@ -18,8 +18,8 @@ private val DEFAULT_LORE: List<String> = listOf(localization["key-lore"].toStrin
 
 fun defaultWarpKey(amount: Int = 1): ItemStack = ItemStack(Material.COMPASS, amount).update<CompassMeta> {
     this["is_warp_key", INTEGER] = 1
-    lore = DEFAULT_LORE
-    setDisplayName(localization["key-name"].toString())
+    lore(DEFAULT_LORE.map { Component.text(it) })
+    displayName(Component.text(localization["key-name"].toString()))
 }
 
 fun KotlinPlugin.registerEvents(vararg listeners: Listener) {
@@ -49,7 +49,6 @@ fun KotlinPlugin.loadAdvancements(vararg advancements: Advancement) = advancemen
     }
 }
 
-
 fun BukkitScheduler.scheduleRepeatingAutoCancelTask(
     delay: Long, period: Long = 1, task: (Long) -> Unit, finish: Runnable? = null
 ): Int {
@@ -61,8 +60,4 @@ fun BukkitScheduler.scheduleRepeatingAutoCancelTask(
         }
     }, delay)
     return id
-}
-
-fun KotlinPlugin.registerCommands(vararg commands: Pair<String, CommandExecutor>) = commands.forEach { (command, executor) ->
-    getCommand(command)?.setExecutor(executor)
 }

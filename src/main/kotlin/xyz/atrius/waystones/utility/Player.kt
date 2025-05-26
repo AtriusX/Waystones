@@ -89,8 +89,6 @@ fun CommandSender.message(message: LocalizedString, colorCode: Char = '&') =
 fun CommandSender.message(message: String, colorCode: Char = '&') =
     sendMessage(message.translateColors(colorCode))
 
-fun Player.awardAdvancement(adv: Pair<String, Advancement>) = awardAdvancement(adv.second)
-
 fun Player.awardAdvancement(adv: Advancement) = awardAdvancement(adv.toInstance())
 
 fun Player.awardAdvancement(adv: SpigotAdvancement?) {

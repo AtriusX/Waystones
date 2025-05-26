@@ -12,5 +12,4 @@ fun World.forceParticle(
     offsetY: Double = 0.0,
     offsetZ: Double = 0.0,
     extra: Double = 0.0,
-) =
-    spawnParticle(particle, location, count, offsetX, offsetY, offsetZ, extra, null, true)
+) = spawnParticle(particle, location, count, offsetX, offsetY, offsetZ, extra, null, true)
