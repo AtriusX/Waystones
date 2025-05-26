@@ -5,6 +5,7 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
+import org.koin.core.annotation.Single
 import xyz.atrius.waystones.data.WarpErrorState
 import xyz.atrius.waystones.localization
 import xyz.atrius.waystones.service.WarpNameService
@@ -13,7 +14,8 @@ import xyz.atrius.waystones.utility.getWarpState
 import xyz.atrius.waystones.utility.isWarpKey
 import xyz.atrius.waystones.utility.sendActionMessage
 
-object InfoEvent: Listener {
+@Single
+class InfoEvent: Listener {
 
     @EventHandler(ignoreCancelled = true)
     fun onClick(event: PlayerInteractEvent) {

@@ -2,7 +2,6 @@ package xyz.atrius.waystones.utility
 
 import net.kyori.adventure.text.Component
 import org.bukkit.Material
-import org.bukkit.event.Listener
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.Recipe
 import org.bukkit.inventory.meta.CompassMeta
@@ -20,11 +19,6 @@ fun defaultWarpKey(amount: Int = 1): ItemStack = ItemStack(Material.COMPASS, amo
     this["is_warp_key", INTEGER] = 1
     lore(DEFAULT_LORE.map { Component.text(it) })
     displayName(Component.text(localization["key-name"].toString()))
-}
-
-fun KotlinPlugin.registerEvents(vararg listeners: Listener) {
-    val events = server.pluginManager
-    listeners.forEach { events.registerEvents(it, plugin) }
 }
 
 fun KotlinPlugin.registerRecipes(vararg recipes: Recipe) = recipes.forEach {

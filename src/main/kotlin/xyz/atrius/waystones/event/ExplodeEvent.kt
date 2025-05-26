@@ -7,11 +7,13 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
+import org.koin.core.annotation.Single
 import xyz.atrius.waystones.data.advancement.UNLIMITED_POWER
 import xyz.atrius.waystones.utility.awardAdvancement
 import xyz.atrius.waystones.utility.isWaystone
 
-object ExplodeEvent : Listener {
+@Single
+class ExplodeEvent : Listener {
 
     @EventHandler
     fun onClick(event: PlayerInteractEvent) {

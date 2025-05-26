@@ -5,13 +5,15 @@ import org.bukkit.block.Block
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockPlaceEvent
+import org.koin.core.annotation.Single
 import xyz.atrius.waystones.configuration
 import xyz.atrius.waystones.data.FloodFill
 import xyz.atrius.waystones.data.advancement.HEAVY_ARTILLERY
 import xyz.atrius.waystones.utility.awardAdvancement
 import xyz.atrius.waystones.utility.isWaystone
 
-object PlaceEvent : Listener {
+@Single
+class PlaceEvent : Listener {
 
     @EventHandler
     fun onPlace(event: BlockPlaceEvent) {

@@ -4,6 +4,7 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
+import org.koin.core.annotation.Single
 import xyz.atrius.waystones.data.advancement.WAYSTONES
 import xyz.atrius.waystones.handler.HandleState.Fail
 import xyz.atrius.waystones.handler.HandleState.Success
@@ -12,7 +13,8 @@ import xyz.atrius.waystones.utility.awardAdvancement
 import xyz.atrius.waystones.utility.cancel
 import xyz.atrius.waystones.utility.sendActionError
 
-object LinkEvent : Listener {
+@Single
+class LinkEvent : Listener {
 
     @EventHandler(ignoreCancelled = true)
     fun onSet(event: PlayerInteractEvent) {

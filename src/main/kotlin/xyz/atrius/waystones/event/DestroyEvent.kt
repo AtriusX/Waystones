@@ -8,9 +8,11 @@ import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.block.BlockExplodeEvent
 import org.bukkit.event.entity.EntityExplodeEvent
+import org.koin.core.annotation.Single
 import xyz.atrius.waystones.service.WarpNameService
 
-object DestroyEvent : Listener {
+@Single
+class DestroyEvent : Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     fun onBreak(event: BlockBreakEvent) {

@@ -12,6 +12,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerMoveEvent
+import org.koin.core.annotation.Single
 import xyz.atrius.waystones.TeleportManager
 import xyz.atrius.waystones.configuration
 import xyz.atrius.waystones.data.advancement.SECRET_TUNNEL
@@ -23,7 +24,8 @@ import xyz.atrius.waystones.localization
 import xyz.atrius.waystones.service.WarpNameService
 import xyz.atrius.waystones.utility.*
 
-object WarpEvent : Listener {
+@Single
+class WarpEvent : Listener {
 
     @EventHandler
     fun onClick(event: PlayerInteractEvent) {

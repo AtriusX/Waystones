@@ -9,12 +9,11 @@ import xyz.atrius.waystones.data.advancement.*
 import xyz.atrius.waystones.data.config.Config
 import xyz.atrius.waystones.data.config.Localization
 import xyz.atrius.waystones.data.crafting.CompassRecipe
-import xyz.atrius.waystones.event.*
 import xyz.atrius.waystones.internal.KotlinPlugin
 import xyz.atrius.waystones.manager.AdvancementManager
+import xyz.atrius.waystones.manager.EventManager
 import xyz.atrius.waystones.service.WarpNameService
 import xyz.atrius.waystones.service.WorldRatioService
-import xyz.atrius.waystones.utility.registerEvents
 import xyz.atrius.waystones.utility.registerRecipes
 
 lateinit var plugin       : KotlinPlugin
@@ -34,17 +33,8 @@ class Waystones : KotlinPlugin(PluginModule.module) {
         val worldRatioService = koin.get<WorldRatioService>()
 
         worldRatioService.load()
-        // Register listeners
-        registerEvents(
-            PlaceEvent,
-            ExplodeEvent,
-            SuppressEvent,
-            WarpEvent,
-            NameEvent,
-            DestroyEvent,
-            InfoEvent,
-            LinkEvent
-        )
+        // Initialize events
+        koin.get<EventManager>().initialize()
         // Register warp key recipe if enabled
         if (configuration.keyItems()) {
             logger.info("Loading recipes!")

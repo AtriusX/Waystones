@@ -5,6 +5,7 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK
 import org.bukkit.event.player.PlayerInteractEvent
+import org.koin.core.annotation.Single
 import xyz.atrius.waystones.data.advancement.QUANTUM_DOMESTICATION
 import xyz.atrius.waystones.handler.HandleState.Success
 import xyz.atrius.waystones.handler.NameHandler
@@ -13,7 +14,8 @@ import xyz.atrius.waystones.utility.awardAdvancement
 import xyz.atrius.waystones.utility.cancel
 import xyz.atrius.waystones.utility.sendActionMessage
 
-object NameEvent : Listener {
+@Single
+class NameEvent : Listener {
 
     @EventHandler(ignoreCancelled = true)
     fun onClick(event: PlayerInteractEvent) {

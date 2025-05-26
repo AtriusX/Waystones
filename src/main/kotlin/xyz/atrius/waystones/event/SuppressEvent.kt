@@ -4,11 +4,13 @@ import org.bukkit.Material
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockPlaceEvent
+import org.koin.core.annotation.Single
 import xyz.atrius.waystones.data.advancement.BLOCKED
 import xyz.atrius.waystones.utility.awardAdvancement
 import xyz.atrius.waystones.utility.isWaystone
 
-object SuppressEvent : Listener {
+@Single
+class SuppressEvent : Listener {
 
     @EventHandler
     fun onSuppress(event: BlockPlaceEvent) {
