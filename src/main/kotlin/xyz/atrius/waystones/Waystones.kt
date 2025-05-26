@@ -1,17 +1,20 @@
 package xyz.atrius.waystones
 
-import xyz.atrius.waystones.commands.*
+import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents
+import org.koin.core.Koin
+import org.koin.ksp.generated.module
+import xyz.atrius.waystones.command.waystones.WaystoneCommand
+import xyz.atrius.waystones.config.PluginModule
 import xyz.atrius.waystones.data.advancement.*
 import xyz.atrius.waystones.data.config.AdvancementManager
 import xyz.atrius.waystones.data.config.Config
 import xyz.atrius.waystones.data.config.Localization
 import xyz.atrius.waystones.data.crafting.CompassRecipe
 import xyz.atrius.waystones.event.*
+import xyz.atrius.waystones.internal.KotlinPlugin
 import xyz.atrius.waystones.service.WarpNameService
 import xyz.atrius.waystones.service.WorldRatioService
-import xyz.atrius.waystones.utility.KotlinPlugin
 import xyz.atrius.waystones.utility.registerEvents
-import xyz.atrius.waystones.utility.registerNamespaces
 import xyz.atrius.waystones.utility.registerRecipes
 
 lateinit var plugin       : KotlinPlugin
@@ -19,9 +22,9 @@ lateinit var configuration: Config
 lateinit var localization : Localization
 
 @Suppress("unused")
-class Waystones : KotlinPlugin() {
+class Waystones : KotlinPlugin(PluginModule.module) {
 
-    override fun onEnable() {
+    override fun enable(koin: Koin) {
         plugin        = this
         configuration = Config(this)
         localization  = Localization(this)
@@ -62,20 +65,14 @@ class Waystones : KotlinPlugin() {
                 SHOOT_THE_MESSENGER
             )
         }
-        // Register command namespaces
-        registerNamespaces(
-            CommandNamespace("waystones").register(
-                InfoCommand,
-                GetKeyCommand,
-                ReloadCommand,
-                ConfigCommand,
-                RatioCommand
-            )
-        )
+
+        lifecycleManager.registerEventHandler(LifecycleEvents.COMMANDS) {
+            it.registrar().register(koin.get<WaystoneCommand>().create(), "Test")
+        }
         logger.info("Waystones loaded!")
     }
 
-    override fun onDisable() {
+    override fun disable(koin: Koin) {
         logger.info("Waystones disabled!")
     }
 }

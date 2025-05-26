@@ -29,3 +29,9 @@ operator fun <T> List<T>.contains(values: Set<T>): Boolean =
     values.any(::contains)
 
 fun Boolean.toInt(): Int = if (this) 1 else 0
+
+private val swap = "[_ ]".toRegex()
+
+fun Any.sanitizedStringFormat(): String = toString()
+    .lowercase()
+    .replace(swap, "-")

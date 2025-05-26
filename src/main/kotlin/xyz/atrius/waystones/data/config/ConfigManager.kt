@@ -27,6 +27,7 @@ object ConfigManager {
 
     fun reload() {
         plugin.reloadConfig()
+
         for ((prop, option) in options) {
             option(plugin.config.get(prop))
         }

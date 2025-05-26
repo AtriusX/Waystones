@@ -7,8 +7,8 @@ import xyz.atrius.waystones.Power.INTER_DIMENSION
 import xyz.atrius.waystones.SicknessOption
 import xyz.atrius.waystones.SicknessOption.DAMAGE_ON_TELEPORT
 import xyz.atrius.waystones.data.Property
+import xyz.atrius.waystones.internal.KotlinPlugin
 import xyz.atrius.waystones.localization
-import xyz.atrius.waystones.utility.KotlinPlugin
 import java.util.*
 
 class Config(plugin: KotlinPlugin) {

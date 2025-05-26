@@ -2,7 +2,7 @@ package xyz.atrius.waystones.data.config
 
 import org.bukkit.configuration.file.YamlConfiguration
 import xyz.atrius.waystones.configuration
-import xyz.atrius.waystones.utility.KotlinPlugin
+import xyz.atrius.waystones.internal.KotlinPlugin
 import xyz.atrius.waystones.utility.translateColors
 import java.io.File
 import java.io.InputStreamReader

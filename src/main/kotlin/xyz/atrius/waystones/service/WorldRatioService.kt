@@ -15,7 +15,7 @@ object WorldRatioService : JsonFile<Double>("ratios"), Iterable<Map.Entry<String
         if (!asEnvironment) {
             val world = Bukkit.getWorld(item)
             if (world != null)
-                data["name:${world.name.lowercase()}"] = ratio
+                data["${world.name.lowercase()}"] = ratio
             return world != null
         }
         val env = World.Environment.values().any { it.name == item.uppercase() }
@@ -28,7 +28,7 @@ object WorldRatioService : JsonFile<Double>("ratios"), Iterable<Map.Entry<String
         if (!asEnvironment) {
             val world = Bukkit.getWorld(item)
             if (world != null)
-                data.remove("name:${world.name.lowercase()}")
+                data.remove("${world.name.lowercase()}")
             return world != null
         }
         val env = World.Environment.values().any { it.name == item.uppercase() }

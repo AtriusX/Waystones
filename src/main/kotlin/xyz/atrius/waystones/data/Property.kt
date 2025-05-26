@@ -18,8 +18,10 @@ class Property<T>(
         get() = plugin.config
 
     private var value: T by observable(
-        parser.parse(config.get(property))
-            ?: default.also { update(property, it) },
+        parser
+            .parse(config.get(property))
+            ?: default
+                .also { update(property, it) },
         observe(property)
     )
 
