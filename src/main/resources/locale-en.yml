@@ -92,3 +92,4 @@ property-single-use-info: "Whether the key should disappear after being used onc
 property-wait-time-info: "The amount of time (in ticks) the player must wait for their warp to succeed (moving will cancel the warp)"
 property-warp-animations-info: "Whether to use particle animations while warping"
 property-world-ratio-info: "The difference in scale between worlds to affect the warp ratio by (legacy, likely will be redesigned later)"
+property-base-distance-info: "The baseline for which all waystones are given as a minimum teleport distance"
