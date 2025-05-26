@@ -26,6 +26,8 @@ dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
     implementation("org.jetbrains.kotlin:kotlin-stdlib:2.1.21")
     implementation("io.insert-koin:koin-core:4.1.0-RC1")
+    implementation("io.arrow-kt:arrow-core:2.1.2")
+
     api("io.insert-koin:koin-annotations:2.0.1-RC1")
     ksp("io.insert-koin:koin-ksp-compiler:2.0.1-RC1")
 }

@@ -22,8 +22,10 @@ fun defaultWarpKey(amount: Int = 1): ItemStack = ItemStack(Material.COMPASS, amo
 }
 
 fun KotlinPlugin.registerRecipes(vararg recipes: Recipe) = recipes.forEach {
-    if (it is CraftingRecipe)
+    if (it is CraftingRecipe) {
         it.setup()
+    }
+
     server.addRecipe(it)
 }
 

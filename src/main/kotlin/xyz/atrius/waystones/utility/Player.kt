@@ -77,9 +77,6 @@ fun PlayerInventory.addItemNaturally(original: ItemStack, new: ItemStack) {
     }
 }
 
-fun Player.canWarp(): Boolean =
-    configuration.portalSickWarping() == PREVENT_TELEPORT && hasPortalSickness()
-
 fun Player.addPotionEffects(vararg effects: PotionEffect) =
     addPotionEffects(arrayListOf(*effects))
 

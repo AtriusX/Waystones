@@ -19,7 +19,12 @@ abstract class CraftingRecipe(
         // Process the crafting recipe
         shape(*recipe.splitMultiline())
         // Set ingredients for each item
-        for ((key, item) in items)
+        for ((key, item) in items) {
+            if (item == Material.AIR) {
+                continue
+            }
+
             setIngredient(key, item)
+        }
     }
 }

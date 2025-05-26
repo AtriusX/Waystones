@@ -39,7 +39,7 @@ class Waystones : KotlinPlugin(PluginModule.module) {
         if (configuration.keyItems()) {
             logger.info("Loading recipes!")
             registerRecipes(
-                CompassRecipe
+                koin.get<CompassRecipe>()
             )
         }
         // Register plugin advancements

@@ -1,19 +1,24 @@
 package xyz.atrius.waystones.data.crafting
 
 import org.bukkit.Material
-import xyz.atrius.waystones.configuration
+import org.koin.core.annotation.Single
+import xyz.atrius.waystones.data.config.property.KeyRecipeProperty
 import xyz.atrius.waystones.utility.*
 
-object CompassRecipe : CraftingRecipe("is_warp_key".toKey(), defaultWarpKey()) {
+@Single
+class CompassRecipe(
+    keyRecipe: KeyRecipeProperty,
+) : CraftingRecipe("is_warp_key".toKey(), defaultWarpKey()) {
 
-    private val keyRecipe = configuration.keyRecipe()
+    private val compassRecipe = keyRecipe.value
 
     override val recipe = run {
         // Pull recipe from config and determine grid size (list can be size 1, 4, or 9)
-        val size = sqrt(keyRecipe.size)
-        keyRecipe
+        val size = sqrt(compassRecipe.size)
+
+        compassRecipe
             // Map each item to it's hash char
-            .map(String::hashChar)
+            .map { it.hashChar() }
             // Chunk the list by its square size
             .chunked(size)
             // Glue each list into a string and join each by a newline
@@ -22,9 +27,10 @@ object CompassRecipe : CraftingRecipe("is_warp_key".toKey(), defaultWarpKey()) {
 
     override val items = hashMapOf<Char, Material>().apply {
         // For each item in the recipe, map it's material to it's hashcode
-        for (item in keyRecipe.toHashSet())
-            if (item != "AIR" || item.isEmpty()) {
-                this[item.hashChar()] = Material.valueOf(item)
+        for (item in compassRecipe.toHashSet()) {
+            if (item.name != "AIR" || item.isEmpty()) {
+                this[item.hashChar()] = item
             }
+        }
     }
 }

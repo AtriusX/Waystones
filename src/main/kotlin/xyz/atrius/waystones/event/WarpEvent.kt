@@ -14,13 +14,13 @@ import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerMoveEvent
 import org.koin.core.annotation.Single
-import xyz.atrius.waystones.configuration
 import xyz.atrius.waystones.data.advancement.SECRET_TUNNEL
 import xyz.atrius.waystones.data.advancement.SHOOT_THE_MESSENGER
 import xyz.atrius.waystones.data.config.Localization
+import xyz.atrius.waystones.data.config.property.DamageStopsWarpingProperty
 import xyz.atrius.waystones.handler.HandleState.*
-import xyz.atrius.waystones.handler.KeyHandler
 import xyz.atrius.waystones.handler.WaystoneHandler
+import xyz.atrius.waystones.service.KeyService
 import xyz.atrius.waystones.service.TeleportService
 import xyz.atrius.waystones.service.WarpNameService
 import xyz.atrius.waystones.utility.*
@@ -29,33 +29,34 @@ import xyz.atrius.waystones.utility.*
 class WarpEvent(
     private val teleportService: TeleportService,
     private val localization: Localization,
+    private val damageStopsWarping: DamageStopsWarpingProperty,
+    private val keyService: KeyService,
 ) : Listener {
 
     @EventHandler
     fun onClick(event: PlayerInteractEvent) {
+        println("TEST")
         val player = event.player
         // Don't start warp while flying with elytra, not right-clicking, or a lodestone was clicked
         if (player.isGliding
-            || event.action != RIGHT_CLICK_AIR
-            || event.action != RIGHT_CLICK_BLOCK
+            || (event.action != RIGHT_CLICK_AIR && event.action != RIGHT_CLICK_BLOCK)
             || event.clickedBlock?.type == Material.LODESTONE
         ) {
             return
         }
-        // Handle key actions and terminate if handler fails
-        val key = KeyHandler(player, event)
-
-        when (val result = key.handle()) {
-            is Fail -> return player.sendActionError(result)
-            else    -> Unit
-        }
         // Make sure the key is connected before we continue
-        val location = key.getLocation()
-            ?: return
-        val name = WarpNameService[location]
+        println("TEST A")
+        val key = keyService
+            .process(player, event)
+            .fold (
+                { return player.sendActionError(it.message()) },
+                { it },
+            )
+        println("TEST B")
+        val name = WarpNameService[key.location]
             ?: localization["unnamed-waystone"].toString()
         // Handle key actions and terminate if handler fails
-        val warp = WaystoneHandler(player, location, name, localization)
+        val warp = WaystoneHandler(player, key.location, name, localization)
 
         when (val result = warp.handle()) {
             is Fail    -> return player.sendActionError(result)
@@ -93,7 +94,7 @@ class WarpEvent(
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     fun onDamage(event: EntityDamageEvent) {
         val entity = event.entity
-        if (!configuration.damageStopsWarping() || entity !is Player) {
+        if (!damageStopsWarping.value || entity !is Player) {
             return
         }
         // Don't cancel anything unless the entity is currently queued
