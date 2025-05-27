@@ -12,7 +12,7 @@ import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.CompassMeta
 import org.koin.core.annotation.Single
-import xyz.atrius.waystones.SicknessOption.PREVENT_TELEPORT
+import xyz.atrius.waystones.data.config.property.type.SicknessOption.PREVENT_TELEPORT
 import xyz.atrius.waystones.data.config.Localization
 import xyz.atrius.waystones.data.config.LocalizedString
 import xyz.atrius.waystones.data.config.property.EnableKeyItemsProperty

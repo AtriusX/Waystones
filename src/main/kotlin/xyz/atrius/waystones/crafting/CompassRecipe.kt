@@ -1,4 +1,4 @@
-package xyz.atrius.waystones.data.crafting
+package xyz.atrius.waystones.crafting
 
 import org.bukkit.Material
 import org.koin.core.annotation.Single

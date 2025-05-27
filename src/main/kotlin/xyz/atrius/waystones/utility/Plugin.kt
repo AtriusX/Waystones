@@ -1,7 +1,7 @@
 package xyz.atrius.waystones.utility
 
 import org.bukkit.inventory.Recipe
-import xyz.atrius.waystones.data.crafting.CraftingRecipe
+import xyz.atrius.waystones.crafting.CraftingRecipe
 import xyz.atrius.waystones.internal.KotlinPlugin
 
 fun KotlinPlugin.registerRecipes(vararg recipes: Recipe) = recipes.forEach {

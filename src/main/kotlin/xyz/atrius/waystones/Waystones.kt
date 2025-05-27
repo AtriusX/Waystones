@@ -5,11 +5,11 @@ import org.koin.core.Koin
 import org.koin.ksp.generated.module
 import xyz.atrius.waystones.command.waystones.WaystoneCommand
 import xyz.atrius.waystones.config.PluginModule
+import xyz.atrius.waystones.crafting.CompassRecipe
 import xyz.atrius.waystones.data.config.Localization
 import xyz.atrius.waystones.data.config.property.EnableAdvancementsProperty
 import xyz.atrius.waystones.data.config.property.EnableKeyItemsProperty
 import xyz.atrius.waystones.data.config.property.LocaleProperty
-import xyz.atrius.waystones.data.crafting.CompassRecipe
 import xyz.atrius.waystones.internal.KotlinPlugin
 import xyz.atrius.waystones.manager.AdvancementManager
 import xyz.atrius.waystones.manager.EventManager

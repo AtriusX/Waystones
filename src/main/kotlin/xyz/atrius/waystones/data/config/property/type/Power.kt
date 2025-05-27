@@ -1,4 +1,4 @@
-package xyz.atrius.waystones
+package xyz.atrius.waystones.data.config.property.type
 
 @Suppress("unused")
 enum class Power {

@@ -12,10 +12,10 @@ import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import org.bukkit.util.Vector
 import org.koin.core.annotation.Single
-import xyz.atrius.waystones.Power
-import xyz.atrius.waystones.Power.ALL
-import xyz.atrius.waystones.Power.INTER_DIMENSION
-import xyz.atrius.waystones.SicknessOption
+import xyz.atrius.waystones.data.config.property.type.Power
+import xyz.atrius.waystones.data.config.property.type.Power.ALL
+import xyz.atrius.waystones.data.config.property.type.Power.INTER_DIMENSION
+import xyz.atrius.waystones.data.config.property.type.SicknessOption
 import xyz.atrius.waystones.data.FloodFill
 import xyz.atrius.waystones.data.config.Localization
 import xyz.atrius.waystones.data.config.LocalizedString
