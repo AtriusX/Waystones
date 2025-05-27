@@ -9,24 +9,32 @@ import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
 import org.koin.core.annotation.Single
 import xyz.atrius.waystones.data.advancement.UNLIMITED_POWER
-import xyz.atrius.waystones.utility.awardAdvancement
+import xyz.atrius.waystones.manager.AdvancementManager
 import xyz.atrius.waystones.utility.isWaystone
 
 @Single
-class ExplodeEvent : Listener {
+class ExplodeEvent(
+    private val advancementManager: AdvancementManager,
+) : Listener {
 
     @EventHandler
     fun onClick(event: PlayerInteractEvent) {
         val player = event.player
         val block = event.clickedBlock
-        if (block?.type != Material.RESPAWN_ANCHOR || event.action != Action.RIGHT_CLICK_BLOCK)
+
+        if (block?.type != Material.RESPAWN_ANCHOR || event.action != Action.RIGHT_CLICK_BLOCK) {
             return
+        }
+
         val anchor = (block.blockData as RespawnAnchor)
         val canExplode = block.world.environment == World.Environment.NORMAL
         val above = block.world.getBlockAt(block.location.add(0.0, 1.0, 0.0))
+
         if (anchor.charges == anchor.maximumCharges
             && above.isWaystone()
             && canExplode
-        ) player.awardAdvancement(UNLIMITED_POWER)
+        ) {
+            advancementManager.awardAdvancement(player, UNLIMITED_POWER)
+        }
     }
 }

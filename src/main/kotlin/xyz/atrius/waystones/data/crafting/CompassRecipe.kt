@@ -8,6 +8,7 @@ import org.bukkit.persistence.PersistentDataType.INTEGER
 import org.koin.core.annotation.Single
 import xyz.atrius.waystones.data.config.Localization
 import xyz.atrius.waystones.data.config.property.KeyRecipeProperty
+import xyz.atrius.waystones.internal.KotlinPlugin
 import xyz.atrius.waystones.utility.*
 
 fun defaultWarpKey(
@@ -31,7 +32,8 @@ fun defaultWarpKey(
 class CompassRecipe(
     keyRecipe: KeyRecipeProperty,
     localization: Localization,
-) : CraftingRecipe("is_warp_key".toKey(), defaultWarpKey(localization)) {
+    plugin: KotlinPlugin,
+) : CraftingRecipe("is_warp_key".toKey(plugin), defaultWarpKey(localization)) {
     private val compassRecipe = keyRecipe.value
 
     override val recipe = run {

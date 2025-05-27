@@ -15,16 +15,18 @@ import org.koin.core.annotation.Single
 import xyz.atrius.waystones.SicknessOption.PREVENT_TELEPORT
 import xyz.atrius.waystones.data.config.Localization
 import xyz.atrius.waystones.data.config.LocalizedString
+import xyz.atrius.waystones.data.config.property.EnableKeyItemsProperty
 import xyz.atrius.waystones.data.config.property.PortalSicknessWarpingProperty
 import xyz.atrius.waystones.data.config.property.SingleUseProperty
+import xyz.atrius.waystones.utility.get
 import xyz.atrius.waystones.utility.hasPortalSickness
 import xyz.atrius.waystones.utility.immortal
-import xyz.atrius.waystones.utility.isWarpKey
 
 @Single
 class KeyService(
     private val singleUse: SingleUseProperty,
     private val portalSickWarping: PortalSicknessWarpingProperty,
+    private val enableKeyItems: EnableKeyItemsProperty,
     private val localization: Localization,
 ) {
 
@@ -33,20 +35,23 @@ class KeyService(
         val item = inventory.itemInMainHand
             .takeIf { event.hand == EquipmentSlot.HAND || it.type == Material.COMPASS }
             ?: inventory.itemInOffHand
-        val lodestoneLocation = item
-            .validateKey(player)
-            .bind()
+        val lodestoneLocation = validateKey(player, item).bind()
 
         Key(lodestoneLocation, player, item, singleUse.value)
     }
 
-    private fun ItemStack.validateKey(player: Player): Either<KeyServiceError, Location> = either {
-        val meta = itemMeta as? CompassMeta
+    fun isWarpKey(key: ItemStack) = when (enableKeyItems.value) {
+        true -> key.itemMeta?.get("is_warp_key") == 1
+        else -> key.type == Material.COMPASS
+    }
+
+    private fun validateKey(player: Player, key: ItemStack): Either<KeyServiceError, Location> = either {
+        val meta = key.itemMeta as? CompassMeta
         val lodestone = ensureNotNull(meta?.lodestone) {
             KeyServiceError.Ignore
         }
 
-        ensure(isWarpKey()) {
+        ensure(isWarpKey(key)) {
             KeyServiceError.Ignore
         }
 

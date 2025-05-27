@@ -14,7 +14,6 @@ import org.koin.core.annotation.Single
 import xyz.atrius.waystones.Power
 import xyz.atrius.waystones.SicknessOption
 import xyz.atrius.waystones.data.FloodFill
-import xyz.atrius.waystones.data.advancement.I_DONT_FEEL_SO_GOOD
 import xyz.atrius.waystones.data.config.Localization
 import xyz.atrius.waystones.data.config.LocalizedString
 import xyz.atrius.waystones.data.config.property.*
@@ -145,6 +144,7 @@ class WaystoneService(
             if (player.immortal) {
                 return
             }
+
             val sick = player.hasPortalSickness()
             // Damage the player if damage is enabled and they aren't immortal
             if (sick && portalSicknessWarping.value == SicknessOption.DAMAGE_ON_TELEPORT) {
@@ -160,7 +160,7 @@ class WaystoneService(
                     PotionEffect(PotionEffectType.BLINDNESS, 100, 9)
                 )
                 player.sendActionMessage(localization["warp-sickness"])
-                player.awardAdvancement(I_DONT_FEEL_SO_GOOD)
+//                player.awardAdvancement(I_DONT_FEEL_SO_GOOD)
             } else {
                 player.sendActionMessage(localization["warp-safely"])
             }
@@ -169,8 +169,10 @@ class WaystoneService(
 
             if (power == Power.ALL || (interDimension && power == Power.INTER_DIMENSION)) {
                 // Only deplete power if the power is not infinite
-                if (!block.hasInfinitePower()) block.powerBlock?.update<RespawnAnchor> {
-                    charges -= powerCost.value.coerceIn(0, 4)
+                if (!block.hasInfinitePower()) {
+                    block.powerBlock?.update<RespawnAnchor> {
+                        charges -= powerCost.value.coerceIn(0, 4)
+                    }
                 }
             }
         }
@@ -182,13 +184,13 @@ class WaystoneService(
             WaystoneServiceError({ localization["warp-error"] })
 
         class WaystoneInhibited(localization: Localization) :
-            WaystoneServiceError({ localization["waystone-status-inhibited"] })
+            WaystoneServiceError({ localization["waystone-error-inhibited"] })
 
         class WaystoneUnpowered(localization: Localization) :
-            WaystoneServiceError({ localization["waystone-status-unpowered"] })
+            WaystoneServiceError({ localization["waystone-error-unpowered"] })
 
         class WaystoneObstructed(localization: Localization) :
-            WaystoneServiceError({ localization["waystone-status-obstructed"] })
+            WaystoneServiceError({ localization["waystone-error-obstructed"] })
 
         class WaystoneWorldJumpDisabled(localization: Localization) :
             WaystoneServiceError({ localization["waystone-world-jump-disabled"] })

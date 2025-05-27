@@ -1,6 +1,5 @@
 package xyz.atrius.waystones.data.config
 
-import java.util.*
 import kotlin.reflect.KClass
 
 interface ArgumentParser<T> {

@@ -23,10 +23,11 @@ class LinkService(
     private val localization: Localization,
     private val relinkableKeys: RelinkableKeysProperty,
     private val warpNameService: WarpNameService,
+    private val keyService: KeyService,
 ) {
 
     fun process(player: Player, item: ItemStack, block: Block): Either<LinkServiceError, Unit> = either {
-        ensure(item.isWarpKey() && block.type == Material.LODESTONE) {
+        ensure(keyService.isWarpKey(item) && block.type == Material.LODESTONE) {
             LinkServiceError.Ignore
         }
 

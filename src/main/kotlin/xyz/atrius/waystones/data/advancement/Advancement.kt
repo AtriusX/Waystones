@@ -5,9 +5,7 @@ import org.bukkit.NamespacedKey
 import org.intellij.lang.annotations.Language
 import xyz.atrius.waystones.data.json.Json
 import xyz.atrius.waystones.localization
-import xyz.atrius.waystones.plugin
 import xyz.atrius.waystones.utility.toKey
-import org.bukkit.advancement.Advancement as SpigotAdvancement
 
 data class Text(
     val text: String
@@ -22,8 +20,8 @@ data class Trigger(
     val trigger: String
 )
 
-class Criteria(vararg items: Pair<String, String>) : Map<String, Trigger>
-    by items.associate({ (name, trig) -> name to Trigger(trig) })
+class Criteria(vararg items: Pair<String, String>) : Map<String, Trigger> by items
+    .associate({ (name, trig) -> name to Trigger(trig) })
 
 @Suppress("unused")
 data class Display(
@@ -60,17 +58,18 @@ data class Advancement(
         parent?.paired()?.first?.toString()
     )
 
-    fun toInstance(): SpigotAdvancement? =
-        plugin.server.getAdvancement(key())
-
     fun key(): NamespacedKey =
-        display.title.text.lowercase().replace(" ", "_")
-            .replace("[^\\w]".toRegex(), "").toKey()
+        display.title.text
+            .lowercase()
+            .replace(" ", "_")
+            .replace("\\W".toRegex(), "")
+            .toKey()
 
     fun paired(): Pair<NamespacedKey, Advancement> =
         key() to this
 
     companion object {
+
         val IMPOSSIBLE = Criteria(
             "command" to "minecraft:impossible"
         )

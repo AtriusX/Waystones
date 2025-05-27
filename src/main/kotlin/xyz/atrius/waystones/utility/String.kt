@@ -2,13 +2,16 @@ package xyz.atrius.waystones.utility
 
 import org.bukkit.ChatColor
 import org.bukkit.NamespacedKey
-import xyz.atrius.waystones.plugin
+import xyz.atrius.waystones.internal.KotlinPlugin
 
 // Translate ChatColors using custom ColorCode
 fun String.translateColors(colorCode: Char = '&') = ChatColor.translateAlternateColorCodes(colorCode, this)
 
 // Convert string to a namespace key
-fun String.toKey() = NamespacedKey(plugin, this)
+fun String.toKey(plugin: KotlinPlugin? = null) = when (plugin) {
+    null -> NamespacedKey("waystones", this)
+    else -> NamespacedKey(plugin, this)
+}
 
 // Split a multiline string into a spreadable array
 fun String.splitMultiline() =

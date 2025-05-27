@@ -10,27 +10,33 @@ import xyz.atrius.waystones.data.FloodFill
 import xyz.atrius.waystones.data.advancement.HEAVY_ARTILLERY
 import xyz.atrius.waystones.service.BoostBlockService
 import xyz.atrius.waystones.data.config.property.MaxWarpSizeProperty
-import xyz.atrius.waystones.utility.awardAdvancement
+import xyz.atrius.waystones.manager.AdvancementManager
 import xyz.atrius.waystones.utility.isWaystone
 
 @Single
 class PlaceEvent(
     private val maxWarpSize: MaxWarpSizeProperty,
     private val boostBlockService: BoostBlockService,
+    private val advancementManager: AdvancementManager,
 ) : Listener {
 
     @EventHandler
     fun onPlace(event: BlockPlaceEvent) {
         val block = event.block
-        if (block.type != Material.NETHERITE_BLOCK)
+
+        if (block.type != Material.NETHERITE_BLOCK) {
             return
+        }
+
         val blocks = FloodFill(
             block.location,
             maxWarpSize.value,
             *boostBlockService.defaultBlocks,
             Material.LODESTONE
         )
-        if (blocks.breakdown.keys.any(Block::isWaystone))
-            event.player.awardAdvancement(HEAVY_ARTILLERY)
+
+        if (blocks.breakdown.keys.any(Block::isWaystone)) {
+            advancementManager.awardAdvancement(event.player, HEAVY_ARTILLERY)
+        }
     }
 }

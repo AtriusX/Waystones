@@ -8,16 +8,17 @@ import org.bukkit.event.player.PlayerInteractEvent
 import org.koin.core.annotation.Single
 import xyz.atrius.waystones.data.WarpErrorState
 import xyz.atrius.waystones.data.config.Localization
+import xyz.atrius.waystones.service.KeyService
 import xyz.atrius.waystones.service.WarpNameService
 import xyz.atrius.waystones.utility.cancel
 import xyz.atrius.waystones.utility.getWarpState
-import xyz.atrius.waystones.utility.isWarpKey
 import xyz.atrius.waystones.utility.sendActionMessage
 
 @Single
 class InfoEvent(
     private val localization: Localization,
     private val warpNameService: WarpNameService,
+    private val keyService: KeyService,
 ) : Listener {
 
     @EventHandler(ignoreCancelled = true)
@@ -32,7 +33,7 @@ class InfoEvent(
         val item   = event.item
             ?: return
         // Make sure the correct block/item pair is used
-        if (block?.type != Material.LODESTONE || !item.isWarpKey()) {
+        if (block?.type != Material.LODESTONE || !keyService.isWarpKey(item)) {
             return
         }
 

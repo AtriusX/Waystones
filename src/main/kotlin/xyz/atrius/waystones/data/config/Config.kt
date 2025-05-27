@@ -33,13 +33,6 @@ class Config(plugin: KotlinPlugin) {
     val powerCost: Property<Int> =
         Property("power-cost", 1, RangeParser(1 .. 4))
 
-    // Whether or not the plugin uses a custom key item for warp keys
-    val keyItems: Property<Boolean> =
-        Property("enable-key-items", true, BooleanParser)
-
-    val advancements: Property<Boolean> =
-        Property("enable-advancements", true, BooleanParser)
-
     // Default block list for power blocks
     val blockMappings: Map<Material, () -> Int> = mapOf(
         NETHERITE_BLOCK to ::netheriteBoost,

@@ -18,6 +18,7 @@ import xyz.atrius.waystones.data.advancement.SECRET_TUNNEL
 import xyz.atrius.waystones.data.advancement.SHOOT_THE_MESSENGER
 import xyz.atrius.waystones.data.config.Localization
 import xyz.atrius.waystones.data.config.property.DamageStopsWarpingProperty
+import xyz.atrius.waystones.manager.AdvancementManager
 import xyz.atrius.waystones.service.KeyService
 import xyz.atrius.waystones.service.TeleportService
 import xyz.atrius.waystones.service.WaystoneService
@@ -30,6 +31,7 @@ class WarpEvent(
     private val damageStopsWarping: DamageStopsWarpingProperty,
     private val keyService: KeyService,
     private val waystoneService: WaystoneService,
+    private val advancementManager: AdvancementManager,
 ) : Listener {
 
     @EventHandler
@@ -61,7 +63,7 @@ class WarpEvent(
             key.useKey()
             warp.teleport()
             player.sendActionMessage(localization["warp-success"])
-            player.awardAdvancement(SECRET_TUNNEL)
+            advancementManager.awardAdvancement(player, SECRET_TUNNEL)
 //            warp.gigawarpAdvancement()
 //            warp.cleanEnergyAdvancement()
         }
@@ -107,7 +109,7 @@ class WarpEvent(
         }
 
         if (player.health in 1.0..2.0) {
-            player.awardAdvancement(SHOOT_THE_MESSENGER)
+            advancementManager.awardAdvancement(player, SHOOT_THE_MESSENGER)
         }
     }
 }

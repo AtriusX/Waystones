@@ -49,7 +49,15 @@ fun Block.getWarpState(player: Player): WarpState = when {
 }
 
 fun Beacon.isActive(): Boolean {
-    return tier > 0 && ((y + 1)..world.maxHeight).all {
-        !world.getBlockAt(x, it, z).type.isSolid
+    if (tier <= 0) {
+        return false
     }
+
+    for (dy in y .. world.maxHeight) {
+        if (world.getBlockAt(x, dy, z).type.isSolid) {
+            return false
+        }
+    }
+
+    return true
 }
