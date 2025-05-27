@@ -1,13 +1,13 @@
 package xyz.atrius.waystones.data.config.property
 
-import com.mojang.brigadier.arguments.IntegerArgumentType
+import com.mojang.brigadier.arguments.DoubleArgumentType
 import org.koin.core.annotation.Single
 import xyz.atrius.waystones.data.config.ConfigProperty
 
 @Single
-class WorldRatioProperty : ConfigProperty<Int>(
+class WorldRatioProperty : ConfigProperty<Double>(
     property = "world-ratio",
-    default = 60,
-    parser = IntegerArgumentType.integer(1),
-    propertyType = Int::class,
+    default = 8.0,
+    parser = DoubleArgumentType.doubleArg(1.0),
+    propertyType = Double::class,
 )

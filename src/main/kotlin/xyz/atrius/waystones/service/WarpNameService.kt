@@ -1,10 +1,12 @@
 package xyz.atrius.waystones.service
 
 import org.bukkit.Location
+import org.koin.core.annotation.Single
 import xyz.atrius.waystones.data.JsonFile
 import xyz.atrius.waystones.utility.locationCode
 
-object WarpNameService : JsonFile<String>("warpnames") {
+@Single
+class WarpNameService : JsonFile<String>("warpnames") {
 
     fun add(location: Location, name: String) {
         data[location.locationCode] = name

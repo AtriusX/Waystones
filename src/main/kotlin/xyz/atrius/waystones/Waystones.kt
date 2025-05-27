@@ -8,6 +8,7 @@ import xyz.atrius.waystones.config.PluginModule
 import xyz.atrius.waystones.data.advancement.*
 import xyz.atrius.waystones.data.config.Config
 import xyz.atrius.waystones.data.config.Localization
+import xyz.atrius.waystones.data.config.property.LocaleProperty
 import xyz.atrius.waystones.data.crafting.CompassRecipe
 import xyz.atrius.waystones.internal.KotlinPlugin
 import xyz.atrius.waystones.manager.AdvancementManager
@@ -26,9 +27,11 @@ class Waystones : KotlinPlugin(PluginModule.module) {
     override fun enable(koin: Koin) {
         plugin        = this
         configuration = Config(this)
-        localization  = Localization(this)
+        localization  = Localization(this, koin.get<LocaleProperty>())
         // Load services
-        WarpNameService.load()
+        val warpNameService = koin.get<WarpNameService>()
+
+        warpNameService.load()
 
         val worldRatioService = koin.get<WorldRatioService>()
 

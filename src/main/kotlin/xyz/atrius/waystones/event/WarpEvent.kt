@@ -18,11 +18,9 @@ import xyz.atrius.waystones.data.advancement.SECRET_TUNNEL
 import xyz.atrius.waystones.data.advancement.SHOOT_THE_MESSENGER
 import xyz.atrius.waystones.data.config.Localization
 import xyz.atrius.waystones.data.config.property.DamageStopsWarpingProperty
-import xyz.atrius.waystones.handler.HandleState.*
-import xyz.atrius.waystones.handler.WaystoneHandler
 import xyz.atrius.waystones.service.KeyService
 import xyz.atrius.waystones.service.TeleportService
-import xyz.atrius.waystones.service.WarpNameService
+import xyz.atrius.waystones.service.WaystoneService
 import xyz.atrius.waystones.utility.*
 
 @Single
@@ -31,11 +29,11 @@ class WarpEvent(
     private val localization: Localization,
     private val damageStopsWarping: DamageStopsWarpingProperty,
     private val keyService: KeyService,
+    private val waystoneService: WaystoneService,
 ) : Listener {
 
     @EventHandler
     fun onClick(event: PlayerInteractEvent) {
-        println("TEST")
         val player = event.player
         // Don't start warp while flying with elytra, not right-clicking, or a lodestone was clicked
         if (player.isGliding
@@ -45,35 +43,29 @@ class WarpEvent(
             return
         }
         // Make sure the key is connected before we continue
-        println("TEST A")
         val key = keyService
             .process(player, event)
             .fold (
                 { return player.sendActionError(it.message()) },
                 { it },
             )
-        println("TEST B")
-        val name = WarpNameService[key.location]
-            ?: localization["unnamed-waystone"].toString()
         // Handle key actions and terminate if handler fails
-        val warp = WaystoneHandler(player, key.location, name, localization)
+        val warp = waystoneService
+            .process(player, key.location.block, key.location)
+            .fold(
+                { return player.sendActionError(it.message()) },
+                { it },
+            )
 
-        when (val result = warp.handle()) {
-            is Fail    -> return player.sendActionError(result)
-            is Ignore  -> Unit
-            is Success -> {
-                // Queue the teleport then use key and warp on success
-                teleportService.queueEvent(player, warp) {
-                    key.useKey()
-                    warp.teleport()
-                    player.sendActionMessage(localization["warp-success"])
-                    player.awardAdvancement(SECRET_TUNNEL)
-                    warp.gigawarpAdvancement()
-                    warp.cleanEnergyAdvancement()
-                }
-                event.cancel()
-            }
+        teleportService.queueEvent(warp) {
+            key.useKey()
+            warp.teleport()
+            player.sendActionMessage(localization["warp-success"])
+            player.awardAdvancement(SECRET_TUNNEL)
+//            warp.gigawarpAdvancement()
+//            warp.cleanEnergyAdvancement()
         }
+        event.cancel()
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

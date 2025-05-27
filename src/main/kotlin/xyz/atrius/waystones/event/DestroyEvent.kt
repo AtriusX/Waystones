@@ -12,13 +12,15 @@ import org.koin.core.annotation.Single
 import xyz.atrius.waystones.service.WarpNameService
 
 @Single
-class DestroyEvent : Listener {
+class DestroyEvent(
+    private val warpNameService: WarpNameService,
+) : Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     fun onBreak(event: BlockBreakEvent) {
         val block = event.block
         if (block.type == Material.LODESTONE)
-            WarpNameService.remove(block.location)
+            warpNameService.remove(block.location)
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -28,5 +30,5 @@ class DestroyEvent : Listener {
     fun onEntityExplode(event: EntityExplodeEvent) = destroy(event.blockList())
 
     private fun destroy(blocks: List<Block>) =
-        WarpNameService.remove(blocks.firstOrNull { it.type == Material.LODESTONE }?.location)
+        warpNameService.remove(blocks.firstOrNull { it.type == Material.LODESTONE }?.location)
 }

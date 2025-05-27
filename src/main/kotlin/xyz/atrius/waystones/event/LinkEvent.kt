@@ -6,38 +6,39 @@ import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
 import org.koin.core.annotation.Single
 import xyz.atrius.waystones.data.advancement.WAYSTONES
-import xyz.atrius.waystones.data.config.Localization
-import xyz.atrius.waystones.handler.HandleState.Fail
-import xyz.atrius.waystones.handler.HandleState.Success
-import xyz.atrius.waystones.handler.LinkHandler
+import xyz.atrius.waystones.service.LinkService
+import xyz.atrius.waystones.service.LinkService.LinkServiceError
 import xyz.atrius.waystones.utility.awardAdvancement
 import xyz.atrius.waystones.utility.cancel
 import xyz.atrius.waystones.utility.sendActionError
 
 @Single
 class LinkEvent(
-    private val localization: Localization,
+    private val linkService: LinkService,
 ) : Listener {
 
     @EventHandler(ignoreCancelled = true)
     fun onSet(event: PlayerInteractEvent) {
-        if (event.action != Action.RIGHT_CLICK_BLOCK)
+        if (event.action != Action.RIGHT_CLICK_BLOCK) {
             return
+        }
+
         val player = event.player
         val item = event.item ?: return
         val block = event.clickedBlock ?: return
-        val linker = LinkHandler(player, item, block, localization)
-        when (val result = linker.handle()) {
-            is Fail -> {
-                player.sendActionError(result)
+
+        linkService
+            .process(player, item, block)
+            .onLeft {
+                if (it is LinkServiceError.Ignore) {
+                    return
+                }
+
+                player.sendActionError(it.message())
                 event.cancel()
             }
-            Success -> {
-                linker.link()
-                event.cancel()
-                player.awardAdvancement(WAYSTONES)
-            }
-            else -> Unit
-        }
+
+        player.awardAdvancement(WAYSTONES)
+        event.cancel()
     }
 }

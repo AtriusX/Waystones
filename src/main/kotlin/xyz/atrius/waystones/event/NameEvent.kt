@@ -8,8 +8,7 @@ import org.bukkit.event.player.PlayerInteractEvent
 import org.koin.core.annotation.Single
 import xyz.atrius.waystones.data.advancement.QUANTUM_DOMESTICATION
 import xyz.atrius.waystones.data.config.Localization
-import xyz.atrius.waystones.handler.HandleState.Success
-import xyz.atrius.waystones.handler.NameHandler
+import xyz.atrius.waystones.service.NameService
 import xyz.atrius.waystones.utility.awardAdvancement
 import xyz.atrius.waystones.utility.cancel
 import xyz.atrius.waystones.utility.sendActionMessage
@@ -17,6 +16,7 @@ import xyz.atrius.waystones.utility.sendActionMessage
 @Single
 class NameEvent(
     private val localization: Localization,
+    private val nameService: NameService,
 ) : Listener {
 
     @EventHandler(ignoreCancelled = true)
@@ -26,17 +26,15 @@ class NameEvent(
         val player = event.player
         val item = player.inventory.itemInMainHand
         val block = event.clickedBlock
-        val handler = NameHandler(player, item, block ?: return)
+        val name = nameService.process(player, item, block ?: return)
+            .fold(
+                { return },
+                { it }
+            )
 
-        when (handler.handle()) {
-            Success -> {
-                val name = handler.createName() ?: return
-                player.sendActionMessage(localization["waystone-set-name", name])
-                player.playSound(player.location, Sound.BLOCK_RESPAWN_ANCHOR_SET_SPAWN, 1f, 2f)
-                player.awardAdvancement(QUANTUM_DOMESTICATION)
-                event.cancel()
-            }
-            else -> return
-        }
+        player.sendActionMessage(localization["waystone-set-name", name])
+        player.playSound(player.location, Sound.BLOCK_RESPAWN_ANCHOR_SET_SPAWN, 1f, 2f)
+        player.awardAdvancement(QUANTUM_DOMESTICATION)
+        event.cancel()
     }
 }

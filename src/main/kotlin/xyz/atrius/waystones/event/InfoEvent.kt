@@ -17,24 +17,33 @@ import xyz.atrius.waystones.utility.sendActionMessage
 @Single
 class InfoEvent(
     private val localization: Localization,
+    private val warpNameService: WarpNameService,
 ) : Listener {
 
     @EventHandler(ignoreCancelled = true)
     fun onClick(event: PlayerInteractEvent) {
         // Filter non left-click events
-        if (event.action != Action.LEFT_CLICK_BLOCK)
+        if (event.action != Action.LEFT_CLICK_BLOCK) {
             return
+        }
+
         val block  = event.clickedBlock
         val player = event.player
-        val item   = event.item ?: return
+        val item   = event.item
+            ?: return
         // Make sure the correct block/item pair is used
-        if (block?.type != Material.LODESTONE || !item.isWarpKey())
+        if (block?.type != Material.LODESTONE || !item.isWarpKey()) {
             return
-        val name = WarpNameService[block.location] ?: localization["unnamed-waystone"]
+        }
+
+        val name = warpNameService[block.location]
+            ?: localization["unnamed-waystone"]
         val state = block.getWarpState(player)
         // Skip any non-warp blocks
-        if (state == WarpErrorState.None)
+        if (state == WarpErrorState.None) {
             return
+        }
+
         player.sendActionMessage(localization["waystone-info", name, state])
         event.cancel()
     }
