@@ -22,10 +22,7 @@ import xyz.atrius.waystones.manager.AdvancementManager
 import xyz.atrius.waystones.service.KeyService
 import xyz.atrius.waystones.service.TeleportService
 import xyz.atrius.waystones.service.WaystoneService
-import xyz.atrius.waystones.utility.cancel
-import xyz.atrius.waystones.utility.hasMovedBlock
-import xyz.atrius.waystones.utility.sendActionError
-import xyz.atrius.waystones.utility.sendActionMessage
+import xyz.atrius.waystones.utility.*
 
 @Single
 class WarpEvent(
@@ -52,17 +49,11 @@ class WarpEvent(
         // Make sure the key is connected before we continue
         val key = keyService
             .process(player, event)
-            .fold (
-                { return player.sendActionError(it.message()) },
-                { it },
-            )
+            .foldResult { return player.sendActionError(it.message()) }
         // Handle key actions and terminate if handler fails
         val warp = waystoneService
             .process(player, key.location.block, key.location)
-            .fold(
-                { return player.sendActionError(it.message()) },
-                { it },
-            )
+            .foldResult { return player.sendActionError(it.message()) }
 
         teleportService.queueEvent(warp) {
             key.useKey()

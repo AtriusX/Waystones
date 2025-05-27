@@ -11,6 +11,7 @@ import xyz.atrius.waystones.data.config.Localization
 import xyz.atrius.waystones.manager.AdvancementManager
 import xyz.atrius.waystones.service.NameService
 import xyz.atrius.waystones.utility.cancel
+import xyz.atrius.waystones.utility.foldResult
 import xyz.atrius.waystones.utility.sendActionMessage
 
 @Single
@@ -32,10 +33,7 @@ class NameEvent(
         val block = event.clickedBlock
         val name = nameService
             .process(player, item, block ?: return)
-            .fold(
-                { return },
-                { it }
-            )
+            .foldResult { return }
 
         player.sendActionMessage(localization["waystone-set-name", name])
         player.playSound(player.location, Sound.BLOCK_RESPAWN_ANCHOR_SET_SPAWN, 1f, 2f)
