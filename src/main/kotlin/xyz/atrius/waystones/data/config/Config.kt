@@ -13,10 +13,6 @@ class Config(plugin: KotlinPlugin) {
         plugin.saveDefaultConfig()
     }
 
-    // The amount of ticks to wait before teleporting
-    val waitTime: Property<Int> =
-        Property("wait-time", 60, PositiveValueParser)
-
     // The minimum base range a waystone can have
     val baseDistance: Property<Int> =
         Property("base-distance", 100, PositiveValueParser)

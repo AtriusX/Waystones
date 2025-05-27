@@ -1,4 +1,4 @@
-package xyz.atrius.waystones.data.config
+package xyz.atrius.waystones.service
 
 import org.bukkit.Material
 import org.koin.core.annotation.Single

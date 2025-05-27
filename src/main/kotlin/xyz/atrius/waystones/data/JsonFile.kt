@@ -1,12 +1,16 @@
 package xyz.atrius.waystones.data
 
 import com.google.gson.GsonBuilder
-import xyz.atrius.waystones.plugin
+import xyz.atrius.waystones.internal.KotlinPlugin
 import java.io.File
 import java.io.FileReader
 import java.nio.file.Files
 
-open class JsonFile<T>(name: String) {
+open class JsonFile<T>(
+    name: String,
+    private val plugin: KotlinPlugin,
+) {
+
     private val file = File(plugin.dataFolder, "$name.json")
     private val json = GsonBuilder().setPrettyPrinting().create()
     protected lateinit var data: HashMap<String, T>

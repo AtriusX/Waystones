@@ -20,10 +20,6 @@ interface ArgumentParser<T> {
         value.toString()
 }
 
-object StringParser : ArgumentParser<String> {
-    override fun parse(input: Any?) = input.toString()
-}
-
 sealed class IntParser : ArgumentParser<Int> {
     override fun parse(input: Any?): Int? = input?.toString()?.toIntOrNull()
 
@@ -48,23 +44,6 @@ class RangeParser(private val range: IntRange) : IntParser() {
     }
 }
 
-object DoubleParser : ArgumentParser<Double> {
-    override fun parse(input: Any?): Double? = input?.toString()?.toDoubleOrNull()
-}
-
-object PercentageParser : ArgumentParser<Double> {
-    private val regex = "^[0-9]+(.[0-9]+)?%$".toRegex()
-
-    override fun parse(input: Any?): Double? {
-        val str = input?.toString()
-        return if (str?.matches(regex) == true)
-            str.dropLast(1).toDouble() / 100 else null
-    }
-
-    override fun toString(value: Double): String =
-        "${value * 100}%"
-}
-
 object BooleanParser : ArgumentParser<Boolean> {
     override fun parse(input: Any?): Boolean? {
         val str = input?.toString()
@@ -76,33 +55,10 @@ object BooleanParser : ArgumentParser<Boolean> {
     }
 }
 
-object LocaleParser : ArgumentParser<Locale> {
-    override fun parse(input: Any?): Locale? = input?.let { Locale.forLanguageTag(input.toString()) }
-
-    override fun toString(value: Locale): String = value.toLanguageTag()
-}
-
 class EnumParser<E : Enum<E>>(private val enum: KClass<E>) : ArgumentParser<E> {
     override fun parse(input: Any?): E? {
         input ?: return null
         val values = enum.java.enumConstants
         return values.firstOrNull { it.name.equals(input.toString(), true) }
-    }
-}
-
-class ListParser<T>(private val parser: ArgumentParser<T>) : ArgumentParser<List<T>> {
-    @Suppress("UNCHECKED_CAST")
-    override fun parse(input: Any?): List<T>? {
-        if (input is List<*>)
-            return input as List<T>?
-        val str = input?.toString()
-        // Parse data in either list or vararg form
-        val data = str?.removeSurrounding("[", "]")
-            ?.split("[ ,] *".toRegex()) ?: return null
-        val arr = mutableListOf<Any>()
-        // Populate the array
-        for (item in data)
-            arr += (parser.parse(item) ?: return null)
-        return arr as List<T>?
     }
 }

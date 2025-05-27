@@ -8,6 +8,8 @@ import xyz.atrius.waystones.config.PluginModule
 import xyz.atrius.waystones.data.advancement.*
 import xyz.atrius.waystones.data.config.Config
 import xyz.atrius.waystones.data.config.Localization
+import xyz.atrius.waystones.data.config.property.EnableAdvancementsProperty
+import xyz.atrius.waystones.data.config.property.EnableKeyItemsProperty
 import xyz.atrius.waystones.data.config.property.LocaleProperty
 import xyz.atrius.waystones.data.crafting.CompassRecipe
 import xyz.atrius.waystones.internal.KotlinPlugin
@@ -39,14 +41,14 @@ class Waystones : KotlinPlugin(PluginModule.module) {
         // Initialize events
         koin.get<EventManager>().initialize()
         // Register warp key recipe if enabled
-        if (configuration.keyItems()) {
+        if (koin.get<EnableKeyItemsProperty>().value) {
             logger.info("Loading recipes!")
             registerRecipes(
                 koin.get<CompassRecipe>()
             )
         }
         // Register plugin advancements
-        if (configuration.advancements()) {
+        if (koin.get<EnableAdvancementsProperty>().value) {
             val advancementManager = koin.get<AdvancementManager>()
 
             logger.info("Loading advancements!")

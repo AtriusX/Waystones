@@ -15,7 +15,6 @@ import xyz.atrius.waystones.Power
 import xyz.atrius.waystones.SicknessOption
 import xyz.atrius.waystones.data.FloodFill
 import xyz.atrius.waystones.data.advancement.I_DONT_FEEL_SO_GOOD
-import xyz.atrius.waystones.data.config.BoostBlockService
 import xyz.atrius.waystones.data.config.Localization
 import xyz.atrius.waystones.data.config.LocalizedString
 import xyz.atrius.waystones.data.config.property.*

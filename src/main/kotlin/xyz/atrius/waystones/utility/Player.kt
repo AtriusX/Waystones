@@ -12,11 +12,9 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.PlayerInventory
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
-import xyz.atrius.waystones.SicknessOption.PREVENT_TELEPORT
 import xyz.atrius.waystones.configuration
 import xyz.atrius.waystones.data.advancement.Advancement
 import xyz.atrius.waystones.data.config.LocalizedString
-import xyz.atrius.waystones.handler.HandleState
 import org.bukkit.advancement.Advancement as SpigotAdvancement
 
 val Player.immortal: Boolean
@@ -47,9 +45,6 @@ fun Player.sendActionError(message: String?) = when(message) {
             .style(style)
     }
 }
-
-fun Player.sendActionError(fail: HandleState.Fail) =
-    sendActionError(fail.error)
 
 fun Player.playSound(sound: Sound, volume: Float = 1f, pitch: Float = 1f) =
     playSound(location, sound, volume, pitch)

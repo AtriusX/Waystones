@@ -3,8 +3,8 @@ package xyz.atrius.waystones.animation.effect
 import org.bukkit.Location
 import org.bukkit.Particle
 import org.bukkit.Sound
-import xyz.atrius.waystones.configuration
 import xyz.atrius.waystones.data.config.Localization
+import xyz.atrius.waystones.data.config.property.WaitTimeProperty
 import xyz.atrius.waystones.data.config.property.WarpAnimationsProperty
 import xyz.atrius.waystones.service.WaystoneService
 import xyz.atrius.waystones.utility.*
@@ -13,6 +13,7 @@ import kotlin.math.ceil
 class SimpleTeleportEffect(
     private val warp: WaystoneService.Warp,
     private val warpAnimations: WarpAnimationsProperty,
+    private val waitTime: WaitTimeProperty,
     private val localization: Localization,
 ) : TeleportEffect {
 
@@ -30,7 +31,7 @@ class SimpleTeleportEffect(
             return
         }
 
-        val amp = configuration.waitTime() - timer + 0.1
+        val amp = waitTime.value - timer + 0.1
         val ratio = timer * 2 + 1
         val period = (System.currentTimeMillis() / 3).toDouble()
         val world  = player.world

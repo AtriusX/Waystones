@@ -5,6 +5,7 @@ import org.koin.core.annotation.Single
 import xyz.atrius.waystones.animation.AnimationManager
 import xyz.atrius.waystones.animation.effect.SimpleTeleportEffect
 import xyz.atrius.waystones.data.config.Localization
+import xyz.atrius.waystones.data.config.property.WaitTimeProperty
 import xyz.atrius.waystones.data.config.property.WarpAnimationsProperty
 
 @Single
@@ -12,6 +13,7 @@ class TeleportService(
     private val animationManager: AnimationManager,
     private val localization: Localization,
     private val warpAnimations: WarpAnimationsProperty,
+    private val waitTime: WaitTimeProperty,
 ) {
     private val queuedTeleports = HashMap<Player, Int>()
 
@@ -23,7 +25,7 @@ class TeleportService(
         }
         // Queue the task and store the task id for if we need to cancel sooner
         queuedTeleports[player] = animationManager.register(
-            SimpleTeleportEffect(warp, warpAnimations, localization),
+            SimpleTeleportEffect(warp, warpAnimations, waitTime, localization),
             warp.warpLocation
         ) {
             queuedTeleports.remove(player)
@@ -32,7 +34,10 @@ class TeleportService(
     }
 
     fun cancel(player: Player) {
-        val id = queuedTeleports.remove(player) ?: -1
+        val id = queuedTeleports
+            .remove(player)
+            ?: -1
+
         animationManager.cancel(id)
     }
 

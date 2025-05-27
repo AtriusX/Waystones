@@ -1,8 +1,6 @@
 package xyz.atrius.waystones.data.struct
 
-class StackSet<E>(
-    initialData: List<E>
-) : HashMap<E, Int>() {
+class StackSet<E>(initialData: List<E>) : HashMap<E, Int>() {
 
     init {
         initialData.forEach { add(it) }
@@ -13,7 +11,10 @@ class StackSet<E>(
     }
 
     override fun remove(key: E): Int? {
-        this[key] = this[key]?.minus(1) ?: 0
+        this[key] = this[key]
+            ?.minus(1)
+            ?: 0
+
         return this[key]
     }
 }

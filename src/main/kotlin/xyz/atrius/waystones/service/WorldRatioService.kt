@@ -5,9 +5,10 @@ import org.bukkit.World
 import org.koin.core.annotation.Single
 import xyz.atrius.waystones.data.JsonFile
 import xyz.atrius.waystones.data.TeleportType
+import xyz.atrius.waystones.internal.KotlinPlugin
 
 @Single
-class WorldRatioService : JsonFile<Double>("ratios"), Iterable<Pair<String, Double>> {
+class WorldRatioService(plugin: KotlinPlugin) : JsonFile<Double>("ratios", plugin), Iterable<Pair<String, Double>> {
 
     operator fun get(world: World): Double =
         data[world.name.lowercase()] ?: 1.0

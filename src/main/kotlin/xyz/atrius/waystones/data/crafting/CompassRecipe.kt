@@ -1,15 +1,37 @@
 package xyz.atrius.waystones.data.crafting
 
+import net.kyori.adventure.text.Component
 import org.bukkit.Material
+import org.bukkit.inventory.ItemStack
+import org.bukkit.inventory.meta.CompassMeta
+import org.bukkit.persistence.PersistentDataType.INTEGER
 import org.koin.core.annotation.Single
+import xyz.atrius.waystones.data.config.Localization
 import xyz.atrius.waystones.data.config.property.KeyRecipeProperty
 import xyz.atrius.waystones.utility.*
+
+fun defaultWarpKey(
+    localization: Localization,
+    amount: Int = 1,
+): ItemStack = ItemStack(Material.COMPASS, amount).update<CompassMeta> {
+    this["is_warp_key", INTEGER] = 1
+
+    val lore = localization["key-lore"]
+        .toString()
+        .let(Component::text)
+    val name = localization["key-name"]
+        .toString()
+        .let(Component::text)
+
+    lore(listOf(lore))
+    displayName(name)
+}
 
 @Single
 class CompassRecipe(
     keyRecipe: KeyRecipeProperty,
-) : CraftingRecipe("is_warp_key".toKey(), defaultWarpKey()) {
-
+    localization: Localization,
+) : CraftingRecipe("is_warp_key".toKey(), defaultWarpKey(localization)) {
     private val compassRecipe = keyRecipe.value
 
     override val recipe = run {

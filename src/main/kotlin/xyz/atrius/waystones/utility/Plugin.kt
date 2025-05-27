@@ -1,25 +1,11 @@
 package xyz.atrius.waystones.utility
 
-import net.kyori.adventure.text.Component
-import org.bukkit.Material
-import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.Recipe
-import org.bukkit.inventory.meta.CompassMeta
-import org.bukkit.persistence.PersistentDataType.INTEGER
 import org.bukkit.scheduler.BukkitScheduler
 import xyz.atrius.waystones.data.advancement.Advancement
 import xyz.atrius.waystones.data.crafting.CraftingRecipe
 import xyz.atrius.waystones.internal.KotlinPlugin
-import xyz.atrius.waystones.localization
 import xyz.atrius.waystones.plugin
-
-private val DEFAULT_LORE: List<String> = listOf(localization["key-lore"].toString())
-
-fun defaultWarpKey(amount: Int = 1): ItemStack = ItemStack(Material.COMPASS, amount).update<CompassMeta> {
-    this["is_warp_key", INTEGER] = 1
-    lore(DEFAULT_LORE.map { Component.text(it) })
-    displayName(Component.text(localization["key-name"].toString()))
-}
 
 fun KotlinPlugin.registerRecipes(vararg recipes: Recipe) = recipes.forEach {
     if (it is CraftingRecipe) {

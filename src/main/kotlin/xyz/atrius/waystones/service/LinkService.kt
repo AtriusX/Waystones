@@ -15,6 +15,7 @@ import org.koin.core.annotation.Single
 import xyz.atrius.waystones.data.config.Localization
 import xyz.atrius.waystones.data.config.LocalizedString
 import xyz.atrius.waystones.data.config.property.RelinkableKeysProperty
+import xyz.atrius.waystones.data.crafting.defaultWarpKey
 import xyz.atrius.waystones.utility.*
 
 @Single
@@ -43,7 +44,7 @@ class LinkService(
             LinkServiceError.AlreadyLinked(localization)
         }
         // Add item to players inventory
-        val key = defaultWarpKey().link(block)
+        val key = defaultWarpKey(localization).link(block)
         // Add item and play sound
         player.inventory.addItemNaturally(item, key)
         player.playSound(Sound.ITEM_LODESTONE_COMPASS_LOCK)

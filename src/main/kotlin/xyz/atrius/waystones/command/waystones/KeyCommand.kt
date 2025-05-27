@@ -11,7 +11,7 @@ import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.koin.core.annotation.Single
 import xyz.atrius.waystones.data.config.Localization
-import xyz.atrius.waystones.utility.defaultWarpKey
+import xyz.atrius.waystones.data.crafting.defaultWarpKey
 import xyz.atrius.waystones.utility.getArgument
 import xyz.atrius.waystones.utility.message
 
@@ -55,7 +55,7 @@ class KeyCommand(
     }
 
     private fun command(sender: CommandSender, amount: Int, target: Player): Int {
-        target.inventory.addItem(defaultWarpKey(amount))
+        target.inventory.addItem(defaultWarpKey(localization, amount))
         sender.message(localization["command-give-key", amount, target.name])
         return Command.SINGLE_SUCCESS
     }

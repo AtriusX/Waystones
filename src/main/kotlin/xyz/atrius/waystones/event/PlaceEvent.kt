@@ -8,7 +8,7 @@ import org.bukkit.event.block.BlockPlaceEvent
 import org.koin.core.annotation.Single
 import xyz.atrius.waystones.data.FloodFill
 import xyz.atrius.waystones.data.advancement.HEAVY_ARTILLERY
-import xyz.atrius.waystones.data.config.BoostBlockService
+import xyz.atrius.waystones.service.BoostBlockService
 import xyz.atrius.waystones.data.config.property.MaxWarpSizeProperty
 import xyz.atrius.waystones.utility.awardAdvancement
 import xyz.atrius.waystones.utility.isWaystone
