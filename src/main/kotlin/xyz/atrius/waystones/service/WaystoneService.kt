@@ -213,16 +213,16 @@ class WaystoneService(
             WaystoneServiceError({ localization["warp-error"] })
 
         class WaystoneInhibited(localization: Localization) :
-            WaystoneServiceError({ localization["waystone-error-inhibited"] })
+            WaystoneServiceError({ localization["warp-error-inhibited"] })
 
         class WaystoneUnpowered(localization: Localization) :
-            WaystoneServiceError({ localization["waystone-error-unpowered"] })
+            WaystoneServiceError({ localization["warp-error-unpowered"] })
 
         class WaystoneObstructed(localization: Localization) :
-            WaystoneServiceError({ localization["waystone-error-obstructed"] })
+            WaystoneServiceError({ localization["warp-error-obstructed"] })
 
         class WaystoneWorldJumpDisabled(localization: Localization) :
-            WaystoneServiceError({ localization["waystone-world-jump-disabled"] })
+            WaystoneServiceError({ localization["warp-world-jump-disabled"] })
 
         class WaystoneOutOfRange(localization: Localization, name: String?, distance: Double, range: Double) :
             WaystoneServiceError({ localization["warp-out-of-range", name, distance - range] })

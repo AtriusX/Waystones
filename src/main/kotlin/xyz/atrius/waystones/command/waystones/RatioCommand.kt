@@ -89,6 +89,5 @@ class RatioCommand(
     private fun worlds() = Bukkit
         .getWorlds()
         .map { it.name }
-        .onEach { println(it) }
         .toTypedArray()
 }

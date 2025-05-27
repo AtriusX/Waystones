@@ -5,7 +5,7 @@ import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
 import org.koin.core.annotation.Single
-import xyz.atrius.waystones.data.advancement.WAYSTONES
+import xyz.atrius.waystones.data.advancement.WaystonesAdvancement
 import xyz.atrius.waystones.manager.AdvancementManager
 import xyz.atrius.waystones.service.LinkService
 import xyz.atrius.waystones.service.LinkService.LinkServiceError
@@ -16,6 +16,7 @@ import xyz.atrius.waystones.utility.sendActionError
 class LinkEvent(
     private val linkService: LinkService,
     private val advancementManager: AdvancementManager,
+    private val waystonesAdvancement: WaystonesAdvancement,
 ) : Listener {
 
     @EventHandler(ignoreCancelled = true)
@@ -39,7 +40,7 @@ class LinkEvent(
                 event.cancel()
             }
 
-        advancementManager.awardAdvancement(player, WAYSTONES)
+        advancementManager.awardAdvancement(player, waystonesAdvancement)
         event.cancel()
     }
 }

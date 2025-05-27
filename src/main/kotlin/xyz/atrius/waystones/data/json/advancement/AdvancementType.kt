@@ -1,12 +1,11 @@
-package xyz.atrius.waystones.data.advancement
+package xyz.atrius.waystones.data.json.advancement
 
 import com.google.gson.annotations.SerializedName
 
-@Suppress("unused")
 enum class AdvancementType {
 
-    @SerializedName("normal")
-    NORMAL,
+    @SerializedName("task")
+    TASK,
 
     @SerializedName("challenge")
     CHALLENGE,

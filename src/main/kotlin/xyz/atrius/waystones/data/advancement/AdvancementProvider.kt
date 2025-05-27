@@ -1,0 +1,42 @@
+package xyz.atrius.waystones.data.advancement
+
+import org.bukkit.Material
+import org.bukkit.NamespacedKey
+import xyz.atrius.waystones.data.config.LocalizedString
+import xyz.atrius.waystones.data.json.advancement.*
+import xyz.atrius.waystones.utility.toKey
+
+open class AdvancementProvider(
+    private val title: LocalizedString,
+    private val description: LocalizedString,
+    private val item: Material,
+    private val parent: AdvancementProvider? = null,
+    private val type: AdvancementType = AdvancementType.TASK,
+) {
+
+    val asAdvancement: Advancement by lazy {
+        val display = Display(
+            title = Text(title.format()),
+            description = Text(description.format()),
+            icon = Icon(item),
+            frame = type,
+        )
+
+        Advancement(
+            display = display,
+            parent = parent
+                ?.namespacedKey()
+                ?.asString(),
+        )
+    }
+
+    fun namespacedKey(): NamespacedKey = asAdvancement
+        .key()
+        .toKey()
+
+    private fun Advancement.key(): String =
+        display.title.text
+            .lowercase()
+            .replace(" ", "_")
+            .replace("\\W".toRegex(), "")
+}

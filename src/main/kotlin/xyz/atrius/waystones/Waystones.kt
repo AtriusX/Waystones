@@ -5,7 +5,6 @@ import org.koin.core.Koin
 import org.koin.ksp.generated.module
 import xyz.atrius.waystones.command.waystones.WaystoneCommand
 import xyz.atrius.waystones.config.PluginModule
-import xyz.atrius.waystones.data.advancement.*
 import xyz.atrius.waystones.data.config.Localization
 import xyz.atrius.waystones.data.config.property.EnableAdvancementsProperty
 import xyz.atrius.waystones.data.config.property.EnableKeyItemsProperty
@@ -45,25 +44,13 @@ class Waystones : KotlinPlugin(PluginModule.module) {
         // Register plugin advancements
         if (koin.get<EnableAdvancementsProperty>().value) {
             val advancementManager = koin.get<AdvancementManager>()
-
-            logger.info("Loading advancements!")
-            advancementManager.register(
-                WAYSTONES,
-                SECRET_TUNNEL,
-                I_DONT_FEEL_SO_GOOD,
-                HEAVY_ARTILLERY,
-                CLEAN_ENERGY,
-                GIGAWARPS,
-                UNLIMITED_POWER,
-                QUANTUM_DOMESTICATION,
-                BLOCKED,
-                SHOOT_THE_MESSENGER
-            )
+            advancementManager.loadAdvancements()
         }
 
         lifecycleManager.registerEventHandler(LifecycleEvents.COMMANDS) {
             it.registrar().register(koin.get<WaystoneCommand>().create(), "Test")
         }
+
         logger.info("Waystones loaded!")
     }
 

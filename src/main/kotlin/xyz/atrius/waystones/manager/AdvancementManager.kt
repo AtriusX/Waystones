@@ -1,8 +1,10 @@
 package xyz.atrius.waystones.manager
 
+import com.google.gson.Gson
 import org.bukkit.entity.Player
 import org.koin.core.annotation.Single
-import xyz.atrius.waystones.data.advancement.Advancement
+import org.slf4j.LoggerFactory
+import xyz.atrius.waystones.data.advancement.AdvancementProvider
 import xyz.atrius.waystones.data.config.property.EnableAdvancementsProperty
 import xyz.atrius.waystones.internal.KotlinPlugin
 import org.bukkit.advancement.Advancement as SpigotAdvancement
@@ -11,23 +13,53 @@ import org.bukkit.advancement.Advancement as SpigotAdvancement
 class AdvancementManager(
     private val plugin: KotlinPlugin,
     private val enableAdvancements: EnableAdvancementsProperty,
+    private val gson: Gson,
+    private val advancementContainers: List<AdvancementProvider>,
 ) {
-    private val advancements = mutableSetOf<Advancement>()
+    private val server = plugin.server
 
-    fun register(vararg advancements: Advancement) {
-        advancements
-            .forEach(this.advancements::add)
+    fun loadAdvancements() {
+        logger.info("Loading ${advancementContainers.size} advancements...")
 
-        loadAdvancements()
+        val groups = advancementContainers
+            .groupBy { it.asAdvancement.parent }
+
+        load(groups)
+        logger.info("Loading complete!")
     }
 
-    fun reload() = with(advancements.toTypedArray()) {
+    @Suppress("DEPRECATION")
+    private fun load(groups: Map<String?, List<AdvancementProvider>>, current: String? = null) {
+        val current = groups[current]
+
+        if (current == null) {
+            return
+        }
+
+        for (item in current) {
+            logger.info("Loading advancement '${item.namespacedKey().asString()}'")
+            server.unsafe.loadAdvancement(item.namespacedKey(), gson.toJson(item.asAdvancement))
+            load(groups, item.namespacedKey().asString())
+        }
+    }
+
+
+    @Suppress("DEPRECATION")
+    private fun unloadAllAdvancements() {
+        logger.info("Unloading advancements!")
+
+        advancementContainers.forEach {
+            server.unsafe.removeAdvancement(it.namespacedKey())
+        }
+    }
+
+    fun reload() {
         unloadAllAdvancements()
         loadAdvancements()
     }
 
-    fun awardAdvancement(player: Player, adv: Advancement) =
-        awardAdvancement(player, plugin.server.getAdvancement(adv.key()))
+    fun awardAdvancement(player: Player, adv: AdvancementProvider) =
+        awardAdvancement(player, plugin.server.getAdvancement(adv.namespacedKey()))
 
     fun awardAdvancement(player: Player, adv: SpigotAdvancement?) {
         if (adv == null || !enableAdvancements.value) {
@@ -41,19 +73,9 @@ class AdvancementManager(
             .forEach(criteria::awardCriteria)
     }
 
-    @Suppress("DEPRECATION")
-    private fun unloadAllAdvancements() = advancements.forEach {
-        plugin.server.unsafe.removeAdvancement(it.key())
-    }
+    companion object {
 
-    @Suppress("DEPRECATION")
-    private fun loadAdvancements() = advancements.forEach {
-        val (key, adv) = it.paired()
-        val server = plugin.server
-        val spigotAdv = server.getAdvancement(key)
-
-        if (spigotAdv == null) {
-            server.unsafe.loadAdvancement(key, adv.toJson())
-        }
+        private val logger = LoggerFactory
+            .getLogger(AdvancementManager::class.java)
     }
 }

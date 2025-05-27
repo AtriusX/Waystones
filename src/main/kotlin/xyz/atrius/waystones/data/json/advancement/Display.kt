@@ -7,5 +7,6 @@ data class Display(
     val showToast: Boolean = true,
     val announceToChat: Boolean = true,
     val hidden: Boolean =  false,
-    val background: String,
+    val frame: AdvancementType? = null,
+    val background: String = "minecraft:textures/block/lodestone_top.png",
 )

@@ -8,7 +8,7 @@ import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
 import org.koin.core.annotation.Single
-import xyz.atrius.waystones.data.advancement.UNLIMITED_POWER
+import xyz.atrius.waystones.data.advancement.UnlimitedPowerAdvancement
 import xyz.atrius.waystones.manager.AdvancementManager
 import xyz.atrius.waystones.service.WaystoneService
 
@@ -16,6 +16,7 @@ import xyz.atrius.waystones.service.WaystoneService
 class ExplodeEvent(
     private val advancementManager: AdvancementManager,
     private val waystoneService: WaystoneService,
+    private val unlimitedPowerAdvancement: UnlimitedPowerAdvancement,
 ) : Listener {
 
     @EventHandler
@@ -35,7 +36,7 @@ class ExplodeEvent(
             && waystoneService.isWaystone(above)
             && canExplode
         ) {
-            advancementManager.awardAdvancement(player, UNLIMITED_POWER)
+            advancementManager.awardAdvancement(player, unlimitedPowerAdvancement)
         }
     }
 }

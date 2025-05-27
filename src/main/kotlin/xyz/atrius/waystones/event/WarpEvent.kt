@@ -14,15 +14,18 @@ import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerMoveEvent
 import org.koin.core.annotation.Single
-import xyz.atrius.waystones.data.advancement.SECRET_TUNNEL
-import xyz.atrius.waystones.data.advancement.SHOOT_THE_MESSENGER
+import xyz.atrius.waystones.data.advancement.SecretTunnelAdvancement
+import xyz.atrius.waystones.data.advancement.ShootTheMessengerAdvancement
 import xyz.atrius.waystones.data.config.Localization
 import xyz.atrius.waystones.data.config.property.DamageStopsWarpingProperty
 import xyz.atrius.waystones.manager.AdvancementManager
 import xyz.atrius.waystones.service.KeyService
 import xyz.atrius.waystones.service.TeleportService
 import xyz.atrius.waystones.service.WaystoneService
-import xyz.atrius.waystones.utility.*
+import xyz.atrius.waystones.utility.cancel
+import xyz.atrius.waystones.utility.hasMovedBlock
+import xyz.atrius.waystones.utility.sendActionError
+import xyz.atrius.waystones.utility.sendActionMessage
 
 @Single
 class WarpEvent(
@@ -32,6 +35,8 @@ class WarpEvent(
     private val keyService: KeyService,
     private val waystoneService: WaystoneService,
     private val advancementManager: AdvancementManager,
+    private val secretTunnelAdvancement: SecretTunnelAdvancement,
+    private val shootTheMessenger: ShootTheMessengerAdvancement,
 ) : Listener {
 
     @EventHandler
@@ -63,7 +68,7 @@ class WarpEvent(
             key.useKey()
             warp.teleport()
             player.sendActionMessage(localization["warp-success"])
-            advancementManager.awardAdvancement(player, SECRET_TUNNEL)
+            advancementManager.awardAdvancement(player, secretTunnelAdvancement)
 //            warp.gigawarpAdvancement()
 //            warp.cleanEnergyAdvancement()
         }
@@ -109,7 +114,7 @@ class WarpEvent(
         }
 
         if (player.health in 1.0..2.0) {
-            advancementManager.awardAdvancement(player, SHOOT_THE_MESSENGER)
+            advancementManager.awardAdvancement(player, shootTheMessenger)
         }
     }
 }

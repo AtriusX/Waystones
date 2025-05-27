@@ -5,7 +5,8 @@ import org.bukkit.NamespacedKey
 import xyz.atrius.waystones.internal.KotlinPlugin
 
 // Translate ChatColors using custom ColorCode
-fun String.translateColors(colorCode: Char = '&') = ChatColor.translateAlternateColorCodes(colorCode, this)
+fun String.translateColors(colorCode: Char = '&') = ChatColor
+    .translateAlternateColorCodes(colorCode, this)
 
 // Convert string to a namespace key
 fun String.toKey(plugin: KotlinPlugin? = null) = when (plugin) {

@@ -6,7 +6,7 @@ import org.bukkit.event.Listener
 import org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK
 import org.bukkit.event.player.PlayerInteractEvent
 import org.koin.core.annotation.Single
-import xyz.atrius.waystones.data.advancement.QUANTUM_DOMESTICATION
+import xyz.atrius.waystones.data.advancement.QuantumDomesticationAdvancement
 import xyz.atrius.waystones.data.config.Localization
 import xyz.atrius.waystones.manager.AdvancementManager
 import xyz.atrius.waystones.service.NameService
@@ -18,6 +18,7 @@ class NameEvent(
     private val localization: Localization,
     private val nameService: NameService,
     private val advancementManager: AdvancementManager,
+    private val quantumDomesticationAdvancement: QuantumDomesticationAdvancement,
 ) : Listener {
 
     @EventHandler(ignoreCancelled = true)
@@ -38,7 +39,7 @@ class NameEvent(
 
         player.sendActionMessage(localization["waystone-set-name", name])
         player.playSound(player.location, Sound.BLOCK_RESPAWN_ANCHOR_SET_SPAWN, 1f, 2f)
-        advancementManager.awardAdvancement(player, QUANTUM_DOMESTICATION)
+        advancementManager.awardAdvancement(player, quantumDomesticationAdvancement)
         event.cancel()
     }
 }

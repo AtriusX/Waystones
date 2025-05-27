@@ -6,7 +6,7 @@ import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockPlaceEvent
 import org.koin.core.annotation.Single
 import xyz.atrius.waystones.data.FloodFill
-import xyz.atrius.waystones.data.advancement.HEAVY_ARTILLERY
+import xyz.atrius.waystones.data.advancement.HeavyArtilleryAdvancement
 import xyz.atrius.waystones.data.config.property.MaxWarpSizeProperty
 import xyz.atrius.waystones.manager.AdvancementManager
 import xyz.atrius.waystones.service.BoostBlockService
@@ -18,6 +18,7 @@ class PlaceEvent(
     private val boostBlockService: BoostBlockService,
     private val advancementManager: AdvancementManager,
     private val waystoneService: WaystoneService,
+    private val heavyArtilleryAdvancement: HeavyArtilleryAdvancement,
 ) : Listener {
 
     @EventHandler
@@ -36,7 +37,7 @@ class PlaceEvent(
         )
 
         if (blocks.breakdown.keys.any(waystoneService::isWaystone)) {
-            advancementManager.awardAdvancement(event.player, HEAVY_ARTILLERY)
+            advancementManager.awardAdvancement(event.player, heavyArtilleryAdvancement)
         }
     }
 }
