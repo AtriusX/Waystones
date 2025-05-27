@@ -14,8 +14,8 @@ import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerMoveEvent
 import org.koin.core.annotation.Single
-import xyz.atrius.waystones.data.advancement.SecretTunnelAdvancement
-import xyz.atrius.waystones.data.advancement.ShootTheMessengerAdvancement
+import xyz.atrius.waystones.advancement.SecretTunnelAdvancement
+import xyz.atrius.waystones.advancement.ShootTheMessengerAdvancement
 import xyz.atrius.waystones.data.config.Localization
 import xyz.atrius.waystones.data.config.property.DamageStopsWarpingProperty
 import xyz.atrius.waystones.manager.AdvancementManager

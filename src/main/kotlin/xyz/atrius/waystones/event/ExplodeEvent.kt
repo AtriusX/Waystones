@@ -8,7 +8,7 @@ import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
 import org.koin.core.annotation.Single
-import xyz.atrius.waystones.data.advancement.UnlimitedPowerAdvancement
+import xyz.atrius.waystones.advancement.UnlimitedPowerAdvancement
 import xyz.atrius.waystones.manager.AdvancementManager
 import xyz.atrius.waystones.service.WaystoneService
 

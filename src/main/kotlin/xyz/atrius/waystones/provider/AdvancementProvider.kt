@@ -1,4 +1,4 @@
-package xyz.atrius.waystones.data.advancement
+package xyz.atrius.waystones.provider
 
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
@@ -16,8 +16,8 @@ open class AdvancementProvider(
 
     val asAdvancement: Advancement by lazy {
         val display = Display(
-            title = Text(title.format()),
-            description = Text(description.format()),
+            title = Text(title.toString()),
+            description = Text(description.toString()),
             icon = Icon(item),
             frame = type,
         )

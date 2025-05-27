@@ -15,8 +15,11 @@ import org.koin.core.annotation.Single
 import xyz.atrius.waystones.data.config.Localization
 import xyz.atrius.waystones.data.config.LocalizedString
 import xyz.atrius.waystones.data.config.property.RelinkableKeysProperty
-import xyz.atrius.waystones.data.crafting.defaultWarpKey
-import xyz.atrius.waystones.utility.*
+import xyz.atrius.waystones.provider.DefaultKeyProvider
+import xyz.atrius.waystones.utility.addItemNaturally
+import xyz.atrius.waystones.utility.locationCode
+import xyz.atrius.waystones.utility.playSound
+import xyz.atrius.waystones.utility.update
 
 @Single
 class LinkService(
@@ -24,6 +27,7 @@ class LinkService(
     private val relinkableKeys: RelinkableKeysProperty,
     private val warpNameService: WarpNameService,
     private val keyService: KeyService,
+    private val defaultKeyProvider: DefaultKeyProvider,
 ) {
 
     fun process(player: Player, item: ItemStack, block: Block): Either<LinkServiceError, Unit> = either {
@@ -45,7 +49,9 @@ class LinkService(
             LinkServiceError.AlreadyLinked(localization)
         }
         // Add item to players inventory
-        val key = defaultWarpKey(localization).link(block)
+        val key = defaultKeyProvider
+            .getKey()
+            .link(block)
         // Add item and play sound
         player.inventory.addItemNaturally(item, key)
         player.playSound(Sound.ITEM_LODESTONE_COMPASS_LOCK)
@@ -57,14 +63,11 @@ class LinkService(
 
         val name = warpNameService[block.location]
             ?: localization["unnamed-waystone"]
+        val lore = localization["link-key-lore", name, lodestone?.locationCode]
+            .toString()
+            .let(Component::text)
 
-        lore(
-            listOf(
-                Component.text(
-                    localization["link-key-lore", name, lodestone?.locationCode].format()
-                )
-            )
-        )
+        lore(listOf(lore))
     }
 
     sealed class LinkServiceError(val message: () -> LocalizedString?) {

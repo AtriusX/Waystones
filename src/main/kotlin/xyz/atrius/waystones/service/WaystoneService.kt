@@ -95,7 +95,7 @@ class WaystoneService(
             val distance = calculateDistance(player.location, block.location, ratio)
 
             val name = warpNameService[block.location]
-                ?: localization["unnamed-waystone"].format()
+                ?: localization["unnamed-waystone"].toString()
 
             ensure(distance <= range) {
                 WaystoneServiceError.WaystoneOutOfRange(localization, name, distance, range)

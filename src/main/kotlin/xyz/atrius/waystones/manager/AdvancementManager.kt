@@ -4,7 +4,7 @@ import com.google.gson.Gson
 import org.bukkit.entity.Player
 import org.koin.core.annotation.Single
 import org.slf4j.LoggerFactory
-import xyz.atrius.waystones.data.advancement.AdvancementProvider
+import xyz.atrius.waystones.provider.AdvancementProvider
 import xyz.atrius.waystones.data.config.property.EnableAdvancementsProperty
 import xyz.atrius.waystones.internal.KotlinPlugin
 import org.bukkit.advancement.Advancement as SpigotAdvancement

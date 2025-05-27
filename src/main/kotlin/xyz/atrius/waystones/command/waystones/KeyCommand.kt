@@ -11,13 +11,14 @@ import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.koin.core.annotation.Single
 import xyz.atrius.waystones.data.config.Localization
-import xyz.atrius.waystones.data.crafting.defaultWarpKey
+import xyz.atrius.waystones.provider.DefaultKeyProvider
 import xyz.atrius.waystones.utility.getArgument
 import xyz.atrius.waystones.utility.message
 
 @Single
 class KeyCommand(
     private val localization: Localization,
+    private val defaultKeyProvider: DefaultKeyProvider,
 ) : WaystoneSubcommand {
 
     override val name: String = "key"
@@ -55,7 +56,7 @@ class KeyCommand(
     }
 
     private fun command(sender: CommandSender, amount: Int, target: Player): Int {
-        target.inventory.addItem(defaultWarpKey(localization, amount))
+        target.inventory.addItem(defaultKeyProvider.getKey(amount))
         sender.message(localization["command-give-key", amount, target.name])
         return Command.SINGLE_SUCCESS
     }

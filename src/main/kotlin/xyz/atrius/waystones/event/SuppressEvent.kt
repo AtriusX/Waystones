@@ -5,7 +5,7 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockPlaceEvent
 import org.koin.core.annotation.Single
-import xyz.atrius.waystones.data.advancement.BlockedAdvancement
+import xyz.atrius.waystones.advancement.BlockedAdvancement
 import xyz.atrius.waystones.manager.AdvancementManager
 import xyz.atrius.waystones.service.WaystoneService
 import xyz.atrius.waystones.utility.UP

@@ -113,7 +113,7 @@ class ConfigCommand(
         value: ConfigPropertyBase<*, *, *>
     ): Component {
         val propertyInfo = Component
-            .text(localization[value.getLocalizedInfoKey()].format())
+            .text(localization[value.getLocalizedInfoKey()].toString())
             .color(TextColor.color(0xFF00FF))
         val hover = HoverEvent.hoverEvent(
             HoverEvent.Action.SHOW_TEXT,

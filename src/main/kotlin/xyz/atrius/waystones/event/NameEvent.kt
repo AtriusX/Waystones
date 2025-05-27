@@ -6,7 +6,7 @@ import org.bukkit.event.Listener
 import org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK
 import org.bukkit.event.player.PlayerInteractEvent
 import org.koin.core.annotation.Single
-import xyz.atrius.waystones.data.advancement.QuantumDomesticationAdvancement
+import xyz.atrius.waystones.advancement.QuantumDomesticationAdvancement
 import xyz.atrius.waystones.data.config.Localization
 import xyz.atrius.waystones.manager.AdvancementManager
 import xyz.atrius.waystones.service.NameService
