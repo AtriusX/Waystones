@@ -6,7 +6,6 @@ import org.koin.ksp.generated.module
 import xyz.atrius.waystones.command.waystones.WaystoneCommand
 import xyz.atrius.waystones.config.PluginModule
 import xyz.atrius.waystones.data.advancement.*
-import xyz.atrius.waystones.data.config.Config
 import xyz.atrius.waystones.data.config.Localization
 import xyz.atrius.waystones.data.config.property.EnableAdvancementsProperty
 import xyz.atrius.waystones.data.config.property.EnableKeyItemsProperty
@@ -19,16 +18,12 @@ import xyz.atrius.waystones.service.WarpNameService
 import xyz.atrius.waystones.service.WorldRatioService
 import xyz.atrius.waystones.utility.registerRecipes
 
-lateinit var plugin       : KotlinPlugin
-lateinit var configuration: Config
 lateinit var localization : Localization
 
 @Suppress("unused")
 class Waystones : KotlinPlugin(PluginModule.module) {
 
     override fun enable(koin: Koin) {
-        plugin        = this
-        configuration = Config(this)
         localization  = Localization(this, koin.get<LocaleProperty>())
         // Load services
         val warpNameService = koin.get<WarpNameService>()

@@ -5,8 +5,6 @@ import org.bukkit.Location
 import org.bukkit.Sound
 import org.bukkit.World
 import org.bukkit.util.Vector
-import xyz.atrius.waystones.configuration
-import xyz.atrius.waystones.data.FloodFill
 import xyz.atrius.waystones.data.TeleportType
 import xyz.atrius.waystones.data.TeleportType.Interdimensional
 import xyz.atrius.waystones.data.TeleportType.Normal
@@ -48,17 +46,6 @@ val Location.locationCode
 // Determines if the selected block is safe to spawn on
 val Location.isSafe: Boolean
     get() = !listOf(UP, UP.UP).map { world?.getBlockAt(it)?.type?.isSolid ?: true }.any { it }
-
-fun Location.range(): Int {
-    val config = configuration
-    return config.baseDistance() + FloodFill(
-        this,
-        config.maxWarpSize(),
-        *config.defaultBlocks
-    ).breakdown.entries.sumOf { (key, value) ->
-        value * (config.blockMappings[key.type]?.invoke() ?: 1)
-    }
-}
 
 fun Location.rotateY(angle: Double, amp: Double = 1.0) =
     add(Vector(cos(angle) * amp, 2.0, sin(angle) * amp))

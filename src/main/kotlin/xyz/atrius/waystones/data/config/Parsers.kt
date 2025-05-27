@@ -43,17 +43,6 @@ class RangeParser(private val range: IntRange) : IntParser() {
     }
 }
 
-object BooleanParser : ArgumentParser<Boolean> {
-    override fun parse(input: Any?): Boolean? {
-        val str = input?.toString()
-        return when (str?.lowercase()) {
-            "1", "t", "true"  -> true
-            "0", "f", "false" -> false
-            else              -> null
-        }
-    }
-}
-
 class EnumParser<E : Enum<E>>(private val enum: KClass<E>) : ArgumentParser<E> {
     override fun parse(input: Any?): E? {
         input ?: return null

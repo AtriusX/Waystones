@@ -10,11 +10,12 @@ import org.bukkit.event.player.PlayerInteractEvent
 import org.koin.core.annotation.Single
 import xyz.atrius.waystones.data.advancement.UNLIMITED_POWER
 import xyz.atrius.waystones.manager.AdvancementManager
-import xyz.atrius.waystones.utility.isWaystone
+import xyz.atrius.waystones.service.WaystoneService
 
 @Single
 class ExplodeEvent(
     private val advancementManager: AdvancementManager,
+    private val waystoneService: WaystoneService,
 ) : Listener {
 
     @EventHandler
@@ -31,7 +32,7 @@ class ExplodeEvent(
         val above = block.world.getBlockAt(block.location.add(0.0, 1.0, 0.0))
 
         if (anchor.charges == anchor.maximumCharges
-            && above.isWaystone()
+            && waystoneService.isWaystone(above)
             && canExplode
         ) {
             advancementManager.awardAdvancement(player, UNLIMITED_POWER)

@@ -4,6 +4,7 @@ import arrow.core.Either
 import arrow.core.raise.either
 import arrow.core.raise.ensure
 import org.bukkit.Location
+import org.bukkit.Material
 import org.bukkit.block.Block
 import org.bukkit.block.data.type.RespawnAnchor
 import org.bukkit.entity.Player
@@ -12,6 +13,8 @@ import org.bukkit.potion.PotionEffectType
 import org.bukkit.util.Vector
 import org.koin.core.annotation.Single
 import xyz.atrius.waystones.Power
+import xyz.atrius.waystones.Power.ALL
+import xyz.atrius.waystones.Power.INTER_DIMENSION
 import xyz.atrius.waystones.SicknessOption
 import xyz.atrius.waystones.data.FloodFill
 import xyz.atrius.waystones.data.config.Localization
@@ -48,8 +51,8 @@ class WaystoneService(
         Warp(name, player, block.location)
     }
 
-    private fun Location.range(): Int {
-        val range = FloodFill(this, maxWarpSize.value, *boostBlockService.defaultBlocks)
+    fun range(waystone: Location): Int {
+        val range = FloodFill(waystone, maxWarpSize.value, *boostBlockService.defaultBlocks)
             .breakdown
             .entries
             .sumOf { (block, count) -> count * (boostBlockService.blockMappings[block.type]?.invoke() ?: 1) }
@@ -59,15 +62,15 @@ class WaystoneService(
 
     private fun validateWarp(player: Player, block: Block): Either<WaystoneServiceError, Unit> = either {
 
-        ensure(block.isWaystone()) {
+        ensure(isWaystone(block)) {
             WaystoneServiceError.WaystoneSevered(localization)
         }
 
-        ensure(!block.isInhibited()) {
+        ensure(!isInhibited(block)) {
             WaystoneServiceError.WaystoneInhibited(localization)
         }
 
-        ensure(block.hasPower(player)) {
+        ensure(hasPower(block, player)) {
             WaystoneServiceError.WaystoneUnpowered(localization)
         }
 
@@ -83,12 +86,12 @@ class WaystoneService(
             }
         }
 
-        if (!block.hasInfinitePower()) {
+        if (!hasInfinitePower(block)) {
             val ratio = when (interDimension) {
                 true -> 1.0
                 else -> worldRatio.value
             }
-            val range = block.location.range() / ratio
+            val range = range(block.location) / ratio
             val distance = calculateDistance(player.location, block.location, ratio)
 
             val name = warpNameService[block.location]
@@ -153,7 +156,7 @@ class WaystoneService(
             // Give portal sickness to the player if they aren't immortal, are unlucky, or already are sick
             if (portalSickness.value
                 && (sick || Random.nextDouble() < portalSicknessChance.value)
-                && !block.hasInfinitePower()
+                && !hasInfinitePower(block)
             ) {
                 player.addPotionEffects(
                     PotionEffect(PotionEffectType.NAUSEA, 600, 9),
@@ -169,7 +172,7 @@ class WaystoneService(
 
             if (power == Power.ALL || (interDimension && power == Power.INTER_DIMENSION)) {
                 // Only deplete power if the power is not infinite
-                if (!block.hasInfinitePower()) {
+                if (!hasInfinitePower(block)) {
                     block.powerBlock?.update<RespawnAnchor> {
                         charges -= powerCost.value.coerceIn(0, 4)
                     }
@@ -177,6 +180,32 @@ class WaystoneService(
             }
         }
     }
+
+    val Block.powerBlock: Block?
+        get() = world.getBlockAt(location.DOWN).takeIf {
+            it.type in listOf(Material.RESPAWN_ANCHOR, Material.COMMAND_BLOCK, Material.OBSIDIAN)
+        }
+
+    private val Block.isPowered: Boolean
+        get() = !isInhibited(this) && (hasInfinitePower(this) || hasNormalPower(this))
+
+    fun hasNormalPower(block: Block): Boolean =
+        ((block.powerBlock?.blockData as? RespawnAnchor)?.charges ?: 0) >= powerCost.value
+
+    fun isWaystone(block: Block): Boolean =
+        block.type == Material.LODESTONE
+
+    fun hasPower(block: Block, player: Player): Boolean = when(requirePower.value) {
+        INTER_DIMENSION -> block.location.sameDimension(player.location) || block.isPowered
+        ALL -> block.isPowered
+        else -> true
+    }
+
+    fun isInhibited(block: Block): Boolean =
+        block.powerBlock?.type == Material.OBSIDIAN
+
+    fun hasInfinitePower(block: Block): Boolean =
+        block.powerBlock?.type == Material.COMMAND_BLOCK
 
     sealed class WaystoneServiceError(val message: () -> LocalizedString?) {
 
