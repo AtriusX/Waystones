@@ -5,6 +5,7 @@ import arrow.core.raise.either
 import arrow.core.raise.ensure
 import org.bukkit.Location
 import org.bukkit.Material
+import org.bukkit.block.Beacon
 import org.bukkit.block.Block
 import org.bukkit.block.data.type.RespawnAnchor
 import org.bukkit.entity.Player
@@ -12,14 +13,18 @@ import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import org.bukkit.util.Vector
 import org.koin.core.annotation.Single
-import xyz.atrius.waystones.data.config.property.type.Power
-import xyz.atrius.waystones.data.config.property.type.Power.ALL
-import xyz.atrius.waystones.data.config.property.type.Power.INTER_DIMENSION
-import xyz.atrius.waystones.data.config.property.type.SicknessOption
+import xyz.atrius.waystones.advancement.CleanEnergyAdvancement
+import xyz.atrius.waystones.advancement.GigawarpsAdvancement
+import xyz.atrius.waystones.advancement.IDontFeelSoGoodAdvancement
 import xyz.atrius.waystones.data.FloodFill
 import xyz.atrius.waystones.data.config.Localization
 import xyz.atrius.waystones.data.config.LocalizedString
 import xyz.atrius.waystones.data.config.property.*
+import xyz.atrius.waystones.data.config.property.type.Power
+import xyz.atrius.waystones.data.config.property.type.Power.ALL
+import xyz.atrius.waystones.data.config.property.type.Power.INTER_DIMENSION
+import xyz.atrius.waystones.data.config.property.type.SicknessOption
+import xyz.atrius.waystones.manager.AdvancementManager
 import xyz.atrius.waystones.utility.*
 import kotlin.random.Random
 
@@ -38,17 +43,20 @@ class WaystoneService(
     private val powerCost: PowerCostProperty,
     private val boostBlockService: BoostBlockService,
     private val warpNameService: WarpNameService,
+    private val advancementManager: AdvancementManager,
+    private val iDontFeelSoGoodAdvancement: IDontFeelSoGoodAdvancement,
+    private val cleanEnergyAdvancement: CleanEnergyAdvancement,
+    private val gigawarpsAdvancement: GigawarpsAdvancement,
 ) {
 
     fun process(player: Player, block: Block, keyLocation: Location): Either<WaystoneServiceError,  Warp> = either {
         // Ensure the warp is valid to use
-        validateWarp(player, block).bind()
-
+        val distance = validateWarp(player, block).bind()
         val name = warpNameService[keyLocation]
             ?: localization["unnamed-waystone"]
                 .toString()
 
-        Warp(name, player, block.location)
+        Warp(name, player, block.location, distance)
     }
 
     fun range(waystone: Location): Int {
@@ -60,7 +68,7 @@ class WaystoneService(
         return baseDistance.value + range
     }
 
-    private fun validateWarp(player: Player, block: Block): Either<WaystoneServiceError, Unit> = either {
+    private fun validateWarp(player: Player, block: Block): Either<WaystoneServiceError, Double> = either {
 
         ensure(isWaystone(block)) {
             WaystoneServiceError.WaystoneSevered(localization)
@@ -86,39 +94,51 @@ class WaystoneService(
             }
         }
 
+        val ratio = when (interDimension) {
+            true -> 1.0
+            else -> worldRatio.value
+        }
+        val range = range(block.location) / ratio
+        val distance = calculateDistance(player.location, block.location, ratio)
+        val name = warpNameService[block.location]
+            ?: localization["unnamed-waystone"].toString()
+
         if (!hasInfinitePower(block)) {
-            val ratio = when (interDimension) {
-                true -> 1.0
-                else -> worldRatio.value
-            }
-            val range = range(block.location) / ratio
-            val distance = calculateDistance(player.location, block.location, ratio)
-
-            val name = warpNameService[block.location]
-                ?: localization["unnamed-waystone"].toString()
-
             ensure(distance <= range) {
                 WaystoneServiceError.WaystoneOutOfRange(localization, name, distance, range)
             }
         }
+
+        distance
     }
 
-//    fun gigawarpAdvancement(player: Player,) {
-//        if (distance > configuration.maxDistance() / 2)
-//            player.awardAdvancement(GIGAWARPS)
-//    }
-//
-//    fun cleanEnergyAdvancement() {
-//        val fill = FloodFill(
-//            warpLocation,
-//            maxWarpSize.value,
-//            *boostBlockService.defaultBlocks,
-//            Material.BEACON
-//        )
-//        if (fill.breakdown.any { (block) ->
-//                with (block.state) { this is Beacon && isActive() }
-//            }) player.awardAdvancement(CLEAN_ENERGY)
-//    }
+    fun gigawarpsAdvancement(player: Player, warp: Warp) {
+        if (advancementManager.hasAdvancement(player, gigawarpsAdvancement)) {
+            return
+        }
+
+        if (warp.distance > boostBlockService.maxDistance() / 2)
+            advancementManager.awardAdvancement(player, gigawarpsAdvancement)
+    }
+
+    fun cleanEnergyAdvancement(player: Player, warp: Warp) {
+        if (advancementManager.hasAdvancement(player, cleanEnergyAdvancement)) {
+            return
+        }
+
+        val fill = FloodFill(
+            warp.warpLocation,
+            maxWarpSize.value,
+            *boostBlockService.defaultBlocks,
+            Material.BEACON
+        )
+        val activeBeaconPresent = fill.breakdown
+            .any { (block) -> (block.state as? Beacon)?.isActive() == true }
+
+        if (activeBeaconPresent) {
+            advancementManager.awardAdvancement(player, cleanEnergyAdvancement)
+        }
+    }
 
     private fun calculateDistance(from: Location, to: Location, ratio: Double): Double {
         val toNormalized = to
@@ -132,6 +152,7 @@ class WaystoneService(
         val name: String,
         val player: Player,
         val warpLocation: Location,
+        val distance: Double,
     ) {
         private val location: Location = player.location
         private val block: Block = warpLocation.block
@@ -163,7 +184,7 @@ class WaystoneService(
                     PotionEffect(PotionEffectType.BLINDNESS, 100, 9)
                 )
                 player.sendActionMessage(localization["warp-sickness"])
-//                player.awardAdvancement(I_DONT_FEEL_SO_GOOD)
+                advancementManager.awardAdvancement(player, iDontFeelSoGoodAdvancement)
             } else {
                 player.sendActionMessage(localization["warp-safely"])
             }

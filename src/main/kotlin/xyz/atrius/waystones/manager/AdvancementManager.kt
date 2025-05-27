@@ -4,9 +4,9 @@ import com.google.gson.Gson
 import org.bukkit.entity.Player
 import org.koin.core.annotation.Single
 import org.slf4j.LoggerFactory
-import xyz.atrius.waystones.provider.AdvancementProvider
 import xyz.atrius.waystones.data.config.property.EnableAdvancementsProperty
 import xyz.atrius.waystones.internal.KotlinPlugin
+import xyz.atrius.waystones.provider.AdvancementProvider
 import org.bukkit.advancement.Advancement as SpigotAdvancement
 
 @Single
@@ -71,6 +71,18 @@ class AdvancementManager(
 
         criteria.remainingCriteria
             .forEach(criteria::awardCriteria)
+    }
+
+    fun hasAdvancement(player: Player, adv: AdvancementProvider): Boolean {
+        val spigotAdvancement = plugin.server.getAdvancement(adv.namespacedKey())
+
+        if (spigotAdvancement == null) {
+            return false
+        }
+
+        val progress = player.getAdvancementProgress(spigotAdvancement)
+        // We should expect the player to have no remaining criteria to meet
+        return progress.remainingCriteria.isEmpty()
     }
 
     companion object {

@@ -60,8 +60,8 @@ class WarpEvent(
             warp.teleport()
             player.sendActionMessage(localization["warp-success"])
             advancementManager.awardAdvancement(player, secretTunnelAdvancement)
-//            warp.gigawarpAdvancement()
-//            warp.cleanEnergyAdvancement()
+            waystoneService.gigawarpsAdvancement(player, warp)
+            waystoneService.cleanEnergyAdvancement(player, warp)
         }
         event.cancel()
     }
