@@ -34,9 +34,15 @@ class NameService(
             NameServiceError.Ignore
         }
 
+        val displayName = meta.displayName()
+
+        ensureNotNull(displayName) {
+            NameServiceError.Ignore
+        }
+
         val name = PlainTextComponentSerializer
             .plainText()
-            .serialize(meta.displayName()!!)
+            .serialize(displayName)
 
         warpNameService.add(block.location, name)
 
