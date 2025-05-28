@@ -5,7 +5,6 @@ import org.bukkit.NamespacedKey
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.ShapedRecipe
 import xyz.atrius.waystones.utility.splitMultiline
-import kotlin.collections.iterator
 
 abstract class CraftingRecipe(
     key: NamespacedKey,

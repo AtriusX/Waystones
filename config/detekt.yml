@@ -1,0 +1,23 @@
+complexity:
+  LongParameterList:
+    constructorThreshold: 25
+    functionThreshold: 10
+  TooManyFunctions:
+    ignorePrivate: true
+formatting:
+  FinalNewline:
+    autoCorrect: true
+  SpacingAroundColon:
+    autoCorrect: true
+  NoConsecutiveBlankLines:
+    autoCorrect: true
+  NoMultipleSpaces:
+    autoCorrect: true
+style:
+  MagicNumber:
+    active: false
+  ReturnCount:
+    active: false
+performance:
+  SpreadOperator:
+    active: false

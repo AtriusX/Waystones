@@ -40,7 +40,8 @@ class ConfigManager(
 
         prop.update(value)
         plugin.config.set(
-            prop.property, when (value) {
+            prop.property,
+            when (value) {
                 is Enum<*> -> value.name
                 is Locale -> value.toString()
                 else -> value
@@ -59,7 +60,8 @@ class ConfigManager(
         }
 
         prop.update(value)
-        plugin.config.set(prop.property,
+        plugin.config.set(
+            prop.property,
             (value as List<*>)
                 .map(Any?::toString)
         )

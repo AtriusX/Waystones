@@ -32,9 +32,9 @@ class ExplodeEvent(
         val canExplode = block.world.environment == World.Environment.NORMAL
         val above = block.world.getBlockAt(block.location.add(0.0, 1.0, 0.0))
 
-        if (anchor.charges == anchor.maximumCharges
-            && waystoneService.isWaystone(above)
-            && canExplode
+        if (anchor.charges == anchor.maximumCharges &&
+            waystoneService.isWaystone(above) &&
+            canExplode
         ) {
             advancementManager.awardAdvancement(player, unlimitedPowerAdvancement)
         }

@@ -58,4 +58,3 @@ fun CommandSender.message(message: LocalizedString, colorCode: Char = '&') =
 
 fun CommandSender.message(message: String, colorCode: Char = '&') =
     sendMessage(message.translateColors(colorCode))
-

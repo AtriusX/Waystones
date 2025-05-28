@@ -1,6 +1,7 @@
 package xyz.atrius.waystones.data
 
 import com.google.gson.GsonBuilder
+import org.slf4j.LoggerFactory
 import xyz.atrius.waystones.internal.KotlinPlugin
 import java.io.File
 import java.io.FileReader
@@ -20,9 +21,10 @@ open class JsonFile<T>(
             if (!file.exists()) {
                 plugin.saveResource(file.name, false)
             }
-        } catch (e: Exception) {
-            e.printStackTrace()
+        } catch (e: IllegalArgumentException) {
+            logger.error("Failed to load configuration file: ${e.message}")
         }
+
         data = json.fromJson(FileReader(file), HashMap<String, T>()::class.java)
     }
 
@@ -33,5 +35,11 @@ open class JsonFile<T>(
 
         val json = json.toJson(data)
         Files.write(file.toPath(), json.toByteArray())
+    }
+
+    companion object {
+
+        private val logger = LoggerFactory
+            .getLogger(JsonFile::class.java)
     }
 }

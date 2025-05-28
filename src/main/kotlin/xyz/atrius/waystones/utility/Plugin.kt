@@ -13,7 +13,10 @@ fun KotlinPlugin.registerRecipes(vararg recipes: Recipe) = recipes.forEach {
 }
 
 fun KotlinPlugin.scheduleRepeatingAutoCancelTask(
-    delay: Long, period: Long = 1, task: (Long) -> Unit, finish: Runnable? = null
+    delay: Long,
+    period: Long = 1,
+    task: (Long) -> Unit,
+    finish: Runnable? = null
 ): Int {
     var timer = delay
     val scheduler = server.scheduler

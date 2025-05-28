@@ -1,6 +1,11 @@
 package xyz.atrius.waystones.data.json.serializer
 
-import com.google.gson.*
+import com.google.gson.JsonDeserializationContext
+import com.google.gson.JsonDeserializer
+import com.google.gson.JsonElement
+import com.google.gson.JsonPrimitive
+import com.google.gson.JsonSerializationContext
+import com.google.gson.JsonSerializer
 import org.bukkit.Material
 import java.lang.reflect.Type
 

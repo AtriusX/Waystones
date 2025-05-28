@@ -5,8 +5,8 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockPlaceEvent
 import org.koin.core.annotation.Single
-import xyz.atrius.waystones.data.FloodFill
 import xyz.atrius.waystones.advancement.HeavyArtilleryAdvancement
+import xyz.atrius.waystones.data.FloodFill
 import xyz.atrius.waystones.data.config.property.MaxWarpSizeProperty
 import xyz.atrius.waystones.manager.AdvancementManager
 import xyz.atrius.waystones.service.BoostBlockService

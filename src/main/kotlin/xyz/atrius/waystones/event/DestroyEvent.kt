@@ -19,8 +19,9 @@ class DestroyEvent(
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     fun onBreak(event: BlockBreakEvent) {
         val block = event.block
-        if (block.type == Material.LODESTONE)
+        if (block.type == Material.LODESTONE) {
             warpNameService.remove(block.location)
+        }
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

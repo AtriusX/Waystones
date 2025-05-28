@@ -9,10 +9,23 @@ import xyz.atrius.waystones.advancement.IDontFeelSoGoodAdvancement
 import xyz.atrius.waystones.animation.AnimationManager
 import xyz.atrius.waystones.animation.effect.SimpleTeleportEffect
 import xyz.atrius.waystones.data.config.Localization
-import xyz.atrius.waystones.data.config.property.*
+import xyz.atrius.waystones.data.config.property.PortalSicknessChanceProperty
+import xyz.atrius.waystones.data.config.property.PortalSicknessDamageProperty
+import xyz.atrius.waystones.data.config.property.PortalSicknessProperty
+import xyz.atrius.waystones.data.config.property.PortalSicknessWarpingProperty
+import xyz.atrius.waystones.data.config.property.PowerCostProperty
+import xyz.atrius.waystones.data.config.property.WaitTimeProperty
+import xyz.atrius.waystones.data.config.property.WarpAnimationsProperty
 import xyz.atrius.waystones.data.config.property.type.SicknessOption
 import xyz.atrius.waystones.manager.AdvancementManager
-import xyz.atrius.waystones.utility.*
+import xyz.atrius.waystones.utility.UP
+import xyz.atrius.waystones.utility.addPotionEffects
+import xyz.atrius.waystones.utility.center
+import xyz.atrius.waystones.utility.hasPortalSickness
+import xyz.atrius.waystones.utility.immortal
+import xyz.atrius.waystones.utility.powerBlock
+import xyz.atrius.waystones.utility.sendActionMessage
+import xyz.atrius.waystones.utility.update
 import kotlin.random.Random
 
 @Single
@@ -27,7 +40,7 @@ class TeleportService(
     private val portalSicknessChance: PortalSicknessChanceProperty,
     private val advancementManager: AdvancementManager,
     private val iDontFeelSoGoodAdvancement: IDontFeelSoGoodAdvancement,
-    private val powerCost: PowerCostProperty
+    private val powerCost: PowerCostProperty,
 ) {
     private val queuedTeleports = HashMap<Player, Int>()
 
@@ -54,10 +67,12 @@ class TeleportService(
         val warpLocation = warp.warpLocation
         val block = warpLocation.block
         // Teleport and notify the player
-        player.teleport(warpLocation.UP.center.also {
-            it.yaw = location.yaw
-            it.pitch = location.pitch
-        })
+        player.teleport(
+            warpLocation.UP.center.also {
+                it.yaw = location.yaw
+                it.pitch = location.pitch
+            }
+        )
         // Skip de-buffs if the player is immortal or portal sickness is disabled
         if (player.immortal || !portalSickness.value) {
             player.sendActionMessage(localization["warp-success"])

@@ -15,7 +15,7 @@ class SuppressEvent(
     private val advancementManager: AdvancementManager,
     private val waystoneService: WaystoneService,
     private val blockedAdvancement: BlockedAdvancement,
-): Listener {
+) : Listener {
 
     @EventHandler
     fun onSuppress(event: BlockPlaceEvent) {

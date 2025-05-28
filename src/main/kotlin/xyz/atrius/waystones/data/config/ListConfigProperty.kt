@@ -3,6 +3,7 @@ package xyz.atrius.waystones.data.config
 import com.mojang.brigadier.StringReader
 import com.mojang.brigadier.arguments.ArgumentType
 import com.mojang.brigadier.exceptions.CommandSyntaxException
+import org.slf4j.LoggerFactory
 import kotlin.reflect.KClass
 
 open class ListConfigProperty<T : Any>(
@@ -29,10 +30,16 @@ open class ListConfigProperty<T : Any>(
 
             onUpdate()
         } catch (e: CommandSyntaxException) {
-            e.printStackTrace()
+            logger.warn("Failed to parse update value: ${e.message}")
             return false
         }
 
         return true
+    }
+
+    companion object {
+
+        private val logger = LoggerFactory
+            .getLogger(ListConfigProperty::class.java)
     }
 }

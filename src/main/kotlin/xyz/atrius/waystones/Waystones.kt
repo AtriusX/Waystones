@@ -17,13 +17,13 @@ import xyz.atrius.waystones.service.WarpNameService
 import xyz.atrius.waystones.service.WorldRatioService
 import xyz.atrius.waystones.utility.registerRecipes
 
-lateinit var localization : Localization
+lateinit var localization: Localization
 
 @Suppress("unused")
 class Waystones : KotlinPlugin(PluginModule.module) {
 
     override fun enable(koin: Koin) {
-        localization  = Localization(this, koin.get<LocaleProperty>())
+        localization = Localization(this, koin.get<LocaleProperty>())
         // Load services
         val warpNameService = koin.get<WarpNameService>()
 

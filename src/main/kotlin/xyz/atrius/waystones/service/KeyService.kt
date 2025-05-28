@@ -12,12 +12,12 @@ import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.CompassMeta
 import org.koin.core.annotation.Single
-import xyz.atrius.waystones.data.config.property.type.SicknessOption.PREVENT_TELEPORT
 import xyz.atrius.waystones.data.config.Localization
 import xyz.atrius.waystones.data.config.LocalizedString
 import xyz.atrius.waystones.data.config.property.EnableKeyItemsProperty
 import xyz.atrius.waystones.data.config.property.PortalSicknessWarpingProperty
 import xyz.atrius.waystones.data.config.property.SingleUseProperty
+import xyz.atrius.waystones.data.config.property.type.SicknessOption.PREVENT_TELEPORT
 import xyz.atrius.waystones.utility.get
 import xyz.atrius.waystones.utility.hasPortalSickness
 import xyz.atrius.waystones.utility.immortal
@@ -74,7 +74,6 @@ class KeyService(
     ) {
 
         fun useKey() {
-
             if (singleUse && !player.immortal) {
                 keyItem.amount--
             }

@@ -4,7 +4,6 @@ import com.mojang.brigadier.arguments.DoubleArgumentType
 import org.koin.core.annotation.Single
 import xyz.atrius.waystones.data.config.ConfigProperty
 
-
 @Single
 class PortalSicknessChanceProperty : ConfigProperty<Double>(
     property = "portal-sickness-chance",

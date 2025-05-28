@@ -15,4 +15,3 @@ class QuantumDomesticationAdvancement(
     item = Material.NAME_TAG,
     parent = secretTunnelAdvancement,
 )
-

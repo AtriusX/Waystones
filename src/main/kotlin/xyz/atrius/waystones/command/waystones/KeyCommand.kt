@@ -39,7 +39,7 @@ class KeyCommand(
 
                 command(sender, amount, sender)
             }
-        val target =  argument("target", ArgumentTypes.player())
+        val target = argument("target", ArgumentTypes.player())
             .requires { it.sender.hasPermission("waystones.getkey.all") }
             .executes {
                 val amount = it.getArgument<Int>("count")

@@ -14,7 +14,7 @@ fun Beacon.isActive(): Boolean {
         return false
     }
 
-    for (dy in y .. world.maxHeight) {
+    for (dy in y..world.maxHeight) {
         if (world.getBlockAt(x, dy, z).type.isSolid) {
             return false
         }

@@ -7,7 +7,12 @@ import xyz.atrius.waystones.data.config.Localization
 import xyz.atrius.waystones.data.config.property.WaitTimeProperty
 import xyz.atrius.waystones.data.config.property.WarpAnimationsProperty
 import xyz.atrius.waystones.service.WaystoneService
-import xyz.atrius.waystones.utility.*
+import xyz.atrius.waystones.utility.UP
+import xyz.atrius.waystones.utility.center
+import xyz.atrius.waystones.utility.forceParticle
+import xyz.atrius.waystones.utility.playSound
+import xyz.atrius.waystones.utility.rotateY
+import xyz.atrius.waystones.utility.sendActionMessage
 import kotlin.math.ceil
 
 class SimpleTeleportEffect(
@@ -23,7 +28,7 @@ class SimpleTeleportEffect(
 
     override fun animation(timer: Long) {
         val player = warp.player
-        val seconds = ceil(timer / 20.0).toInt() // TODO: Should this be moved elsewhere?
+        val seconds = ceil(timer / 20.0).toInt()
 
         player.sendActionMessage(localization["warp-wait", warp.name, seconds])
         // Play warp animation if enabled
@@ -34,7 +39,7 @@ class SimpleTeleportEffect(
         val amp = waitTime.value - timer + 0.1
         val ratio = timer * 2 + 1
         val period = (System.currentTimeMillis() / 3).toDouble()
-        val world  = player.world
+        val world = player.world
 
         world.forceParticle(
             Particle.ASH,
@@ -58,7 +63,13 @@ class SimpleTeleportEffect(
 
     override fun endAtLocation(location: Location) {
         warp.player.world.forceParticle(
-            Particle.LARGE_SMOKE, location.UP.center, 400, 0.2, 0.5, 0.2, 0.1
+            Particle.LARGE_SMOKE,
+            location.UP.center,
+            400,
+            0.2,
+            0.5,
+            0.2,
+            0.1
         )
         // Warp sound effects
         location.playSound(Sound.ENTITY_STRAY_DEATH, 0.5f, 0f)

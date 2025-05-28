@@ -40,9 +40,9 @@ class WarpEvent(
     fun onClick(event: PlayerInteractEvent) {
         val player = event.player
         // Don't start warp while flying with elytra, not right-clicking, or a lodestone was clicked
-        if (player.isGliding
-            || !event.action.isRightClick
-            || waystoneService.isWaystone(event.clickedBlock)
+        if (player.isGliding ||
+            !event.action.isRightClick ||
+            waystoneService.isWaystone(event.clickedBlock)
         ) {
             return
         }

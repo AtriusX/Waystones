@@ -35,7 +35,6 @@ class ConfigCommand(
             }
 
         for ((_, option) in configManager) {
-
             val configSubcommand = when (option) {
                 is ConfigProperty<*> -> option.toPropertySubcommand()
                 is ListConfigProperty<*> -> option.toPropertySubcommand()

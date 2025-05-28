@@ -65,4 +65,4 @@ fun Location.sameDimension(world: World?) =
     world == this.world
 
 fun Location.playSound(sound: Sound, volume: Float = 1f, pitch: Float = 1f) = Bukkit.getOnlinePlayers()
-    .forEach { if (it.world == world) it.playSound(this, sound, volume, pitch)  }
+    .forEach { if (it.world == world) it.playSound(this, sound, volume, pitch) }

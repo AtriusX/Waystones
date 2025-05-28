@@ -16,7 +16,12 @@ import xyz.atrius.waystones.advancement.GigawarpsAdvancement
 import xyz.atrius.waystones.data.FloodFill
 import xyz.atrius.waystones.data.config.Localization
 import xyz.atrius.waystones.data.config.LocalizedString
-import xyz.atrius.waystones.data.config.property.*
+import xyz.atrius.waystones.data.config.property.BaseDistanceProperty
+import xyz.atrius.waystones.data.config.property.JumpWorldsProperty
+import xyz.atrius.waystones.data.config.property.MaxWarpSizeProperty
+import xyz.atrius.waystones.data.config.property.PowerCostProperty
+import xyz.atrius.waystones.data.config.property.RequirePowerProperty
+import xyz.atrius.waystones.data.config.property.WorldRatioProperty
 import xyz.atrius.waystones.data.config.property.type.Power
 import xyz.atrius.waystones.manager.AdvancementManager
 import xyz.atrius.waystones.utility.isActive
@@ -40,7 +45,7 @@ class WaystoneService(
     private val gigawarpsAdvancement: GigawarpsAdvancement,
 ) {
 
-    fun process(player: Player, block: Block, keyLocation: Location): Either<WaystoneServiceError,  Warp> = either {
+    fun process(player: Player, block: Block, keyLocation: Location): Either<WaystoneServiceError, Warp> = either {
         // Ensure the warp is valid to use
         val distance = validateWarp(player, block).bind()
         val name = warpNameService[keyLocation]
@@ -48,8 +53,8 @@ class WaystoneService(
         // Determine how the waystone requires power
         val usePower = when (requirePower.value) {
             Power.ALL -> true
-            Power.INTER_DIMENSION -> !hasInfinitePower(block)
-                && !player.location.sameDimension(block.world)
+            Power.INTER_DIMENSION -> !hasInfinitePower(block) &&
+                !player.location.sameDimension(block.world)
             Power.NONE -> false
         }
 
@@ -66,7 +71,6 @@ class WaystoneService(
     }
 
     private fun validateWarp(player: Player, block: Block): Either<WaystoneServiceError, Double> = either {
-
         ensure(isWaystone(block)) {
             WaystoneServiceError.WaystoneSevered(localization)
         }
@@ -114,8 +118,9 @@ class WaystoneService(
             return
         }
 
-        if (warp.distance > boostBlockService.maxDistance() / 2)
+        if (warp.distance > boostBlockService.maxDistance() / 2) {
             advancementManager.awardAdvancement(player, gigawarpsAdvancement)
+        }
     }
 
     fun cleanEnergyAdvancement(player: Player, warp: Warp) {
@@ -169,7 +174,7 @@ class WaystoneService(
     fun isWaystone(block: Block?): Boolean =
         block?.type == Material.LODESTONE
 
-    fun hasPower(block: Block, player: Player): Boolean = when(requirePower.value) {
+    fun hasPower(block: Block, player: Player): Boolean = when (requirePower.value) {
         Power.INTER_DIMENSION -> block.location.sameDimension(player.location) || block.isPowered
         Power.ALL -> block.isPowered
         else -> true

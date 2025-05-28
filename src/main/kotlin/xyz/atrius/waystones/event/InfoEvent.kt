@@ -11,7 +11,6 @@ import org.koin.core.annotation.Single
 import xyz.atrius.waystones.data.WarpActiveState.Active
 import xyz.atrius.waystones.data.WarpActiveState.Infinite
 import xyz.atrius.waystones.data.WarpErrorState
-import xyz.atrius.waystones.data.WarpErrorState.*
 import xyz.atrius.waystones.data.WarpState
 import xyz.atrius.waystones.data.config.Localization
 import xyz.atrius.waystones.service.KeyService
@@ -36,9 +35,9 @@ class InfoEvent(
             return
         }
 
-        val block  = event.clickedBlock
+        val block = event.clickedBlock
         val player = event.player
-        val item   = event.item
+        val item = event.item
             ?: return
         // Make sure the correct block/item pair is used
         if (block?.type != Material.LODESTONE || !keyService.isWarpKey(item)) {
@@ -58,10 +57,10 @@ class InfoEvent(
     }
 
     fun Block.getWarpState(player: Player): WarpState = when {
-        !waystoneService.isWaystone(this) -> None
-        waystoneService.isInhibited(this) -> Inhibited
-        !waystoneService.hasPower(this, player) -> Unpowered
-        !location.isSafe -> Obstructed
+        !waystoneService.isWaystone(this) -> WarpErrorState.None
+        waystoneService.isInhibited(this) -> WarpErrorState.Inhibited
+        !waystoneService.hasPower(this, player) -> WarpErrorState.Unpowered
+        !location.isSafe -> WarpErrorState.Obstructed
         waystoneService.hasInfinitePower(this) -> Infinite
         else -> Active(waystoneService.range(location))
     }

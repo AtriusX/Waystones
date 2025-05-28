@@ -20,7 +20,7 @@ open class LimitedArgumentType<T : Any>(
             .readString()
             .sanitizedStringFormat()
         return names[value]
-            ?: throw RuntimeException("Failed to find $value: Known values: ${names.keys.joinToString(", ")}")
+            ?: error("Failed to find $value: Known values: ${names.keys.joinToString(", ")}")
     }
 
     override fun <S : Any> listSuggestions(

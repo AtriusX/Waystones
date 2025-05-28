@@ -16,7 +16,7 @@ operator fun <T> ItemMeta.set(key: String, type: PersistentDataType<T, T>, value
             key.toKey(),
             type,
             value
-                ?: throw IllegalStateException("Value must be provided!")
+                ?: error("Value must be provided!")
         )
 
 fun PlayerInventory.addItemNaturally(original: ItemStack, new: ItemStack) {
@@ -31,7 +31,6 @@ fun PlayerInventory.addItemNaturally(original: ItemStack, new: ItemStack) {
         original.itemMeta = new.itemMeta
         return
     }
-
 
     if (addItem(new).isNotEmpty()) {
         player.world.dropItem(player.location.UP, new)

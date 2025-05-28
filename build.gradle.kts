@@ -7,6 +7,7 @@ plugins {
     id("com.gradleup.shadow") version "8.3.6"
     id("dev.s7a.gradle.minecraft.server") version "3.2.1"
     id("com.google.devtools.ksp") version "2.1.21-2.0.1"
+    id("io.gitlab.arturbosch.detekt") version "1.23.8"
 }
 
 val pluginVersion = "2.0.0"
@@ -30,6 +31,8 @@ dependencies {
 
     api("io.insert-koin:koin-annotations:2.0.1-RC1")
     ksp("io.insert-koin:koin-ksp-compiler:2.0.1-RC1")
+
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.8")
 }
 
 group = "xyz.atrius"
@@ -60,6 +63,12 @@ task("buildPlugin") {
             into(rootDir.resolve("build/MinecraftServer/plugins"))
         }
     }
+}
+
+detekt {
+    autoCorrect = true
+    buildUponDefaultConfig = true
+    config.setFrom("$projectDir/config/detekt.yml")
 }
 
 task<LaunchMinecraftServerTask>("testPlugin") {

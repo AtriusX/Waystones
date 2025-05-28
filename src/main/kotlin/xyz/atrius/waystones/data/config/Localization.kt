@@ -18,7 +18,6 @@ class Localization(
     private val config = YamlConfiguration()
     private val cachedMessageFormat = HashMap<String, MessageFormat>()
 
-
     init {
         reload()
     }
@@ -33,7 +32,7 @@ class Localization(
 
     fun getTemplate(key: String): MessageFormat {
         val template = config.get(key)
-                ?: throw IllegalArgumentException("$key does not exist in localization file!")
+            ?: throw IllegalArgumentException("$key does not exist in localization file!")
         return cachedMessageFormat.getOrPut(key, { MessageFormat(template as String, locale.value) })
     }
 
@@ -49,8 +48,8 @@ class Localization(
             config.load(configFile)
         } else {
             val defaultConfigFile = plugin.getResource(configFile.name)
-                    ?: plugin.getResource("locale-en.yml")
-                    ?: throw RuntimeException("default localization file not in jar, corrupt download?")
+                ?: plugin.getResource("locale-en.yml")
+                ?: error("default localization file not in jar, corrupt download?")
             val defaultConfig = YamlConfiguration.loadConfiguration(InputStreamReader(defaultConfigFile))
             config.load(configFile)
             config.options().copyDefaults(true)

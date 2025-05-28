@@ -42,7 +42,6 @@ class RatioCommand(
         return base
             .then(setCommand())
             .then(removeCommand())
-
     }
 
     private fun setCommand(): LiteralArgumentBuilder<CommandSourceStack> {

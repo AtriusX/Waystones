@@ -4,7 +4,7 @@ import org.bukkit.Material
 import xyz.atrius.waystones.data.config.Localization
 import xyz.atrius.waystones.provider.AdvancementProvider
 
-//@Single Disabled until the advancement is useful
+// @Single Disabled until the advancement is useful
 class HowLowCanYouGoAdvancement(
     localization: Localization,
     secretTunnelAdvancement: SecretTunnelAdvancement,
