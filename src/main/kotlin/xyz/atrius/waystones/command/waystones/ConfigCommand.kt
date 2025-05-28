@@ -60,7 +60,9 @@ class ConfigCommand(
                 Command.SINGLE_SUCCESS
             }
 
-        return base.then(configProperty)
+        return base
+            .then(resetArgument(property, default))
+            .then(configProperty)
     }
 
     private fun <T : Any> ListConfigProperty<T>.toPropertySubcommand(): LiteralArgumentBuilder<CommandSourceStack> {
@@ -93,8 +95,17 @@ class ConfigCommand(
             }
         }
 
-        return root.then(tail)
+        return root
+            .then(resetArgument(property, default))
+            .then(tail)
     }
+
+    private fun <T : Any> resetArgument(property: String, value: T) = literal("reset")
+        .executes {
+            configManager.setProperty(property, value)
+            updatedPropertyMessage(it.source.sender, property, value)
+            Command.SINGLE_SUCCESS
+        }
 
     private fun listOptions(sender: CommandSender) {
         sender.message("&7--------- &dWaystones Config &7----------&r")

@@ -23,7 +23,7 @@ class Localization(
     }
 
     fun localize(key: String, vararg args: Any?): LocalizedString {
-        return LocalizedString(key, *args)
+        return LocalizedString(key, this, *args)
     }
 
 //    fun format(string: String, vararg args: Any?): String {
