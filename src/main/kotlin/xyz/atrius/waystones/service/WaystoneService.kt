@@ -75,16 +75,16 @@ class WaystoneService(
             WaystoneServiceError.WaystoneSevered(localization)
         }
 
-        ensure(!isInhibited(block)) {
-            WaystoneServiceError.WaystoneInhibited(localization)
+        val state = when (getWarpState(player, block)) {
+            null -> WaystoneServiceError.WaystoneSevered(localization)
+            is WaystoneStatus.Inhibited -> WaystoneServiceError.WaystoneInhibited(localization)
+            is WaystoneStatus.Unpowered -> WaystoneServiceError.WaystoneUnpowered(localization)
+            is WaystoneStatus.Obstructed -> WaystoneServiceError.WaystoneObstructed(localization)
+            else -> null
         }
 
-        ensure(hasPower(block, player)) {
-            WaystoneServiceError.WaystoneUnpowered(localization)
-        }
-
-        ensure(block.location.isSafe) {
-            WaystoneServiceError.WaystoneObstructed(localization)
+        if (state != null) {
+            raise(state)
         }
 
         val interDimension = player.location.sameDimension(block.location)
@@ -158,10 +158,13 @@ class WaystoneService(
         val usePower: Boolean,
     )
 
+    fun isWaystone(block: Block?): Boolean =
+        block?.type == Material.LODESTONE
+
     private val Block.isPowered: Boolean
         get() = !isInhibited(this) && (hasInfinitePower(this) || hasNormalPower(this))
 
-    fun hasNormalPower(block: Block): Boolean {
+    private fun hasNormalPower(block: Block): Boolean {
         val respawnAnchor = block.powerBlock
             ?.blockData as? RespawnAnchor
         val charges = respawnAnchor
@@ -171,20 +174,41 @@ class WaystoneService(
         return charges >= powerCost.value
     }
 
-    fun isWaystone(block: Block?): Boolean =
-        block?.type == Material.LODESTONE
-
-    fun hasPower(block: Block, player: Player): Boolean = when (requirePower.value) {
+    private fun hasPower(block: Block, player: Player): Boolean = when (requirePower.value) {
         Power.INTER_DIMENSION -> block.location.sameDimension(player.location) || block.isPowered
         Power.ALL -> block.isPowered
         else -> true
     }
 
-    fun isInhibited(block: Block): Boolean =
+    private fun isInhibited(block: Block): Boolean =
         block.powerBlock?.type == Material.OBSIDIAN
 
-    fun hasInfinitePower(block: Block): Boolean =
+    private fun hasInfinitePower(block: Block): Boolean =
         block.powerBlock?.type == Material.COMMAND_BLOCK
+
+    fun getWarpState(player: Player, block: Block): WaystoneStatus? {
+        if (!isWaystone(block)) {
+            return null
+        }
+
+        if (isInhibited(block)) {
+            return WaystoneStatus.Inhibited(localization)
+        }
+
+        if (!hasPower(block, player)) {
+            return WaystoneStatus.Unpowered(localization)
+        }
+
+        if (!block.location.isSafe) {
+            return WaystoneStatus.Obstructed(localization)
+        }
+
+        if (hasInfinitePower(block)) {
+            return WaystoneStatus.Infinite(localization)
+        }
+
+        return WaystoneStatus.Active(localization, range(block.location))
+    }
 
     sealed class WaystoneServiceError(val message: () -> LocalizedString?) {
 
@@ -205,5 +229,23 @@ class WaystoneService(
 
         class WaystoneOutOfRange(localization: Localization, name: String?, distance: Double, range: Double) :
             WaystoneServiceError({ localization["warp-out-of-range", name, distance - range] })
+    }
+
+    sealed class WaystoneStatus(val message: () -> LocalizedString?) {
+
+        class Inhibited(localization: Localization) :
+            WaystoneStatus({ localization["waystone-status-inhibited"] })
+
+        class Unpowered(localization: Localization) :
+            WaystoneStatus({ localization["waystone-status-unpowered"] })
+
+        class Obstructed(localization: Localization) :
+            WaystoneStatus({ localization["waystone-status-obstructed"] })
+
+        class Active(localization: Localization, range: Int) :
+            WaystoneStatus({ localization["waystone-status-active", range] })
+
+        class Infinite(localization: Localization) :
+            WaystoneStatus({ localization["waystone-status-infinite", -1] })
     }
 }

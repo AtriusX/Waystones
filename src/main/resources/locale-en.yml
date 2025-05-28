@@ -22,6 +22,7 @@ command-reload-usage: "&7[&dWaystones&7] &a/waystones reload [config|advancement
 waystone-info: "&3&lName: {0} | {1}"
 waystone-status: "Status: {0}{1,choice,-2#|-1#' | Range: {1,choice,-1#Infinity|0#{1}}'}"
 waystone-status-active: "Active"
+waystone-status-infinite: "Infinite"
 waystone-status-unknown: "Unknown"
 waystone-status-inhibited: "Inhibited"
 waystone-status-unpowered: "Unpowered"

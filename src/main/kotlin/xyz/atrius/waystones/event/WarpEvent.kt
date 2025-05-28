@@ -8,6 +8,7 @@ import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityDamageEvent
+import org.bukkit.event.player.PlayerDropItemEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerMoveEvent
 import org.koin.core.annotation.Single
@@ -74,6 +75,19 @@ class WarpEvent(
             return
         }
 
+        teleportService.cancel(player)
+        player.sendActionError(localization["warp-cancel"])
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    fun onDropItem(event: PlayerDropItemEvent) {
+        val player = event.player
+        val item = event.itemDrop.itemStack
+        // Check if the player is queued for teleport or the item dropped isn't a warp key
+        if (player !in teleportService || !keyService.isWarpKey(item)) {
+            return
+        }
+        // Cancel the teleport if an item is dropped
         teleportService.cancel(player)
         player.sendActionError(localization["warp-cancel"])
     }
