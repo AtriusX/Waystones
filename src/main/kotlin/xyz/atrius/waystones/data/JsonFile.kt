@@ -17,6 +17,8 @@ open class JsonFile<T>(
     protected lateinit var data: HashMap<String, T>
 
     fun load() {
+        logger.info("Loading ${file.name}...")
+
         try {
             if (!file.exists()) {
                 plugin.saveResource(file.name, false)
@@ -26,6 +28,7 @@ open class JsonFile<T>(
         }
 
         data = json.fromJson(FileReader(file), HashMap<String, T>()::class.java)
+        logger.info("Loaded ${file.name} successfully!")
     }
 
     fun save(forceLowercase: Boolean = false) {
