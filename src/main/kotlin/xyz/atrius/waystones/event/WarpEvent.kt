@@ -1,14 +1,11 @@
 package xyz.atrius.waystones.event
 
-import org.bukkit.Material
 import org.bukkit.entity.Arrow
 import org.bukkit.entity.Player
 import org.bukkit.entity.Skeleton
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
-import org.bukkit.event.block.Action.RIGHT_CLICK_AIR
-import org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.player.PlayerInteractEvent
@@ -22,7 +19,10 @@ import xyz.atrius.waystones.manager.AdvancementManager
 import xyz.atrius.waystones.service.KeyService
 import xyz.atrius.waystones.service.TeleportService
 import xyz.atrius.waystones.service.WaystoneService
-import xyz.atrius.waystones.utility.*
+import xyz.atrius.waystones.utility.cancel
+import xyz.atrius.waystones.utility.foldResult
+import xyz.atrius.waystones.utility.hasMovedBlock
+import xyz.atrius.waystones.utility.sendActionError
 
 @Single
 class WarpEvent(
@@ -41,8 +41,8 @@ class WarpEvent(
         val player = event.player
         // Don't start warp while flying with elytra, not right-clicking, or a lodestone was clicked
         if (player.isGliding
-            || (event.action != RIGHT_CLICK_AIR && event.action != RIGHT_CLICK_BLOCK)
-            || event.clickedBlock?.type == Material.LODESTONE
+            || !event.action.isRightClick
+            || waystoneService.isWaystone(event.clickedBlock)
         ) {
             return
         }
@@ -55,10 +55,7 @@ class WarpEvent(
             .process(player, key.location.block, key.location)
             .foldResult { return player.sendActionError(it.message()) }
 
-        teleportService.queueEvent(warp) {
-            key.useKey()
-            warp.teleport()
-            player.sendActionMessage(localization["warp-success"])
+        teleportService.queueEvent(warp, key) {
             advancementManager.awardAdvancement(player, secretTunnelAdvancement)
             waystoneService.gigawarpsAdvancement(player, warp)
             waystoneService.cleanEnergyAdvancement(player, warp)

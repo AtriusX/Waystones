@@ -43,7 +43,6 @@ class AdvancementManager(
         }
     }
 
-
     @Suppress("DEPRECATION")
     private fun unloadAllAdvancements() {
         logger.info("Unloading advancements!")

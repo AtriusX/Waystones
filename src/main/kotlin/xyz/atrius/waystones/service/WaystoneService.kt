@@ -9,24 +9,20 @@ import org.bukkit.block.Beacon
 import org.bukkit.block.Block
 import org.bukkit.block.data.type.RespawnAnchor
 import org.bukkit.entity.Player
-import org.bukkit.potion.PotionEffect
-import org.bukkit.potion.PotionEffectType
 import org.bukkit.util.Vector
 import org.koin.core.annotation.Single
 import xyz.atrius.waystones.advancement.CleanEnergyAdvancement
 import xyz.atrius.waystones.advancement.GigawarpsAdvancement
-import xyz.atrius.waystones.advancement.IDontFeelSoGoodAdvancement
 import xyz.atrius.waystones.data.FloodFill
 import xyz.atrius.waystones.data.config.Localization
 import xyz.atrius.waystones.data.config.LocalizedString
 import xyz.atrius.waystones.data.config.property.*
 import xyz.atrius.waystones.data.config.property.type.Power
-import xyz.atrius.waystones.data.config.property.type.Power.ALL
-import xyz.atrius.waystones.data.config.property.type.Power.INTER_DIMENSION
-import xyz.atrius.waystones.data.config.property.type.SicknessOption
 import xyz.atrius.waystones.manager.AdvancementManager
-import xyz.atrius.waystones.utility.*
-import kotlin.random.Random
+import xyz.atrius.waystones.utility.isActive
+import xyz.atrius.waystones.utility.isSafe
+import xyz.atrius.waystones.utility.powerBlock
+import xyz.atrius.waystones.utility.sameDimension
 
 @Single
 class WaystoneService(
@@ -34,17 +30,12 @@ class WaystoneService(
     private val jumpWorlds: JumpWorldsProperty,
     private val maxWarpSize: MaxWarpSizeProperty,
     private val baseDistance: BaseDistanceProperty,
-    private val portalSickness: PortalSicknessProperty,
-    private val portalSicknessChance: PortalSicknessChanceProperty,
-    private val portalSicknessDamage: PortalSicknessDamageProperty,
-    private val portalSicknessWarping: PortalSicknessWarpingProperty,
     private val worldRatio: WorldRatioProperty,
     private val requirePower: RequirePowerProperty,
     private val powerCost: PowerCostProperty,
     private val boostBlockService: BoostBlockService,
     private val warpNameService: WarpNameService,
     private val advancementManager: AdvancementManager,
-    private val iDontFeelSoGoodAdvancement: IDontFeelSoGoodAdvancement,
     private val cleanEnergyAdvancement: CleanEnergyAdvancement,
     private val gigawarpsAdvancement: GigawarpsAdvancement,
 ) {
@@ -53,10 +44,16 @@ class WaystoneService(
         // Ensure the warp is valid to use
         val distance = validateWarp(player, block).bind()
         val name = warpNameService[keyLocation]
-            ?: localization["unnamed-waystone"]
-                .toString()
+            ?: localization["unnamed-waystone"].toString()
+        // Determine how the waystone requires power
+        val usePower = when (requirePower.value) {
+            Power.ALL -> true
+            Power.INTER_DIMENSION -> !hasInfinitePower(block)
+                && !player.location.sameDimension(block.world)
+            Power.NONE -> false
+        }
 
-        Warp(name, player, block.location, distance)
+        Warp(name, player, block.location, distance, usePower)
     }
 
     fun range(waystone: Location): Int {
@@ -148,77 +145,33 @@ class WaystoneService(
         return from.toVector().distance(toNormalized)
     }
 
-    inner class Warp(
+    data class Warp(
         val name: String,
         val player: Player,
         val warpLocation: Location,
         val distance: Double,
-    ) {
-        private val location: Location = player.location
-        private val block: Block = warpLocation.block
-        private val interDimension: Boolean = !warpLocation.sameDimension(location)
-
-        fun teleport() {
-            // Teleport and notify the player
-            player.teleport(warpLocation.UP.center.also {
-                it.yaw   = location.yaw
-                it.pitch = location.pitch
-            })
-            // Skip de-buffs if the player is immortal
-            if (player.immortal) {
-                return
-            }
-
-            val sick = player.hasPortalSickness()
-            // Damage the player if damage is enabled and they aren't immortal
-            if (sick && portalSicknessWarping.value == SicknessOption.DAMAGE_ON_TELEPORT) {
-                player.damage(portalSicknessDamage.value)
-            }
-            // Give portal sickness to the player if they aren't immortal, are unlucky, or already are sick
-            if (portalSickness.value
-                && (sick || Random.nextDouble() < portalSicknessChance.value)
-                && !hasInfinitePower(block)
-            ) {
-                player.addPotionEffects(
-                    PotionEffect(PotionEffectType.NAUSEA, 600, 9),
-                    PotionEffect(PotionEffectType.BLINDNESS, 100, 9)
-                )
-                player.sendActionMessage(localization["warp-sickness"])
-                advancementManager.awardAdvancement(player, iDontFeelSoGoodAdvancement)
-            } else {
-                player.sendActionMessage(localization["warp-safely"])
-            }
-            // Determine how power is depleted from the warp
-            val power = requirePower.value
-
-            if (power == Power.ALL || (interDimension && power == Power.INTER_DIMENSION)) {
-                // Only deplete power if the power is not infinite
-                if (!hasInfinitePower(block)) {
-                    block.powerBlock?.update<RespawnAnchor> {
-                        charges -= powerCost.value.coerceIn(0, 4)
-                    }
-                }
-            }
-        }
-    }
-
-    val Block.powerBlock: Block?
-        get() = world.getBlockAt(location.DOWN).takeIf {
-            it.type in listOf(Material.RESPAWN_ANCHOR, Material.COMMAND_BLOCK, Material.OBSIDIAN)
-        }
+        val usePower: Boolean,
+    )
 
     private val Block.isPowered: Boolean
         get() = !isInhibited(this) && (hasInfinitePower(this) || hasNormalPower(this))
 
-    fun hasNormalPower(block: Block): Boolean =
-        ((block.powerBlock?.blockData as? RespawnAnchor)?.charges ?: 0) >= powerCost.value
+    fun hasNormalPower(block: Block): Boolean {
+        val respawnAnchor = block.powerBlock
+            ?.blockData as? RespawnAnchor
+        val charges = respawnAnchor
+            ?.charges
+            ?: 0
 
-    fun isWaystone(block: Block): Boolean =
-        block.type == Material.LODESTONE
+        return charges >= powerCost.value
+    }
+
+    fun isWaystone(block: Block?): Boolean =
+        block?.type == Material.LODESTONE
 
     fun hasPower(block: Block, player: Player): Boolean = when(requirePower.value) {
-        INTER_DIMENSION -> block.location.sameDimension(player.location) || block.isPowered
-        ALL -> block.isPowered
+        Power.INTER_DIMENSION -> block.location.sameDimension(player.location) || block.isPowered
+        Power.ALL -> block.isPowered
         else -> true
     }
 
