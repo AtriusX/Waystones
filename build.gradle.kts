@@ -33,6 +33,9 @@ dependencies {
     ksp("io.insert-koin:koin-ksp-compiler:2.0.1-RC1")
 
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.8")
+
+    testImplementation("io.mockk:mockk:1.14.2")
+    testImplementation("io.kotest:kotest-runner-junit5:5.9.1")
 }
 
 group = "xyz.atrius"
@@ -43,6 +46,10 @@ tasks.shadowJar {
     minimize()
     archiveClassifier.set("")
     archiveVersion.set(pluginVersion)
+}
+
+tasks.withType<Test>().configureEach {
+    useJUnitPlatform()
 }
 
 tasks.build {
