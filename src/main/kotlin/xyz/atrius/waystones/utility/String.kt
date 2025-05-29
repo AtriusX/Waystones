@@ -43,7 +43,7 @@ fun Any.sanitizedStringFormat(): String = toString()
  * Gets a base-level language locale from a specified language locale.
  *
  * @receiver The locale to de-specify.
- * @return   The de-specified locale.
+ * @return The de-specified locale.
  */
 fun Locale.despecify(): Locale =
     Locale.of(language)

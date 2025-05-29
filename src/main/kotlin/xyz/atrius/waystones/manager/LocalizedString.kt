@@ -26,7 +26,10 @@ class LocalizedString(
         val message = playerMessage
             ?: values[fallbackLocale]
             ?: values[defaultLocale]
-            ?: error("No message found for key '$key' in searched locales: $fallbackLocale, $fallbackLocale, $defaultLocale!")
+            ?: error(
+                "No message found for key '$key' in searched locales: " +
+                    "$playerLocale, $fallbackLocale, $defaultLocale!"
+            )
 
         return message
             .format(args)

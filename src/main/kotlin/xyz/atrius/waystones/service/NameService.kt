@@ -28,8 +28,8 @@ class NameService(
 
         ensure(
             item.type == Material.NAME_TAG &&
-                    block.type == Material.LODESTONE &&
-                    meta.hasDisplayName()
+                block.type == Material.LODESTONE &&
+                meta.hasDisplayName()
         ) {
             NameServiceError.Ignore
         }

@@ -37,4 +37,3 @@ open class KotlinPlugin(private vararg val modules: Module) : JavaPlugin() {
         koin.get<T>().disable()
     }
 }
-

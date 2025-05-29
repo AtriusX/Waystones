@@ -8,9 +8,9 @@ import org.koin.core.annotation.Single
 import xyz.atrius.waystones.advancement.IDontFeelSoGoodAdvancement
 import xyz.atrius.waystones.animation.AnimationManager
 import xyz.atrius.waystones.animation.effect.SimpleTeleportEffect
+import xyz.atrius.waystones.data.config.property.EnablePortalSicknessProperty
 import xyz.atrius.waystones.data.config.property.PortalSicknessChanceProperty
 import xyz.atrius.waystones.data.config.property.PortalSicknessDamageProperty
-import xyz.atrius.waystones.data.config.property.EnablePortalSicknessProperty
 import xyz.atrius.waystones.data.config.property.PortalSicknessWarpingProperty
 import xyz.atrius.waystones.data.config.property.PowerCostProperty
 import xyz.atrius.waystones.data.config.property.WaitTimeProperty

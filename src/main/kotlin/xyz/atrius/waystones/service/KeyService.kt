@@ -42,8 +42,9 @@ class KeyService(
 
     fun isWarpKey(key: ItemStack) = when (enableKeyItems.value) {
         true -> key.itemMeta?.get("is_warp_key") == 1
-        else -> key.type == Material.COMPASS &&
-            (key.itemMeta as? CompassMeta)?.lodestone != null
+        else ->
+            key.type == Material.COMPASS &&
+                (key.itemMeta as? CompassMeta)?.lodestone != null
     }
 
     private fun validateKey(player: Player, key: ItemStack): Either<KeyServiceError, Location> = either {

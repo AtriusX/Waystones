@@ -15,4 +15,3 @@ class Waystones : KotlinPlugin(WaystonesModule.module) {
     override fun disable(koin: Koin) =
         disablePlugin<WaystonesInitializer>(koin)
 }
-
