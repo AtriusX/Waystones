@@ -57,7 +57,7 @@ class KeyCommand(
     }
 
     private fun command(sender: CommandSender, amount: Int, target: Player): Int {
-        target.inventory.addItem(defaultKeyProvider.getKey(amount, target))
+        target.inventory.addItem(defaultKeyProvider.getKey(target, amount))
         sender.message(localization["command-give-key", amount, target.name])
         return Command.SINGLE_SUCCESS
     }

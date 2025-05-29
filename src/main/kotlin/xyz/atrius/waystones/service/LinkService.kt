@@ -50,21 +50,21 @@ class LinkService(
         }
         // Add item to players inventory
         val key = defaultKeyProvider
-            .getKey(target = player)
-            .link(block)
+            .getKey(player)
+            .link(player, block)
         // Add item and play sound
         player.inventory.addItemNaturally(item, key)
         player.playSound(Sound.ITEM_LODESTONE_COMPASS_LOCK)
     }
 
-    private fun ItemStack.link(block: Block) = update<CompassMeta> {
+    private fun ItemStack.link(player: Player, block: Block) = update<CompassMeta> {
         lodestone = block.location
         isLodestoneTracked = true
 
         val name = warpNameService[block.location]
-            ?: localization["unnamed-waystone"]
+            ?: localization["unnamed-waystone"].format(player)
         val lore = localization["link-key-lore", name, lodestone?.locationCode]
-            .toString()
+            .format(player)
             .let(Component::text)
 
         lore(listOf(lore))

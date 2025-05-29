@@ -17,8 +17,8 @@ class DefaultKeyProvider(
 ) {
 
     fun getKey(
-        amount: Int = 1,
         target: Player? = null,
+        amount: Int = 1,
     ): ItemStack = ItemStack(Material.COMPASS, amount).update<CompassMeta> {
         this["is_warp_key", INTEGER] = 1
 
