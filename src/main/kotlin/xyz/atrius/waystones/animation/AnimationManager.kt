@@ -21,7 +21,7 @@ class AnimationManager(
     fun register(effect: TeleportEffect, to: Location, onComplete: () -> Unit = {}) = effect.run {
         effect.start()
         plugin.scheduleRepeatingAutoCancelTask(
-            waitTime.value.toLong(),
+            waitTime.value().toLong(),
             1,
             { animation(it) }
         ) {

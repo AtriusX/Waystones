@@ -7,7 +7,9 @@ import xyz.atrius.waystones.data.config.ConfigProperty
 @Single
 class PortalSicknessChanceProperty : ConfigProperty<Double>(
     property = "portal-sickness-chance",
-    default = 0.05,
-    parser = DoubleArgumentType.doubleArg(0.0, 1.0),
+    default = 5.0,
+    parser = DoubleArgumentType.doubleArg(0.0, 100.0),
     propertyType = Double::class,
+    format = { "$it%" },
+    readProcess = { it / 100 }
 )

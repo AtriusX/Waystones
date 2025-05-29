@@ -31,7 +31,7 @@ class PlaceEvent(
 
         val blocks = FloodFill(
             block.location,
-            maxWarpSize.value,
+            maxWarpSize.value(),
             *boostBlockService.defaultBlocks,
             Material.LODESTONE
         )

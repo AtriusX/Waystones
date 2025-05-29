@@ -31,7 +31,7 @@ class LocalizationManager(
             key = key,
             args = args,
             values = values,
-            fallbackLocale = fallbackLocale.value,
+            fallbackLocale = fallbackLocale.value(),
             defaultLocale = defaultPluginLocale,
         )
     }

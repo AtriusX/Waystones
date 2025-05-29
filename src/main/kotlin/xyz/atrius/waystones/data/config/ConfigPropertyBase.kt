@@ -13,12 +13,18 @@ sealed interface ConfigPropertyBase<T : Any, D : Any, U> {
 
     val propertyType: KClass<out T>
 
-    val value: D
+    val format: (D) -> String
+
+    val readProcess: (D) -> D
 
     val javaClass: Class<out T>
         get() = propertyType.java
 
+    fun value(): D
+
     fun update(value: U): Boolean
+
+    fun format(): String
 
     fun getLocalizedInfoKey(): String {
         return "property-$property-info"

@@ -58,8 +58,8 @@ class ConfigCommand(
         val configProperty = argument("value", parser)
             .executes {
                 val value = it.getArgument("value", propertyType.java)
-                configManager.setProperty(property, value)
-                updatedPropertyMessage(it.source.sender, property, value)
+                val update = configManager.setProperty(property, value)
+                updatedPropertyMessage(it.source.sender, property, update?.format())
                 Command.SINGLE_SUCCESS
             }
 
@@ -86,8 +86,8 @@ class ConfigCommand(
             if (i in sizes) {
                 tail.executes {
                     val values = it.getArguments("value", javaClass)
-                    configManager.setProperty(property, values)
-                    updatedPropertyMessage(it.source.sender, property, value)
+                    val update = configManager.setProperty(property, values)
+                    updatedPropertyMessage(it.source.sender, property, update?.format())
                     Command.SINGLE_SUCCESS
                 }
             }
@@ -105,8 +105,8 @@ class ConfigCommand(
 
     private fun <T : Any> resetArgument(property: String, value: T) = literal("reset")
         .executes {
-            configManager.setProperty(property, value)
-            updatedPropertyMessage(it.source.sender, property, value)
+            val update = configManager.setProperty(property, value)
+            updatedPropertyMessage(it.source.sender, property, update?.format())
             Command.SINGLE_SUCCESS
         }
 
@@ -135,7 +135,7 @@ class ConfigCommand(
             propertyInfo,
         )
         val value = Component
-            .text("${value.value}")
+            .text(value.format())
             .color(TextColor.color(0x00FFFF))
         return Component
             .text("$property: ")
@@ -143,13 +143,13 @@ class ConfigCommand(
             .append(value)
     }
 
-    private fun updatedPropertyMessage(sender: CommandSender, property: String, value: Any) {
+    private fun updatedPropertyMessage(sender: CommandSender, property: String, value: Any?) {
         sender.message(localization["command-config-set", property, value])
     }
 
     private fun <T : Any> viewConfigValue(sender: CommandSender, property: String) {
         val prop = configManager.getValueOrNull<T>(property)
-            ?: configManager.getListValueOrNull<T>(property)
-        sender.message(localization["command-config-view", property, prop])
+            ?: configManager.getListValueOrNull(property)
+        sender.message(localization["command-config-view", property, prop?.format()])
     }
 }

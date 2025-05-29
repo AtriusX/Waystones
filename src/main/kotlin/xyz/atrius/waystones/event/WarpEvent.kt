@@ -95,7 +95,7 @@ class WarpEvent(
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     fun onDamage(event: EntityDamageEvent) {
         val entity = event.entity
-        if (!damageStopsWarping.value || entity !is Player) {
+        if (!damageStopsWarping.value() || entity !is Player) {
             return
         }
         // Don't cancel anything unless the entity is currently queued

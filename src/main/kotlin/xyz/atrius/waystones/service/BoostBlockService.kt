@@ -29,23 +29,23 @@ class BoostBlockService(
 
     // Returns the max warp distance any waystone can have
     fun maxDistance(): Int =
-        baseDistance.value + maxBoost.value * maxWarpSize.value
+        baseDistance.value() + maxBoost.value() * maxWarpSize.value()
 
     // Netherite grants the max amount of boost per block
-    private fun netheriteBoost(): Int = maxBoost.value
+    private fun netheriteBoost(): Int = maxBoost.value()
 
     // Emerald grants 75% of the max boost per block
-    private fun emeraldBoost(): Int = (maxBoost.value * 0.75).toInt()
+    private fun emeraldBoost(): Int = (maxBoost.value() * 0.75).toInt()
 
     // Diamond grants 50% of the max boost per block
-    private fun diamondBoost(): Int = maxBoost.value / 2
+    private fun diamondBoost(): Int = maxBoost.value() / 2
 
     // Gold grants 33% of the max boost per block
-    private fun goldBoost(): Int = maxBoost.value / 3
+    private fun goldBoost(): Int = maxBoost.value() / 3
 
     // Copper grants 25% of the max boost per block
-    private fun copperBoost(): Int = maxBoost.value / 4
+    private fun copperBoost(): Int = maxBoost.value() / 4
 
     // Iron grants 20% of the max boost per block
-    private fun ironBoost(): Int = maxBoost.value / 5
+    private fun ironBoost(): Int = maxBoost.value() / 5
 }

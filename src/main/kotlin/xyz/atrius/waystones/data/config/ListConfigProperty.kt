@@ -11,10 +11,17 @@ open class ListConfigProperty<T : Any>(
     override val default: List<T>,
     override val parser: ArgumentType<T>,
     override val propertyType: KClass<out T>,
+    override val format: (List<T>) -> String = { it.joinToString(", ") },
+    override val readProcess: (List<T>) -> List<T> = { it },
     val sizes: Set<Int>,
 ) : ConfigPropertyBase<T, List<T>, List<Any?>> {
-    final override var value: List<T> = default
-        private set
+    private var value: List<T> = default
+
+    override fun value(): List<T> =
+        readProcess(value)
+
+    override fun format(): String =
+        format(value)
 
     override fun update(value: List<Any?>): Boolean {
         if (value.size !in sizes) {

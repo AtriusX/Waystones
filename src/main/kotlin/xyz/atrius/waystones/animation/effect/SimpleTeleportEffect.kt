@@ -32,11 +32,11 @@ class SimpleTeleportEffect(
 
         player.sendActionMessage(localization["warp-wait", warp.name, seconds])
         // Play warp animation if enabled
-        if (!warpAnimations.value) {
+        if (!warpAnimations.value()) {
             return
         }
 
-        val amp = waitTime.value - timer + 0.1
+        val amp = waitTime.value() - timer + 0.1
         val ratio = timer * 2 + 1
         val period = (System.currentTimeMillis() / 3).toDouble()
         val world = player.world

@@ -39,7 +39,7 @@ class LinkService(
             LinkServiceError.Ignore
         }
 
-        if (!relinkableKeys.value) {
+        if (!relinkableKeys.value()) {
             ensure(!meta.hasLodestone()) {
                 LinkServiceError.NotRelinkable(localization)
             }

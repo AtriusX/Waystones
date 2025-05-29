@@ -34,11 +34,11 @@ class WaystonesInitializer(
         // Initialize events
         eventManager.initialize()
         // Register warp key recipe if enabled
-        if (enableKeyItemsProperty.value) {
+        if (enableKeyItemsProperty.value()) {
             craftingRecipeManager.load()
         }
         // Register plugin advancements
-        if (enableAdvancementsProperty.value) {
+        if (enableAdvancementsProperty.value()) {
             advancementManager.loadAdvancements()
         }
 

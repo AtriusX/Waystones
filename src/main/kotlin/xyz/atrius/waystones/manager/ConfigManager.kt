@@ -25,22 +25,24 @@ class ConfigManager(
     fun <T : Any> getListPropertyOrNull(option: String?): ListConfigProperty<T>? =
         options[option] as? ListConfigProperty<T>
 
-    fun <T : Any> getValueOrNull(option: String?): T? =
-        getPropertyOrNull<T>(option)?.value
+    fun <T : Any> getValueOrNull(option: String?): ConfigProperty<T>? =
+        getPropertyOrNull(option)
 
-    fun <T : Any> getListValueOrNull(option: String?): List<T>? =
-        getListPropertyOrNull<T>(option)?.value
+    fun <T : Any> getListValueOrNull(option: String?): ListConfigProperty<T>? =
+        getListPropertyOrNull(option)
 
-    fun <T : Any> setProperty(property: String?, value: T): Boolean {
+    fun <T : Any> setProperty(property: String?, value: T): ConfigProperty<T>? {
         val prop = getPropertyOrNull<T>(property)
-            ?: return false
-        return setProperty(prop, value)
+            ?: return null
+        setProperty(prop, value)
+        return prop
     }
 
-    fun <T : Any> setProperty(property: String?, value: List<T>): Boolean {
+    fun <T : Any> setProperty(property: String?, value: List<T>): ListConfigProperty<T>? {
         val prop = getListPropertyOrNull<T>(property)
-            ?: return false
-        return setProperty(prop, value)
+            ?: return null
+        setProperty(prop, value)
+        return prop
     }
 
     private fun <T : Any, D : Any, U> setProperty(

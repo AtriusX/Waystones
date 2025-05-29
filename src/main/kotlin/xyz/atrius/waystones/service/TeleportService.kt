@@ -74,24 +74,24 @@ class TeleportService(
             }
         )
         // Skip de-buffs if the player is immortal or portal sickness is disabled
-        if (player.immortal || !portalSickness.value) {
+        if (player.immortal || !portalSickness.value()) {
             player.sendActionMessage(localization["warp-success"])
             return
         }
         // Use power if the warp requires it
         if (warp.usePower) {
             block.powerBlock?.update<RespawnAnchor> {
-                charges -= powerCost.value
+                charges -= powerCost.value()
             }
         }
 
         val sick = player.hasPortalSickness()
         // Damage the player if damage is enabled and they are already sick
-        if (sick && portalSicknessWarping.value == SicknessOption.DAMAGE_ON_TELEPORT) {
-            player.damage(portalSicknessDamage.value)
+        if (sick && portalSicknessWarping.value() == SicknessOption.DAMAGE_ON_TELEPORT) {
+            player.damage(portalSicknessDamage.value())
         }
         // If the player isn't sick, give them a chance to avoid getting sick
-        if (!sick && Random.nextDouble() > portalSicknessChance.value) {
+        if (!sick && Random.nextDouble() > portalSicknessChance.value()) {
             player.sendActionMessage(localization["warp-success"])
             return
         }

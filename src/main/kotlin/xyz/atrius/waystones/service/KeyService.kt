@@ -37,10 +37,10 @@ class KeyService(
             ?: inventory.itemInOffHand
         val lodestoneLocation = validateKey(player, item).bind()
 
-        Key(lodestoneLocation, player, item, singleUse.value)
+        Key(lodestoneLocation, player, item, singleUse.value())
     }
 
-    fun isWarpKey(key: ItemStack) = when (enableKeyItems.value) {
+    fun isWarpKey(key: ItemStack) = when (enableKeyItems.value()) {
         true -> key.itemMeta?.get("is_warp_key") == 1
         else ->
             key.type == Material.COMPASS &&
@@ -59,7 +59,7 @@ class KeyService(
             KeyServiceError.Severed(localization)
         }
 
-        ensure(!player.hasPortalSickness() && portalSickWarping.value != PREVENT_TELEPORT) {
+        ensure(!player.hasPortalSickness() && portalSickWarping.value() != PREVENT_TELEPORT) {
             KeyServiceError.Blocked(localization)
         }
 

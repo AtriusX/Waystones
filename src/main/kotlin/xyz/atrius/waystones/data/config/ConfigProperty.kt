@@ -11,16 +11,25 @@ open class ConfigProperty<T : Any>(
     override val default: T,
     override val parser: ArgumentType<T>,
     override val propertyType: KClass<out T>,
+    override val format: (T) -> String = { it.toString() },
+    override val readProcess: (T) -> T = { it },
 ) : ConfigPropertyBase<T, T, Any?> {
-    final override var value: T = default
-        private set
+    private var value: T = default
+
+    override fun value(): T =
+        readProcess(value)
+
+    override fun format(): String =
+        format(value)
 
     override fun update(value: Any?): Boolean {
         try {
             this.value = parser
                 .parse(StringReader(value.toString()))
+
         } catch (e: CommandSyntaxException) {
             logger.warn("Failed to parse update value for property '$property': ${e.message}")
+
             return false
         }
 

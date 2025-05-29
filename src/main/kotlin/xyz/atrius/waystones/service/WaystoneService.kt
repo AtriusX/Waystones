@@ -53,7 +53,7 @@ class WaystoneService(
                 .format(player)
         val distance = validateWarp(player, block, name).bind()
         // Determine how the waystone requires power
-        val usePower = when (requirePower.value) {
+        val usePower = when (requirePower.value()) {
             Power.ALL -> true
             Power.INTER_DIMENSION -> !hasInfinitePower(block) &&
                 !player.location.sameDimension(block.world)
@@ -64,12 +64,12 @@ class WaystoneService(
     }
 
     fun range(waystone: Location): Int {
-        val range = FloodFill(waystone, maxWarpSize.value, *boostBlockService.defaultBlocks)
+        val range = FloodFill(waystone, maxWarpSize.value(), *boostBlockService.defaultBlocks)
             .breakdown
             .entries
             .sumOf { (block, count) -> count * (boostBlockService.blockMappings[block.type]?.invoke() ?: 1) }
 
-        return baseDistance.value + range
+        return baseDistance.value() + range
     }
 
     private fun validateWarp(player: Player, block: Block, name: String): Either<WaystoneServiceError, Double> = either {
@@ -92,14 +92,14 @@ class WaystoneService(
         val interDimension = player.location.sameDimension(block.location)
 
         if (interDimension) {
-            ensure(jumpWorlds.value) {
+            ensure(jumpWorlds.value()) {
                 WaystoneServiceError.WaystoneWorldJumpDisabled(localization)
             }
         }
 
         val ratio = when (interDimension) {
             true -> 1.0
-            else -> worldRatio.value
+            else -> worldRatio.value()
         }
         val range = range(block.location) / ratio
         val distance = calculateDistance(player.location, block.location, ratio)
@@ -134,7 +134,7 @@ class WaystoneService(
 
         val fill = FloodFill(
             warp.warpLocation,
-            maxWarpSize.value,
+            maxWarpSize.value(),
             *boostBlockService.defaultBlocks,
             Material.BEACON
         )
@@ -175,10 +175,10 @@ class WaystoneService(
             ?.charges
             ?: 0
 
-        return charges >= powerCost.value
+        return charges >= powerCost.value()
     }
 
-    private fun hasPower(block: Block, player: Player): Boolean = when (requirePower.value) {
+    private fun hasPower(block: Block, player: Player): Boolean = when (requirePower.value()) {
         Power.INTER_DIMENSION -> block.location.sameDimension(player.location) || block.isPowered
         Power.ALL -> block.isPowered
         else -> true

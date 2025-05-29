@@ -16,7 +16,7 @@ class CompassRecipe(
     plugin: KotlinPlugin,
     defaultKeyProvider: DefaultKeyProvider,
 ) : CraftingRecipe("is_warp_key".toKey(plugin), defaultKeyProvider.getKey()) {
-    private val waystoneKeyRecipe = keyRecipe.value
+    private val waystoneKeyRecipe = keyRecipe.value()
 
     override val recipe = run {
         // Pull recipe from config and determine grid size (list can be size 1, 4, or 9)
