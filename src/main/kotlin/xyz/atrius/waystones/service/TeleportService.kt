@@ -91,7 +91,7 @@ class TeleportService(
             player.damage(portalSicknessDamage.value)
         }
         // If the player isn't sick, give them a chance to avoid getting sick
-        if (!sick && Random.nextDouble() < portalSicknessChance.value) {
+        if (!sick && Random.nextDouble() > portalSicknessChance.value) {
             player.sendActionMessage(localization["warp-success"])
             return
         }
