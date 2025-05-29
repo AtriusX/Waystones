@@ -50,7 +50,7 @@ class LinkService(
         }
         // Add item to players inventory
         val key = defaultKeyProvider
-            .getKey()
+            .getKey(target = player)
             .link(block)
         // Add item and play sound
         player.inventory.addItemNaturally(item, key)

@@ -18,7 +18,7 @@ class LocalizationManager(
     private val supportedLocales: Set<Locale>,
     @Named("defaultPluginLocale")
     private val defaultPluginLocale: Locale,
-    private val preferredPluginLocale: FallbackLocaleProperty,
+    private val fallbackLocale: FallbackLocaleProperty,
 ) {
     private val configs: Map<Locale, LocaleConfig> = supportedLocales
         .associateWith { LocaleConfig(plugin, it) }
@@ -31,7 +31,7 @@ class LocalizationManager(
             key = key,
             args = args,
             values = values,
-            preferredPluginLocale = preferredPluginLocale.value,
+            fallbackLocale = fallbackLocale.value,
             defaultLocale = defaultPluginLocale,
         )
     }

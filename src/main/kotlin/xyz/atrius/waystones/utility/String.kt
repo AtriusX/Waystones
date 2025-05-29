@@ -3,6 +3,7 @@ package xyz.atrius.waystones.utility
 import org.bukkit.ChatColor
 import org.bukkit.NamespacedKey
 import xyz.atrius.waystones.internal.KotlinPlugin
+import java.util.Locale
 
 // Translate ChatColors using custom ColorCode
 fun String.translateColors(colorCode: Char = '&') = ChatColor
@@ -37,3 +38,12 @@ private val swap = "[_ ]".toRegex()
 fun Any.sanitizedStringFormat(): String = toString()
     .lowercase()
     .replace(swap, "-")
+
+/**
+ * Gets a base-level language locale from a specified language locale.
+ *
+ * @receiver The locale to de-specify.
+ * @return   The de-specified locale.
+ */
+fun Locale.despecify(): Locale =
+    Locale.of(language)
