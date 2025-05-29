@@ -116,7 +116,7 @@ class ConfigCommand(
         sender.message(localization["plugin-header"].format(player))
         // Display each config property
         for ((prop, value) in configManager) {
-            val component = getConfigPropertyMessage(prop, value)
+            val component = getConfigPropertyMessage(player, prop, value)
             sender.sendMessage(component)
         }
 
@@ -124,11 +124,12 @@ class ConfigCommand(
     }
 
     private fun getConfigPropertyMessage(
+        player: Player?,
         property: String,
         value: ConfigPropertyBase<*, *, *>
     ): Component {
         val propertyInfo = Component
-            .text(localization[value.getLocalizedInfoKey()].toString())
+            .text(localization[value.getLocalizedInfoKey()].format(player))
             .color(TextColor.color(0xFF00FF))
         val hover = HoverEvent.hoverEvent(
             HoverEvent.Action.SHOW_TEXT,

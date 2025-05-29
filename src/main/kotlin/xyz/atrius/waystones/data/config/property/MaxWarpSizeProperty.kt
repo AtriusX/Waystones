@@ -10,4 +10,5 @@ class MaxWarpSizeProperty : ConfigProperty<Int>(
     default = 25,
     parser = IntegerArgumentType.integer(0),
     propertyType = Int::class,
+    format = { "$it Block(s) Max" }
 )

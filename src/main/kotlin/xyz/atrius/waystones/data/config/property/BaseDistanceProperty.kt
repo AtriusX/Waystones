@@ -10,4 +10,5 @@ class BaseDistanceProperty : ConfigProperty<Int>(
     default = 100,
     parser = IntegerArgumentType.integer(0),
     propertyType = Int::class,
+    format = { "$it Block(s)" }
 )

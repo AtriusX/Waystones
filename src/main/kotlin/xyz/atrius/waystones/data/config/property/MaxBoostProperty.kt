@@ -9,5 +9,6 @@ class MaxBoostProperty : ConfigProperty<Int>(
     property = "max-boost",
     default = 50,
     parser = IntegerArgumentType.integer(0),
-    propertyType = Int::class
+    propertyType = Int::class,
+    format = { "$it Block(s)" },
 )

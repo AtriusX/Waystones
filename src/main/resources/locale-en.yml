@@ -86,7 +86,7 @@ property-max-boost-info: "Determines the upper limit for how far away waystones 
 property-max-warp-size-info: "The max number of boost blocks a waystone will scan for when calculating its max distance"
 property-portal-sickness-chance-info: "The percentage chance for which warps can result in portal sickness"
 property-portal-sickness-damage-info: "The amount of damage the player takes when warping while already experiencing portal sickness"
-property-portal-sickness-info: "Whether warping players can get hit with a nausea debuff upon a successful warp"
+property-enable-portal-sickness-info: "Whether warping players can get hit with a nausea debuff upon a successful warp"
 property-portal-sickness-warping-info: "Determines whether portal sickness prevents warping, causes damage on success, or has no effect"
 property-power-cost-info: "The amount of respawn anchor power to use when required for warps"
 property-relinkable-keys-info: "Whether waystone keys should be relinkable after they are connected to a waystone"

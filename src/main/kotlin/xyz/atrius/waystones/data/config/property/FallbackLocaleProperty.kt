@@ -4,6 +4,7 @@ import org.koin.core.annotation.Named
 import org.koin.core.annotation.Single
 import xyz.atrius.waystones.command.resolver.LimitedArgumentType
 import xyz.atrius.waystones.data.config.ConfigProperty
+import xyz.atrius.waystones.utility.sanitizedStringFormat
 import java.util.Locale
 
 @Single
@@ -15,4 +16,5 @@ class FallbackLocaleProperty(
     default = Locale.ENGLISH,
     parser = LimitedArgumentType<Locale>(supportedLocales.toTypedArray()),
     propertyType = Locale::class,
+    format = { it.displayName.sanitizedStringFormat() }
 )

@@ -10,4 +10,5 @@ class WorldRatioProperty : ConfigProperty<Double>(
     default = 8.0,
     parser = DoubleArgumentType.doubleArg(1.0),
     propertyType = Double::class,
+    format = { "$it Block(s)" },
 )

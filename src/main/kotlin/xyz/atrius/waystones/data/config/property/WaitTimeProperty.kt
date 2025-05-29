@@ -10,4 +10,5 @@ class WaitTimeProperty : ConfigProperty<Int>(
     default = 60,
     parser = IntegerArgumentType.integer(0),
     propertyType = Int::class,
+    format = { "${it / 20.0} second(s)" }
 )
