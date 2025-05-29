@@ -10,14 +10,14 @@ import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
-import xyz.atrius.waystones.data.config.LocalizedString
+import xyz.atrius.waystones.manager.LocalizedString
 
 val Player.immortal: Boolean
     get() = gameMode in listOf(GameMode.CREATIVE, GameMode.SPECTATOR)
 
 fun Player.sendActionMessage(message: LocalizedString?) = when (message) {
     null -> Unit
-    else -> sendActionMessage(message.toString())
+    else -> sendActionMessage(message.format(this))
 }
 
 fun Player.sendActionMessage(message: String?) = when (message) {
@@ -27,7 +27,7 @@ fun Player.sendActionMessage(message: String?) = when (message) {
 
 fun Player.sendActionError(message: LocalizedString?) = when (message) {
     null -> Unit
-    else -> sendActionError(message.toString())
+    else -> sendActionError(message.format(this))
 }
 
 fun Player.sendActionError(message: String?) = when (message) {
@@ -54,7 +54,7 @@ fun Player.addPotionEffects(vararg effects: PotionEffect) =
     addPotionEffects(arrayListOf(*effects))
 
 fun CommandSender.message(message: LocalizedString, colorCode: Char = '&') =
-    message(message.toString(), colorCode)
+    message(message.format(this as? Player), colorCode)
 
 fun CommandSender.message(message: String, colorCode: Char = '&') =
     sendMessage(message.translateColors(colorCode))

@@ -12,9 +12,9 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.CompassMeta
 import org.koin.core.annotation.Single
-import xyz.atrius.waystones.data.config.Localization
-import xyz.atrius.waystones.data.config.LocalizedString
 import xyz.atrius.waystones.data.config.property.RelinkableKeysProperty
+import xyz.atrius.waystones.manager.LocalizationManager
+import xyz.atrius.waystones.manager.LocalizedString
 import xyz.atrius.waystones.provider.DefaultKeyProvider
 import xyz.atrius.waystones.utility.addItemNaturally
 import xyz.atrius.waystones.utility.locationCode
@@ -23,7 +23,7 @@ import xyz.atrius.waystones.utility.update
 
 @Single
 class LinkService(
-    private val localization: Localization,
+    private val localization: LocalizationManager,
     private val relinkableKeys: RelinkableKeysProperty,
     private val warpNameService: WarpNameService,
     private val keyService: KeyService,
@@ -74,10 +74,10 @@ class LinkService(
 
         object Ignore : LinkServiceError({ null })
 
-        class NotRelinkable(localization: Localization) :
+        class NotRelinkable(localization: LocalizationManager) :
             LinkServiceError({ localization["link-not-relinkable"] })
 
-        class AlreadyLinked(localization: Localization) :
+        class AlreadyLinked(localization: LocalizationManager) :
             LinkServiceError({ localization["link-already-linked"] })
     }
 }

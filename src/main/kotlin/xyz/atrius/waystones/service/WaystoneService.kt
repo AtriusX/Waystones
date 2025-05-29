@@ -14,8 +14,6 @@ import org.koin.core.annotation.Single
 import xyz.atrius.waystones.advancement.CleanEnergyAdvancement
 import xyz.atrius.waystones.advancement.GigawarpsAdvancement
 import xyz.atrius.waystones.data.FloodFill
-import xyz.atrius.waystones.data.config.Localization
-import xyz.atrius.waystones.data.config.LocalizedString
 import xyz.atrius.waystones.data.config.property.BaseDistanceProperty
 import xyz.atrius.waystones.data.config.property.JumpWorldsProperty
 import xyz.atrius.waystones.data.config.property.MaxWarpSizeProperty
@@ -24,6 +22,8 @@ import xyz.atrius.waystones.data.config.property.RequirePowerProperty
 import xyz.atrius.waystones.data.config.property.WorldRatioProperty
 import xyz.atrius.waystones.data.config.property.type.Power
 import xyz.atrius.waystones.manager.AdvancementManager
+import xyz.atrius.waystones.manager.LocalizationManager
+import xyz.atrius.waystones.manager.LocalizedString
 import xyz.atrius.waystones.utility.isActive
 import xyz.atrius.waystones.utility.isSafe
 import xyz.atrius.waystones.utility.powerBlock
@@ -31,7 +31,7 @@ import xyz.atrius.waystones.utility.sameDimension
 
 @Single
 class WaystoneService(
-    private val localization: Localization,
+    private val localization: LocalizationManager,
     private val jumpWorlds: JumpWorldsProperty,
     private val maxWarpSize: MaxWarpSizeProperty,
     private val baseDistance: BaseDistanceProperty,
@@ -49,7 +49,9 @@ class WaystoneService(
         // Ensure the warp is valid to use
         val distance = validateWarp(player, block).bind()
         val name = warpNameService[keyLocation]
-            ?: localization["unnamed-waystone"].toString()
+            ?.format(player)
+            ?: localization["unnamed-waystone"]
+                .format(player)
         // Determine how the waystone requires power
         val usePower = when (requirePower.value) {
             Power.ALL -> true
@@ -102,7 +104,9 @@ class WaystoneService(
         val range = range(block.location) / ratio
         val distance = calculateDistance(player.location, block.location, ratio)
         val name = warpNameService[block.location]
-            ?: localization["unnamed-waystone"].toString()
+            ?.format(player)
+            ?: localization["unnamed-waystone"]
+                .format(player)
 
         if (!hasInfinitePower(block)) {
             ensure(distance <= range) {
@@ -212,40 +216,40 @@ class WaystoneService(
 
     sealed class WaystoneServiceError(val message: () -> LocalizedString?) {
 
-        class WaystoneSevered(localization: Localization) :
+        class WaystoneSevered(localization: LocalizationManager) :
             WaystoneServiceError({ localization["warp-error"] })
 
-        class WaystoneInhibited(localization: Localization) :
+        class WaystoneInhibited(localization: LocalizationManager) :
             WaystoneServiceError({ localization["warp-error-inhibited"] })
 
-        class WaystoneUnpowered(localization: Localization) :
+        class WaystoneUnpowered(localization: LocalizationManager) :
             WaystoneServiceError({ localization["warp-error-unpowered"] })
 
-        class WaystoneObstructed(localization: Localization) :
+        class WaystoneObstructed(localization: LocalizationManager) :
             WaystoneServiceError({ localization["warp-error-obstructed"] })
 
-        class WaystoneWorldJumpDisabled(localization: Localization) :
+        class WaystoneWorldJumpDisabled(localization: LocalizationManager) :
             WaystoneServiceError({ localization["warp-world-jump-disabled"] })
 
-        class WaystoneOutOfRange(localization: Localization, name: String?, distance: Double, range: Double) :
+        class WaystoneOutOfRange(localization: LocalizationManager, name: String?, distance: Double, range: Double) :
             WaystoneServiceError({ localization["warp-out-of-range", name, distance - range] })
     }
 
     sealed class WaystoneStatus(val message: () -> LocalizedString?) {
 
-        class Inhibited(localization: Localization) :
+        class Inhibited(localization: LocalizationManager) :
             WaystoneStatus({ localization["waystone-status-inhibited"] })
 
-        class Unpowered(localization: Localization) :
+        class Unpowered(localization: LocalizationManager) :
             WaystoneStatus({ localization["waystone-status-unpowered"] })
 
-        class Obstructed(localization: Localization) :
+        class Obstructed(localization: LocalizationManager) :
             WaystoneStatus({ localization["waystone-status-obstructed"] })
 
-        class Active(localization: Localization, range: Int) :
+        class Active(localization: LocalizationManager, range: Int) :
             WaystoneStatus({ localization["waystone-status-active", range] })
 
-        class Infinite(localization: Localization) :
+        class Infinite(localization: LocalizationManager) :
             WaystoneStatus({ localization["waystone-status-infinite", -1] })
     }
 }

@@ -8,7 +8,6 @@ import org.koin.core.annotation.Single
 import xyz.atrius.waystones.advancement.IDontFeelSoGoodAdvancement
 import xyz.atrius.waystones.animation.AnimationManager
 import xyz.atrius.waystones.animation.effect.SimpleTeleportEffect
-import xyz.atrius.waystones.data.config.Localization
 import xyz.atrius.waystones.data.config.property.PortalSicknessChanceProperty
 import xyz.atrius.waystones.data.config.property.PortalSicknessDamageProperty
 import xyz.atrius.waystones.data.config.property.PortalSicknessProperty
@@ -18,6 +17,7 @@ import xyz.atrius.waystones.data.config.property.WaitTimeProperty
 import xyz.atrius.waystones.data.config.property.WarpAnimationsProperty
 import xyz.atrius.waystones.data.config.property.type.SicknessOption
 import xyz.atrius.waystones.manager.AdvancementManager
+import xyz.atrius.waystones.manager.LocalizationManager
 import xyz.atrius.waystones.utility.UP
 import xyz.atrius.waystones.utility.addPotionEffects
 import xyz.atrius.waystones.utility.center
@@ -31,7 +31,7 @@ import kotlin.random.Random
 @Single
 class TeleportService(
     private val animationManager: AnimationManager,
-    private val localization: Localization,
+    private val localization: LocalizationManager,
     private val warpAnimations: WarpAnimationsProperty,
     private val waitTime: WaitTimeProperty,
     private val portalSickness: PortalSicknessProperty,

@@ -19,8 +19,9 @@ open class LimitedArgumentType<T : Any>(
         val value = reader
             .readString()
             .sanitizedStringFormat()
+
         return names[value]
-            ?: error("Failed to find $value: Known values: ${names.keys.joinToString(", ")}")
+            ?: error("Failed to find value '$value'! Known values: ${names.keys.joinToString(", ")}")
     }
 
     override fun <S : Any> listSuggestions(

@@ -3,9 +3,9 @@ package xyz.atrius.waystones.animation.effect
 import org.bukkit.Location
 import org.bukkit.Particle
 import org.bukkit.Sound
-import xyz.atrius.waystones.data.config.Localization
 import xyz.atrius.waystones.data.config.property.WaitTimeProperty
 import xyz.atrius.waystones.data.config.property.WarpAnimationsProperty
+import xyz.atrius.waystones.manager.LocalizationManager
 import xyz.atrius.waystones.service.WaystoneService
 import xyz.atrius.waystones.utility.UP
 import xyz.atrius.waystones.utility.center
@@ -19,7 +19,7 @@ class SimpleTeleportEffect(
     private val warp: WaystoneService.Warp,
     private val warpAnimations: WarpAnimationsProperty,
     private val waitTime: WaitTimeProperty,
-    private val localization: Localization,
+    private val localization: LocalizationManager,
 ) : TeleportEffect {
 
     override fun start() {

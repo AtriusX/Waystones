@@ -14,9 +14,9 @@ import org.bukkit.event.player.PlayerMoveEvent
 import org.koin.core.annotation.Single
 import xyz.atrius.waystones.advancement.SecretTunnelAdvancement
 import xyz.atrius.waystones.advancement.ShootTheMessengerAdvancement
-import xyz.atrius.waystones.data.config.Localization
 import xyz.atrius.waystones.data.config.property.DamageStopsWarpingProperty
 import xyz.atrius.waystones.manager.AdvancementManager
+import xyz.atrius.waystones.manager.LocalizationManager
 import xyz.atrius.waystones.service.KeyService
 import xyz.atrius.waystones.service.TeleportService
 import xyz.atrius.waystones.service.WaystoneService
@@ -28,7 +28,7 @@ import xyz.atrius.waystones.utility.sendActionError
 @Single
 class WarpEvent(
     private val teleportService: TeleportService,
-    private val localization: Localization,
+    private val localization: LocalizationManager,
     private val damageStopsWarping: DamageStopsWarpingProperty,
     private val keyService: KeyService,
     private val waystoneService: WaystoneService,

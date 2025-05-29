@@ -6,13 +6,13 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.CompassMeta
 import org.bukkit.persistence.PersistentDataType.INTEGER
 import org.koin.core.annotation.Single
-import xyz.atrius.waystones.data.config.Localization
+import xyz.atrius.waystones.manager.LocalizationManager
 import xyz.atrius.waystones.utility.set
 import xyz.atrius.waystones.utility.update
 
 @Single
 class DefaultKeyProvider(
-    private val localization: Localization,
+    private val localization: LocalizationManager,
 ) {
 
     fun getKey(

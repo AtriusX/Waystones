@@ -1,12 +1,12 @@
 package xyz.atrius.waystones.advancement
 
 import org.bukkit.Material
-import xyz.atrius.waystones.data.config.Localization
+import xyz.atrius.waystones.manager.LocalizationManager
 import xyz.atrius.waystones.provider.AdvancementProvider
 
 // @Single Disabled until the advancement is useful
 class HowLowCanYouGoAdvancement(
-    localization: Localization,
+    localization: LocalizationManager,
     secretTunnelAdvancement: SecretTunnelAdvancement,
 ) : AdvancementProvider(
     title = localization["how-low-can-you-go"],

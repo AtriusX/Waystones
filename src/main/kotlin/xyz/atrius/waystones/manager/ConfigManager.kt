@@ -5,7 +5,7 @@ import xyz.atrius.waystones.data.config.ConfigProperty
 import xyz.atrius.waystones.data.config.ConfigPropertyBase
 import xyz.atrius.waystones.data.config.ListConfigProperty
 import xyz.atrius.waystones.internal.KotlinPlugin
-import java.util.*
+import java.util.Locale
 
 @Single
 class ConfigManager(
@@ -31,16 +31,25 @@ class ConfigManager(
     fun <T : Any> getListValueOrNull(option: String?): List<T>? =
         getListPropertyOrNull<T>(option)?.value
 
-    fun <T : Any> setProperty(option: String?, value: T): Boolean {
-        val prop = getPropertyOrNull<T>(option)
+    fun <T : Any> setProperty(property: String?, value: T): Boolean {
+        val prop = getPropertyOrNull<T>(property)
+            ?: return false
+        return setProperty(prop, value)
+    }
 
-        if (prop == null) {
-            return false
-        }
+    fun <T : Any> setProperty(property: String?, value: List<T>): Boolean {
+        val prop = getListPropertyOrNull<T>(property)
+            ?: return false
+        return setProperty(prop, value)
+    }
 
-        prop.update(value)
+    private fun <T : Any, D : Any, U> setProperty(
+        property: ConfigPropertyBase<T, D, U>,
+        value: U,
+    ): Boolean {
+        property.update(value)
         plugin.config.set(
-            prop.property,
+            property.property,
             when (value) {
                 is Enum<*> -> value.name
                 is Locale -> value.toString()
@@ -48,23 +57,6 @@ class ConfigManager(
             }
         )
 
-        plugin.saveConfig()
-        return true
-    }
-
-    fun <T : Any> setProperty(option: String?, value: List<T>): Boolean {
-        val prop = getListPropertyOrNull<T>(option)
-
-        if (prop == null) {
-            return false
-        }
-
-        prop.update(value)
-        plugin.config.set(
-            prop.property,
-            (value as List<*>)
-                .map(Any?::toString)
-        )
         plugin.saveConfig()
         return true
     }

@@ -14,15 +14,15 @@ import org.koin.core.annotation.Single
 import xyz.atrius.waystones.data.config.ConfigProperty
 import xyz.atrius.waystones.data.config.ConfigPropertyBase
 import xyz.atrius.waystones.data.config.ListConfigProperty
-import xyz.atrius.waystones.data.config.Localization
 import xyz.atrius.waystones.manager.ConfigManager
+import xyz.atrius.waystones.manager.LocalizationManager
 import xyz.atrius.waystones.utility.getArguments
 import xyz.atrius.waystones.utility.message
 
 @Single
 class ConfigCommand(
     private val configManager: ConfigManager,
-    private val localization: Localization,
+    private val localization: LocalizationManager,
 ) : WaystoneSubcommand {
     override val name: String = "config"
 

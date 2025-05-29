@@ -12,12 +12,12 @@ import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.CompassMeta
 import org.koin.core.annotation.Single
-import xyz.atrius.waystones.data.config.Localization
-import xyz.atrius.waystones.data.config.LocalizedString
 import xyz.atrius.waystones.data.config.property.EnableKeyItemsProperty
 import xyz.atrius.waystones.data.config.property.PortalSicknessWarpingProperty
 import xyz.atrius.waystones.data.config.property.SingleUseProperty
 import xyz.atrius.waystones.data.config.property.type.SicknessOption.PREVENT_TELEPORT
+import xyz.atrius.waystones.manager.LocalizationManager
+import xyz.atrius.waystones.manager.LocalizedString
 import xyz.atrius.waystones.utility.get
 import xyz.atrius.waystones.utility.hasPortalSickness
 import xyz.atrius.waystones.utility.immortal
@@ -27,7 +27,7 @@ class KeyService(
     private val singleUse: SingleUseProperty,
     private val portalSickWarping: PortalSicknessWarpingProperty,
     private val enableKeyItems: EnableKeyItemsProperty,
-    private val localization: Localization,
+    private val localization: LocalizationManager,
 ) {
 
     fun process(player: Player, event: PlayerInteractEvent): Either<KeyServiceError, Key> = either {
@@ -85,8 +85,8 @@ class KeyService(
 
         object Ignore : KeyServiceError({ null })
 
-        class Severed(localization: Localization) : KeyServiceError({ localization["key-severed"] })
+        class Severed(localization: LocalizationManager) : KeyServiceError({ localization["key-severed"] })
 
-        class Blocked(localization: Localization) : KeyServiceError({ localization["key-blocked"] })
+        class Blocked(localization: LocalizationManager) : KeyServiceError({ localization["key-blocked"] })
     }
 }

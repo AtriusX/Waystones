@@ -10,14 +10,14 @@ import io.papermc.paper.command.brigadier.argument.resolvers.selector.PlayerSele
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.koin.core.annotation.Single
-import xyz.atrius.waystones.data.config.Localization
+import xyz.atrius.waystones.manager.LocalizationManager
 import xyz.atrius.waystones.provider.DefaultKeyProvider
 import xyz.atrius.waystones.utility.getArgument
 import xyz.atrius.waystones.utility.message
 
 @Single
 class KeyCommand(
-    private val localization: Localization,
+    private val localization: LocalizationManager,
     private val defaultKeyProvider: DefaultKeyProvider,
 ) : WaystoneSubcommand {
 
