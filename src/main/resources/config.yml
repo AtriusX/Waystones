@@ -1,12 +1,12 @@
 fallback-locale: en
-wait-time: 60
+wait-time: 3.0
 damage-stops-warping: true
 limit-distance: true
 base-distance: 100
 max-boost: 150
 max-warp-size: 50
 jump-worlds: true
-world-ratio: 8
+default-world-ratio: 1.0
 warp-animations: true
 single-use: false
 require-power: INTER_DIMENSION

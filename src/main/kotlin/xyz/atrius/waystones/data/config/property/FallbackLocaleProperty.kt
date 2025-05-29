@@ -16,5 +16,6 @@ class FallbackLocaleProperty(
     default = Locale.ENGLISH,
     parser = LimitedArgumentType<Locale>(supportedLocales.toTypedArray()),
     propertyType = Locale::class,
-    format = { it.displayName.sanitizedStringFormat() }
+    format = { it.displayName.sanitizedStringFormat() },
+    serialize = { it.toLanguageTag() }
 )

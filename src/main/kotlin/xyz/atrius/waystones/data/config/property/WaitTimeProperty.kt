@@ -10,6 +10,6 @@ class WaitTimeProperty : ConfigProperty<Double>(
     default = 3.0,
     parser = DoubleArgumentType.doubleArg(0.0),
     propertyType = Double::class,
-    format = { "%.2f second(s)".format(it) },
+    format = { "%.1f second(s)".format(it) },
     readProcess = { it * 20.0 },
 )

@@ -6,9 +6,9 @@ import xyz.atrius.waystones.data.config.ConfigProperty
 
 @Single
 class WorldRatioProperty : ConfigProperty<Double>(
-    property = "world-ratio",
-    default = 8.0,
-    parser = DoubleArgumentType.doubleArg(1.0),
+    property = "default-world-ratio",
+    default = 1.0,
+    parser = DoubleArgumentType.doubleArg(0.0),
     propertyType = Double::class,
     format = { "$it Block(s)" },
 )

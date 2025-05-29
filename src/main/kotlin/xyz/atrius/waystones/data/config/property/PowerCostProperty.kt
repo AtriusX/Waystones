@@ -10,5 +10,5 @@ class PowerCostProperty : ConfigProperty<Int>(
     default = 1,
     parser = IntegerArgumentType.integer(1, 4),
     propertyType = Int::class,
-    format = { "$it Points" }
+    format = { "$it Point(s)" }
 )
