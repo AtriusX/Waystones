@@ -7,5 +7,8 @@ interface SubCommand {
 
     val name: String
 
+    val basePermission: String?
+        get() = null
+
     fun build(base: ArgumentBuilder<CommandSourceStack, *>): ArgumentBuilder<CommandSourceStack, *>
 }

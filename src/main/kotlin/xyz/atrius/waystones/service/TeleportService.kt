@@ -10,7 +10,7 @@ import xyz.atrius.waystones.animation.AnimationManager
 import xyz.atrius.waystones.animation.effect.SimpleTeleportEffect
 import xyz.atrius.waystones.data.config.property.PortalSicknessChanceProperty
 import xyz.atrius.waystones.data.config.property.PortalSicknessDamageProperty
-import xyz.atrius.waystones.data.config.property.PortalSicknessProperty
+import xyz.atrius.waystones.data.config.property.EnablePortalSicknessProperty
 import xyz.atrius.waystones.data.config.property.PortalSicknessWarpingProperty
 import xyz.atrius.waystones.data.config.property.PowerCostProperty
 import xyz.atrius.waystones.data.config.property.WaitTimeProperty
@@ -34,7 +34,7 @@ class TeleportService(
     private val localization: LocalizationManager,
     private val warpAnimations: WarpAnimationsProperty,
     private val waitTime: WaitTimeProperty,
-    private val portalSickness: PortalSicknessProperty,
+    private val portalSickness: EnablePortalSicknessProperty,
     private val portalSicknessWarping: PortalSicknessWarpingProperty,
     private val portalSicknessDamage: PortalSicknessDamageProperty,
     private val portalSicknessChance: PortalSicknessChanceProperty,

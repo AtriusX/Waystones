@@ -11,7 +11,6 @@ open class ListConfigProperty<T : Any>(
     override val default: List<T>,
     override val parser: ArgumentType<T>,
     override val propertyType: KClass<out T>,
-    override val onUpdate: () -> Unit = {},
     val sizes: Set<Int>,
 ) : ConfigPropertyBase<T, List<T>, List<Any?>> {
     final override var value: List<T> = default
@@ -27,10 +26,8 @@ open class ListConfigProperty<T : Any>(
                 .map {
                     parser.parse(StringReader(it.toString()))
                 }
-
-            onUpdate()
         } catch (e: CommandSyntaxException) {
-            logger.warn("Failed to parse update value: ${e.message}")
+            logger.warn("Failed to parse update value for property '$property': ${e.message}")
             return false
         }
 

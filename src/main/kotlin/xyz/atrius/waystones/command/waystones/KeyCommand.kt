@@ -23,9 +23,10 @@ class KeyCommand(
 
     override val name: String = "key"
 
+    override val basePermission: String = "waystones.getkey.self"
+
     override fun build(base: ArgumentBuilder<CommandSourceStack, *>): ArgumentBuilder<CommandSourceStack, *> {
         val base = base
-            .requires { it.sender.hasPermission("waystones.getkey.self") }
             .requires { it.sender is Player }
             .executes {
                 val sender = it.source.sender as Player

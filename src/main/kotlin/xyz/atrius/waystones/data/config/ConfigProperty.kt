@@ -11,7 +11,6 @@ open class ConfigProperty<T : Any>(
     override val default: T,
     override val parser: ArgumentType<T>,
     override val propertyType: KClass<out T>,
-    override val onUpdate: () -> Unit = {}
 ) : ConfigPropertyBase<T, T, Any?> {
     final override var value: T = default
         private set
@@ -20,9 +19,8 @@ open class ConfigProperty<T : Any>(
         try {
             this.value = parser
                 .parse(StringReader(value.toString()))
-            onUpdate()
         } catch (e: CommandSyntaxException) {
-            logger.error("Failed to parse updated value, ${e.message}")
+            logger.warn("Failed to parse update value for property '$property': ${e.message}")
             return false
         }
 

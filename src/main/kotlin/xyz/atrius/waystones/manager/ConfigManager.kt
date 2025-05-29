@@ -61,9 +61,7 @@ class ConfigManager(
         return true
     }
 
-    fun reload() {
-        plugin.reloadConfig()
-
+    fun load() {
         for ((prop, option) in options) {
             when (option) {
                 is ConfigProperty<*> -> {
@@ -79,6 +77,11 @@ class ConfigManager(
                 }
             }
         }
+    }
+
+    fun reload() {
+        plugin.reloadConfig()
+        load()
     }
 
     operator fun iterator(): Iterator<Map.Entry<String, ConfigPropertyBase<*, *, *>>> =

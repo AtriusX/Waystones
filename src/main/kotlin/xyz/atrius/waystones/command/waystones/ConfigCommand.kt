@@ -10,6 +10,7 @@ import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.event.HoverEvent
 import net.kyori.adventure.text.format.TextColor
 import org.bukkit.command.CommandSender
+import org.bukkit.entity.Player
 import org.koin.core.annotation.Single
 import xyz.atrius.waystones.data.config.ConfigProperty
 import xyz.atrius.waystones.data.config.ConfigPropertyBase
@@ -25,6 +26,8 @@ class ConfigCommand(
     private val localization: LocalizationManager,
 ) : WaystoneSubcommand {
     override val name: String = "config"
+
+    override val basePermission: String = "waystones.config"
 
     override fun build(base: ArgumentBuilder<CommandSourceStack, *>): ArgumentBuilder<CommandSourceStack, *> {
         val configCommand = base
@@ -108,14 +111,16 @@ class ConfigCommand(
         }
 
     private fun listOptions(sender: CommandSender) {
-        sender.message("&7--------- &dWaystones Config &7----------&r")
+        val player = sender as? Player
+
+        sender.message(localization["plugin-header"].format(player))
         // Display each config property
         for ((prop, value) in configManager) {
             val component = getConfigPropertyMessage(prop, value)
             sender.sendMessage(component)
         }
 
-        sender.message("&7-----------------------------------")
+        sender.message(localization["plugin-footer"].format(player))
     }
 
     private fun getConfigPropertyMessage(

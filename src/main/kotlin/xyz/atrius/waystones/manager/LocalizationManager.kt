@@ -5,7 +5,7 @@ import org.bukkit.configuration.file.YamlConfiguration
 import org.koin.core.annotation.Named
 import org.koin.core.annotation.Single
 import org.slf4j.LoggerFactory
-import xyz.atrius.waystones.data.config.property.LocaleProperty
+import xyz.atrius.waystones.data.config.property.FallbackLocaleProperty
 import xyz.atrius.waystones.internal.KotlinPlugin
 import java.io.File
 import java.text.MessageFormat
@@ -18,7 +18,7 @@ class LocalizationManager(
     private val supportedLocales: Set<Locale>,
     @Named("defaultPluginLocale")
     private val defaultPluginLocale: Locale,
-    private val preferredPluginLocale: LocaleProperty,
+    private val preferredPluginLocale: FallbackLocaleProperty,
 ) {
     private val configs: Map<Locale, LocaleConfig> = supportedLocales
         .associateWith { LocaleConfig(plugin, it) }
@@ -35,6 +35,9 @@ class LocalizationManager(
             defaultLocale = defaultPluginLocale,
         )
     }
+
+    operator fun contains(key: String): Boolean = configs
+        .any { (_, v) -> v.getTemplate(key) != null }
 
     private data class LocaleConfig(
         private val plugin: KotlinPlugin,

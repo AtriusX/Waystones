@@ -7,6 +7,7 @@ import xyz.atrius.waystones.data.config.property.EnableKeyItemsProperty
 import xyz.atrius.waystones.internal.PluginInitializer
 import xyz.atrius.waystones.manager.AdvancementManager
 import xyz.atrius.waystones.manager.CommandManager
+import xyz.atrius.waystones.manager.ConfigManager
 import xyz.atrius.waystones.manager.CraftingRecipeManager
 import xyz.atrius.waystones.manager.EventManager
 import xyz.atrius.waystones.service.WarpNameService
@@ -14,6 +15,7 @@ import xyz.atrius.waystones.service.WorldRatioService
 
 @Single
 class WaystonesInitializer(
+    private val configManager: ConfigManager,
     private val warpNameService: WarpNameService,
     private val worldRatioService: WorldRatioService,
     private val eventManager: EventManager,
@@ -25,6 +27,7 @@ class WaystonesInitializer(
 ) : PluginInitializer {
 
     override fun enable() {
+        configManager.load()
         // Load services
         warpNameService.load()
         worldRatioService.load()

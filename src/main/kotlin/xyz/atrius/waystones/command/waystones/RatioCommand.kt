@@ -8,6 +8,7 @@ import io.papermc.paper.command.brigadier.CommandSourceStack
 import io.papermc.paper.command.brigadier.Commands.argument
 import io.papermc.paper.command.brigadier.Commands.literal
 import org.bukkit.Bukkit
+import org.bukkit.entity.Player
 import org.koin.core.annotation.Single
 import xyz.atrius.waystones.command.resolver.LimitedArgumentType
 import xyz.atrius.waystones.manager.LocalizationManager
@@ -23,19 +24,21 @@ class RatioCommand(
 
     override val name: String = "ratio"
 
+    override val basePermission: String = "waystones.config"
+
     override fun build(base: ArgumentBuilder<CommandSourceStack, *>): ArgumentBuilder<CommandSourceStack, *> {
         val base = base
-            .requires { it.sender.hasPermission("waystones.config") }
             .executes {
                 val sender = it.source.sender
+                val player = sender as? Player
 
-                sender.message("&7--------- &dWaystones Ratios &7----------&r")
+                sender.message(localization["plugin-header"].format(player))
                 // Display each config property
                 for ((item, ratio) in worldRatioService) {
                     sender.message("&f$item&f: &b$ratio")
                 }
 
-                sender.message("&7-----------------------------------")
+                sender.message(localization["plugin-footer"].format(player))
                 Command.SINGLE_SUCCESS
             }
 

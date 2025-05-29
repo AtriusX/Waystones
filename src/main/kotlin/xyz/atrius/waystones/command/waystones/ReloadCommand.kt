@@ -19,6 +19,8 @@ class ReloadCommand(
 
     override val name: String = "reload"
 
+    override val basePermission: String = "waystones.reload"
+
     override fun build(base: ArgumentBuilder<CommandSourceStack, *>): ArgumentBuilder<CommandSourceStack, *> {
         val base = base
             .requires { it.sender.hasPermission("waystones.reload") }

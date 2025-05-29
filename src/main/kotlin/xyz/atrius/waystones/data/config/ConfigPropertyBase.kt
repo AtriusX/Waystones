@@ -13,8 +13,6 @@ sealed interface ConfigPropertyBase<T : Any, D : Any, U> {
 
     val propertyType: KClass<out T>
 
-    val onUpdate: () -> Unit
-
     val value: D
 
     val javaClass: Class<out T>

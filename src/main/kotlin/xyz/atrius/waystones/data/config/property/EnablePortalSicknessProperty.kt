@@ -5,8 +5,8 @@ import org.koin.core.annotation.Single
 import xyz.atrius.waystones.data.config.ConfigProperty
 
 @Single
-class PortalSicknessProperty : ConfigProperty<Boolean>(
-    property = "portal-sickness",
+class EnablePortalSicknessProperty : ConfigProperty<Boolean>(
+    property = "enable-portal-sickness",
     default = true,
     parser = BoolArgumentType.bool(),
     propertyType = Boolean::class,
