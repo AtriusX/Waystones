@@ -47,11 +47,11 @@ class WaystoneService(
 
     fun process(player: Player, block: Block, keyLocation: Location): Either<WaystoneServiceError, Warp> = either {
         // Ensure the warp is valid to use
-        val distance = validateWarp(player, block).bind()
         val name = warpNameService[keyLocation]
             ?.format(player)
             ?: localization["unnamed-waystone"]
                 .format(player)
+        val distance = validateWarp(player, block, name).bind()
         // Determine how the waystone requires power
         val usePower = when (requirePower.value) {
             Power.ALL -> true
@@ -72,16 +72,16 @@ class WaystoneService(
         return baseDistance.value + range
     }
 
-    private fun validateWarp(player: Player, block: Block): Either<WaystoneServiceError, Double> = either {
+    private fun validateWarp(player: Player, block: Block, name: String): Either<WaystoneServiceError, Double> = either {
         ensure(isWaystone(block)) {
-            WaystoneServiceError.WaystoneSevered(localization)
+            WaystoneServiceError.WaystoneSevered(localization, name)
         }
 
         val state = when (getWarpState(player, block)) {
-            null -> WaystoneServiceError.WaystoneSevered(localization)
-            is WaystoneStatus.Inhibited -> WaystoneServiceError.WaystoneInhibited(localization)
-            is WaystoneStatus.Unpowered -> WaystoneServiceError.WaystoneUnpowered(localization)
-            is WaystoneStatus.Obstructed -> WaystoneServiceError.WaystoneObstructed(localization)
+            null -> WaystoneServiceError.WaystoneSevered(localization, name)
+            is WaystoneStatus.Inhibited -> WaystoneServiceError.WaystoneInhibited(localization, name)
+            is WaystoneStatus.Unpowered -> WaystoneServiceError.WaystoneUnpowered(localization, name)
+            is WaystoneStatus.Obstructed -> WaystoneServiceError.WaystoneObstructed(localization, name)
             else -> null
         }
 
@@ -216,20 +216,20 @@ class WaystoneService(
 
     sealed class WaystoneServiceError(val message: () -> LocalizedString?) {
 
-        class WaystoneSevered(localization: LocalizationManager) :
-            WaystoneServiceError({ localization["warp-error"] })
+        class WaystoneSevered(localization: LocalizationManager, name: String) :
+            WaystoneServiceError({ localization["warp-error", name] })
 
-        class WaystoneInhibited(localization: LocalizationManager) :
-            WaystoneServiceError({ localization["warp-error-inhibited"] })
+        class WaystoneInhibited(localization: LocalizationManager, name: String) :
+            WaystoneServiceError({ localization["warp-error-inhibited", name] })
 
-        class WaystoneUnpowered(localization: LocalizationManager) :
-            WaystoneServiceError({ localization["warp-error-unpowered"] })
+        class WaystoneUnpowered(localization: LocalizationManager, name: String) :
+            WaystoneServiceError({ localization["warp-error-unpowered", name] })
 
-        class WaystoneObstructed(localization: LocalizationManager) :
-            WaystoneServiceError({ localization["warp-error-obstructed"] })
+        class WaystoneObstructed(localization: LocalizationManager, name: String) :
+            WaystoneServiceError({ localization["warp-error-obstructed", name] })
 
         class WaystoneWorldJumpDisabled(localization: LocalizationManager) :
-            WaystoneServiceError({ localization["warp-world-jump-disabled"] })
+            WaystoneServiceError({ localization["world-jump-disabled"] })
 
         class WaystoneOutOfRange(localization: LocalizationManager, name: String?, distance: Double, range: Double) :
             WaystoneServiceError({ localization["warp-out-of-range", name, distance - range] })

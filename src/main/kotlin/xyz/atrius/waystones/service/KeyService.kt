@@ -49,15 +49,13 @@ class KeyService(
 
     private fun validateKey(player: Player, key: ItemStack): Either<KeyServiceError, Location> = either {
         val meta = key.itemMeta as? CompassMeta
-        val lodestone = ensureNotNull(meta?.lodestone) {
-            KeyServiceError.Ignore
-        }
+        val lodestone = meta?.lodestone
 
         ensure(isWarpKey(key)) {
             KeyServiceError.Ignore
         }
 
-        ensure(meta.hasLodestone() && meta.isLodestoneTracked) {
+        ensure(meta?.hasLodestone() == true || meta?.isLodestoneTracked == false) {
             KeyServiceError.Severed(localization)
         }
 
@@ -65,7 +63,9 @@ class KeyService(
             KeyServiceError.Blocked(localization)
         }
 
-        lodestone
+        ensureNotNull(lodestone) {
+            KeyServiceError.Ignore
+        }
     }
 
     data class Key(
