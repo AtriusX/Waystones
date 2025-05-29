@@ -17,6 +17,8 @@ sealed interface ConfigPropertyBase<T : Any, D : Any, U> {
 
     val readProcess: (D) -> D
 
+    val serialize: (D) -> Any
+
     val javaClass: Class<out T>
         get() = propertyType.java
 
@@ -25,6 +27,8 @@ sealed interface ConfigPropertyBase<T : Any, D : Any, U> {
     fun update(value: U): Boolean
 
     fun format(): String
+
+    fun serialize(): Any = serialize(value())
 
     fun getLocalizedInfoKey(): String {
         return "property-$property-info"

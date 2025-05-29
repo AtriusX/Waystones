@@ -5,7 +5,6 @@ import xyz.atrius.waystones.data.config.ConfigProperty
 import xyz.atrius.waystones.data.config.ConfigPropertyBase
 import xyz.atrius.waystones.data.config.ListConfigProperty
 import xyz.atrius.waystones.internal.KotlinPlugin
-import java.util.Locale
 
 @Single
 class ConfigManager(
@@ -52,11 +51,12 @@ class ConfigManager(
         property.update(value)
         plugin.config.set(
             property.property,
-            when (value) {
-                is Enum<*> -> value.name
-                is Locale -> value.toString()
-                else -> value
-            }
+            property.serialize(),
+//            when (value) {
+//                is Enum<*> -> value.name
+//                is Locale -> value.toString()
+//                else -> value
+//            }
         )
 
         plugin.saveConfig()

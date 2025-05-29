@@ -46,9 +46,9 @@ class TeleportService(
 
     fun queueEvent(warp: WaystoneService.Warp, key: KeyService.Key, onComplete: () -> Unit = {}) {
         val player = warp.player
-        // Cancel any previous queues for this player
-        if (contains(player)) {
-            cancel(player)
+        // Prevent spam queueing
+        if (player in queuedTeleports) {
+            return
         }
         // Queue the task and store the task id for if we need to cancel sooner
         queuedTeleports[player] = animationManager.register(

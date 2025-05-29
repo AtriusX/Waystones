@@ -1,14 +1,15 @@
 package xyz.atrius.waystones.data.config.property
 
-import com.mojang.brigadier.arguments.IntegerArgumentType
+import com.mojang.brigadier.arguments.DoubleArgumentType
 import org.koin.core.annotation.Single
 import xyz.atrius.waystones.data.config.ConfigProperty
 
 @Single
-class WaitTimeProperty : ConfigProperty<Int>(
+class WaitTimeProperty : ConfigProperty<Double>(
     property = "wait-time",
-    default = 60,
-    parser = IntegerArgumentType.integer(0),
-    propertyType = Int::class,
-    format = { "${it / 20.0} second(s)" }
+    default = 3.0,
+    parser = DoubleArgumentType.doubleArg(0.0),
+    propertyType = Double::class,
+    format = { "%.2f second(s)".format(it) },
+    readProcess = { it * 20.0 },
 )

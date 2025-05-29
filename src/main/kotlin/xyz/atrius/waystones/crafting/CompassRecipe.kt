@@ -12,17 +12,17 @@ import xyz.atrius.waystones.utility.toKey
 
 @Single
 class CompassRecipe(
-    keyRecipe: KeyRecipeProperty,
     plugin: KotlinPlugin,
     defaultKeyProvider: DefaultKeyProvider,
+    private val keyRecipe: KeyRecipeProperty,
 ) : CraftingRecipe("is_warp_key".toKey(plugin), defaultKeyProvider.getKey()) {
-    private val waystoneKeyRecipe = keyRecipe.value()
 
-    override val recipe = run {
+    override fun recipe(): String {
+        val waystoneKeyRecipe = keyRecipe.value()
         // Pull recipe from config and determine grid size (list can be size 1, 4, or 9)
         val size = sqrt(waystoneKeyRecipe.size)
 
-        waystoneKeyRecipe
+        return waystoneKeyRecipe
             // Map each item to it's hash char
             .map { it.hashChar() }
             // Chunk the list by its square size
@@ -31,9 +31,9 @@ class CompassRecipe(
             .joinToString("\n", transform = List<Char>::glue)
     }
 
-    override val items = hashMapOf<Char, Material>().apply {
+    override fun items(): HashMap<Char, Material> = hashMapOf<Char, Material>().apply {
         // For each item in the recipe, map it's material to it's hashcode
-        for (item in waystoneKeyRecipe.toHashSet()) {
+        for (item in keyRecipe.value().toHashSet()) {
             if (item.name != "AIR" || item.isEmpty()) {
                 this[item.hashChar()] = item
             }

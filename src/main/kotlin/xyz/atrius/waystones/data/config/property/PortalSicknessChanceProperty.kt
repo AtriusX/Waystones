@@ -10,6 +10,6 @@ class PortalSicknessChanceProperty : ConfigProperty<Double>(
     default = 5.0,
     parser = DoubleArgumentType.doubleArg(0.0, 100.0),
     propertyType = Double::class,
-    format = { "$it%" },
+    format = { "%.1f%%".format(it) },
     readProcess = { it / 100 }
 )

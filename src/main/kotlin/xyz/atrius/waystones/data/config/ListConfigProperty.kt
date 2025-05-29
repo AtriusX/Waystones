@@ -13,6 +13,7 @@ open class ListConfigProperty<T : Any>(
     override val propertyType: KClass<out T>,
     override val format: (List<T>) -> String = { it.joinToString(", ") },
     override val readProcess: (List<T>) -> List<T> = { it },
+    override val serialize: (List<T>) -> Any = { it },
     val sizes: Set<Int>,
 ) : ConfigPropertyBase<T, List<T>, List<Any?>> {
     private var value: List<T> = default

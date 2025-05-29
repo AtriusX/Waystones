@@ -13,11 +13,14 @@ open class ConfigProperty<T : Any>(
     override val propertyType: KClass<out T>,
     override val format: (T) -> String = { it.toString() },
     override val readProcess: (T) -> T = { it },
+    override val serialize: (T) -> Any = { it },
 ) : ConfigPropertyBase<T, T, Any?> {
     private var value: T = default
 
     override fun value(): T =
         readProcess(value)
+
+
 
     override fun format(): String =
         format(value)
