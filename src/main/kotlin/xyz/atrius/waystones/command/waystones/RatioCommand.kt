@@ -42,9 +42,13 @@ class RatioCommand(
 
                     val worldName = world.name.sanitizedStringFormat()
                     val default = worldRatioService.isDefault(world)
+                    val isDisabled = when (ratio) {
+                        0.0 -> 0
+                        else -> 1
+                    }
                     val message = when (default) {
                         true -> localization["command-ratio-list-default", worldName]
-                        else -> localization["command-ratio-list-ratio", worldName, ratio]
+                        else -> localization["command-ratio-list-ratio", worldName, isDisabled, ratio]
                     }
 
                     sender.message(message)
