@@ -53,6 +53,7 @@ class TeleportService(
         // Queue the task and store the task id for if we need to cancel sooner
         queuedTeleports[player] = animationManager.register(
             SimpleTeleportEffect(warp, warpAnimations, waitTime, localization),
+            warp.player,
             warp.warpLocation
         ) {
             queuedTeleports.remove(player)
@@ -109,7 +110,7 @@ class TeleportService(
             .remove(player)
             ?: -1
 
-        animationManager.cancel(id)
+        animationManager.cancel(id, player)
     }
 
     operator fun contains(player: Player) =
