@@ -15,6 +15,7 @@ import xyz.atrius.waystones.manager.LocalizationManager
 import xyz.atrius.waystones.service.WorldRatioService
 import xyz.atrius.waystones.utility.getArgument
 import xyz.atrius.waystones.utility.message
+import xyz.atrius.waystones.utility.sanitizedStringFormat
 
 @Single
 class RatioCommand(
@@ -34,8 +35,19 @@ class RatioCommand(
 
                 sender.message(localization["plugin-header"].format(player))
                 // Display each config property
-                for ((item, ratio) in worldRatioService) {
-                    sender.message("&f$item&f: &b$ratio")
+                for ((world, ratio) in worldRatioService) {
+                    if (ratio < 0) {
+                        continue
+                    }
+
+                    val worldName = world.name.sanitizedStringFormat()
+                    val default = worldRatioService.isDefault(world)
+                    val message = when (default) {
+                        true -> localization["command-ratio-list-default", worldName]
+                        else -> localization["command-ratio-list-ratio", worldName, ratio]
+                    }
+
+                    sender.message(message)
                 }
 
                 sender.message(localization["plugin-footer"].format(player))
@@ -43,6 +55,7 @@ class RatioCommand(
             }
 
         return base
+            .then(setDefault())
             .then(setCommand())
             .then(removeCommand())
     }
@@ -53,7 +66,7 @@ class RatioCommand(
                 val world = it.getArgument("world", String::class.java)
                 val ratio = it.getArgument("ratio", Double::class.java)
                 val added = worldRatioService
-                    .add(world, ratio.toDouble())
+                    .add(Bukkit.getWorld(world), ratio.toDouble())
                 val message = when (added) {
                     true -> localization["command-ratio-added-successfully", 0, world]
                     else -> localization["command-ratio-addition-failed", world]
@@ -74,7 +87,7 @@ class RatioCommand(
             .executes {
                 val world = it.getArgument<String>("world")
                 val removed = worldRatioService
-                    .remove(world)
+                    .remove(Bukkit.getWorld(world))
                 val message = when (removed) {
                     true -> localization["command-ratio-removed-successfully", 0, world]
                     else -> localization["command-ratio-removal-failed", world]
@@ -85,6 +98,22 @@ class RatioCommand(
             }
 
         return literal("remove")
+            .then(world)
+    }
+
+    private fun setDefault(): LiteralArgumentBuilder<CommandSourceStack> {
+        val world = argument("world", LimitedArgumentType(worlds()))
+            .executes {
+                val world = it.getArgument<String>("world")
+
+                worldRatioService.default(Bukkit.getWorld(world))
+                val message = localization["command-ratio-default-set", world]
+
+                it.source.sender.message(message)
+                Command.SINGLE_SUCCESS
+            }
+
+        return literal("default")
             .then(world)
     }
 

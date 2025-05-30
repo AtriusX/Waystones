@@ -1,5 +1,6 @@
 package xyz.atrius.waystones.event
 
+import org.bukkit.Sound
 import org.bukkit.entity.Arrow
 import org.bukkit.entity.Player
 import org.bukkit.entity.Skeleton
@@ -23,6 +24,7 @@ import xyz.atrius.waystones.service.WaystoneService
 import xyz.atrius.waystones.utility.cancel
 import xyz.atrius.waystones.utility.foldResult
 import xyz.atrius.waystones.utility.hasMovedBlock
+import xyz.atrius.waystones.utility.playSound
 import xyz.atrius.waystones.utility.sendActionError
 
 @Single
@@ -54,7 +56,10 @@ class WarpEvent(
         // Handle key actions and terminate if handler fails
         val warp = waystoneService
             .process(player, key.location.block, key.location)
-            .foldResult { return player.sendActionError(it.message()) }
+            .foldResult {
+                player.location.playSound(Sound.ENTITY_ENDER_EYE_DEATH, 20f, 0f)
+                return player.sendActionError(it.message())
+            }
 
         teleportService.queueEvent(warp, key) {
             advancementManager.awardAdvancement(player, secretTunnelAdvancement)

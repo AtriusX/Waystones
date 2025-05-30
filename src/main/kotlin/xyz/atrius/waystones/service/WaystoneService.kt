@@ -19,7 +19,6 @@ import xyz.atrius.waystones.data.config.property.JumpWorldsProperty
 import xyz.atrius.waystones.data.config.property.MaxWarpSizeProperty
 import xyz.atrius.waystones.data.config.property.PowerCostProperty
 import xyz.atrius.waystones.data.config.property.RequirePowerProperty
-import xyz.atrius.waystones.data.config.property.WorldRatioProperty
 import xyz.atrius.waystones.data.config.property.type.Power
 import xyz.atrius.waystones.manager.AdvancementManager
 import xyz.atrius.waystones.manager.LocalizationManager
@@ -35,7 +34,6 @@ class WaystoneService(
     private val jumpWorlds: JumpWorldsProperty,
     private val maxWarpSize: MaxWarpSizeProperty,
     private val baseDistance: BaseDistanceProperty,
-    private val worldRatio: WorldRatioProperty,
     private val requirePower: RequirePowerProperty,
     private val powerCost: PowerCostProperty,
     private val boostBlockService: BoostBlockService,
@@ -43,6 +41,7 @@ class WaystoneService(
     private val advancementManager: AdvancementManager,
     private val cleanEnergyAdvancement: CleanEnergyAdvancement,
     private val gigawarpsAdvancement: GigawarpsAdvancement,
+    private val worldRatioService: WorldRatioService,
 ) {
 
     fun process(player: Player, block: Block, keyLocation: Location): Either<WaystoneServiceError, Warp> = either {
@@ -97,12 +96,11 @@ class WaystoneService(
             }
         }
 
-        val ratio = when (interDimension) {
-            true -> 1.0
-            else -> worldRatio.value()
-        }
+        val ratio = worldRatioService.getRatio(player.world, block.world)
+            ?: raise(WaystoneServiceError.WaystoneWorldJumpDisabled(localization))
+
         val range = range(block.location) / ratio
-        val distance = calculateDistance(player.location, block.location, ratio)
+        val distance = calculateDistance(player.location, block.location, 1.0)
         val name = warpNameService[block.location]
             ?.format(player)
             ?: localization["unnamed-waystone"]
@@ -110,7 +108,7 @@ class WaystoneService(
 
         if (!hasInfinitePower(block)) {
             ensure(distance <= range) {
-                WaystoneServiceError.WaystoneOutOfRange(localization, name, distance, range)
+                WaystoneServiceError.WaystoneOutOfRange(localization, name, distance, range, block.location)
             }
         }
 
@@ -231,8 +229,8 @@ class WaystoneService(
         class WaystoneWorldJumpDisabled(localization: LocalizationManager) :
             WaystoneServiceError({ localization["world-jump-disabled"] })
 
-        class WaystoneOutOfRange(localization: LocalizationManager, name: String?, distance: Double, range: Double) :
-            WaystoneServiceError({ localization["warp-out-of-range", name, distance - range] })
+        class WaystoneOutOfRange(localization: LocalizationManager, name: String?, distance: Double, range: Double, location: Location) :
+            WaystoneServiceError({ localization["warp-out-of-range", name, distance - range, range, location.x, location.z] })
     }
 
     sealed class WaystoneStatus(val message: () -> LocalizedString?) {

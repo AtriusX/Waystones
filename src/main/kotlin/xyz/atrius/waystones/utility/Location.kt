@@ -3,6 +3,7 @@ package xyz.atrius.waystones.utility
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.Sound
+import org.bukkit.SoundCategory
 import org.bukkit.World
 import org.bukkit.util.Vector
 import xyz.atrius.waystones.data.TeleportType
@@ -78,4 +79,4 @@ fun Location.sameDimension(world: World?) =
     world == this.world
 
 fun Location.playSound(sound: Sound, volume: Float = 1f, pitch: Float = 1f) = Bukkit.getOnlinePlayers()
-    .forEach { if (it.world == world) it.playSound(this, sound, volume, pitch) }
+    .forEach { if (it.world == world) it.playSound(this, sound, SoundCategory.MASTER, volume, pitch, 0) }
