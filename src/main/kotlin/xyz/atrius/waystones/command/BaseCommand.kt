@@ -20,11 +20,14 @@ abstract class BaseCommand<S : SubCommand>(
         val base = literal(name)
 
         for (command in subCommands) {
-            base.then(
-                command.build(
-                    literal(command.name)
-                )
-            )
+            val subCommand = command
+                .build(literal(command.name))
+
+            command.basePermission?.let { permission ->
+                subCommand.requires { it.sender.hasPermission(permission) }
+            }
+
+            base.then(subCommand)
         }
 
         return base
