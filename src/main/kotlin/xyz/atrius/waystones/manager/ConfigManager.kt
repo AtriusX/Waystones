@@ -52,11 +52,6 @@ class ConfigManager(
         plugin.config.set(
             property.property,
             property.serialize(),
-//            when (value) {
-//                is Enum<*> -> value.name
-//                is Locale -> value.toString()
-//                else -> value
-//            }
         )
 
         plugin.saveConfig()

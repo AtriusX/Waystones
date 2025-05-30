@@ -28,8 +28,7 @@ sealed interface ConfigPropertyBase<T : Any, D : Any, U> {
 
     fun format(): String
 
-    fun serialize(): Any = serialize(value())
-
+    fun serialize(): Any
     fun getLocalizedInfoKey(): String {
         return "property-$property-info"
     }

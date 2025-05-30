@@ -24,6 +24,9 @@ open class ListConfigProperty<T : Any>(
     override fun format(): String =
         format(value)
 
+    override fun serialize(): Any =
+        serialize(value)
+
     override fun update(value: List<Any?>): Boolean {
         if (value.size !in sizes) {
             return false

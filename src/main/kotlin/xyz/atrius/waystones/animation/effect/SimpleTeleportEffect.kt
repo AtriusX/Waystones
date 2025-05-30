@@ -110,6 +110,9 @@ class SimpleTeleportEffect(
     }
 
     override fun cancel() {
-        warp.player.hideBossBar(bar)
+        val player = warp.player
+        player.hideBossBar(bar)
+        player.stopSound(Sound.BLOCK_PORTAL_AMBIENT)
+        player.location.playSound(Sound.BLOCK_BEACON_DEACTIVATE, 20f, 0f)
     }
 }

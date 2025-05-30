@@ -20,10 +20,11 @@ open class ConfigProperty<T : Any>(
     override fun value(): T =
         readProcess(value)
 
-
-
     override fun format(): String =
         format(value)
+
+    override fun serialize(): Any =
+        serialize(value)
 
     override fun update(value: Any?): Boolean {
         try {
