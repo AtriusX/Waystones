@@ -30,7 +30,6 @@ open class ConfigProperty<T : Any>(
         try {
             this.value = parser
                 .parse(StringReader(value.toString()))
-
         } catch (e: CommandSyntaxException) {
             logger.warn("Failed to parse update value for property '$property': ${e.message}")
 

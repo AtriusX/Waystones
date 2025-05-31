@@ -56,6 +56,7 @@ class WaystoneService(
             Power.ALL -> true
             Power.INTER_DIMENSION -> !hasInfinitePower(block) &&
                 !player.location.sameDimension(block.world)
+
             Power.NONE -> false
         }
 
@@ -71,7 +72,11 @@ class WaystoneService(
         return baseDistance.value() + range
     }
 
-    private fun validateWarp(player: Player, block: Block, name: String): Either<WaystoneServiceError, Double> = either {
+    private fun validateWarp(
+        player: Player,
+        block: Block,
+        name: String,
+    ): Either<WaystoneServiceError, Double> = either {
         ensure(isWaystone(block)) {
             WaystoneServiceError.WaystoneSevered(localization, name)
         }
@@ -229,8 +234,15 @@ class WaystoneService(
         class WaystoneWorldJumpDisabled(localization: LocalizationManager) :
             WaystoneServiceError({ localization["world-jump-disabled"] })
 
-        class WaystoneOutOfRange(localization: LocalizationManager, name: String?, distance: Double, range: Double, location: Location) :
-            WaystoneServiceError({ localization["warp-out-of-range", name, distance - range, range, location.x, location.z] })
+        class WaystoneOutOfRange(
+            localization: LocalizationManager,
+            name: String?,
+            distance: Double,
+            range: Double,
+            location: Location
+        ) : WaystoneServiceError(
+            { localization["warp-out-of-range", name, distance - range, range, location.x, location.z] }
+        )
     }
 
     sealed class WaystoneStatus(val message: () -> LocalizedString?) {
