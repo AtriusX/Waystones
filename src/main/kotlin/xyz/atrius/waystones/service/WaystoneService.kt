@@ -16,6 +16,7 @@ import xyz.atrius.waystones.advancement.GigawarpsAdvancement
 import xyz.atrius.waystones.data.FloodFill
 import xyz.atrius.waystones.data.config.property.BaseDistanceProperty
 import xyz.atrius.waystones.data.config.property.JumpWorldsProperty
+import xyz.atrius.waystones.data.config.property.LimitDistanceProperty
 import xyz.atrius.waystones.data.config.property.MaxWarpSizeProperty
 import xyz.atrius.waystones.data.config.property.PowerCostProperty
 import xyz.atrius.waystones.data.config.property.RequirePowerProperty
@@ -42,6 +43,7 @@ class WaystoneService(
     private val cleanEnergyAdvancement: CleanEnergyAdvancement,
     private val gigawarpsAdvancement: GigawarpsAdvancement,
     private val worldRatioService: WorldRatioService,
+    private val limitDistance: LimitDistanceProperty,
 ) {
 
     fun process(player: Player, block: Block, keyLocation: Location): Either<WaystoneServiceError, Warp> = either {
@@ -111,7 +113,7 @@ class WaystoneService(
             ?: localization["unnamed-waystone"]
                 .format(player)
 
-        if (!hasInfinitePower(block)) {
+        if (!hasInfinitePower(block) && limitDistance.value()) {
             ensure(distance <= range) {
                 WaystoneServiceError.WaystoneOutOfRange(localization, name, distance, range, block.location)
             }
@@ -210,7 +212,7 @@ class WaystoneService(
             return WaystoneStatus.Obstructed(localization)
         }
 
-        if (hasInfinitePower(block)) {
+        if (hasInfinitePower(block) || !limitDistance.value()) {
             return WaystoneStatus.Infinite(localization)
         }
 
@@ -248,18 +250,18 @@ class WaystoneService(
     sealed class WaystoneStatus(val message: () -> LocalizedString?) {
 
         class Inhibited(localization: LocalizationManager) :
-            WaystoneStatus({ localization["waystone-status-inhibited"] })
+            WaystoneStatus({ localization["waystone-status", -3] })
 
         class Unpowered(localization: LocalizationManager) :
-            WaystoneStatus({ localization["waystone-status-unpowered"] })
+            WaystoneStatus({ localization["waystone-status", -2] })
 
         class Obstructed(localization: LocalizationManager) :
-            WaystoneStatus({ localization["waystone-status-obstructed"] })
+            WaystoneStatus({ localization["waystone-status", -1] })
 
         class Active(localization: LocalizationManager, range: Int) :
-            WaystoneStatus({ localization["waystone-status-active", range] })
+            WaystoneStatus({ localization["waystone-status", 0, range] })
 
         class Infinite(localization: LocalizationManager) :
-            WaystoneStatus({ localization["waystone-status-infinite", -1] })
+            WaystoneStatus({ localization["waystone-status", 1] })
     }
 }
