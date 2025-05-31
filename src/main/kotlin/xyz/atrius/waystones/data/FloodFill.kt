@@ -20,18 +20,26 @@ class FloodFill(
     }
 
     private tailrec fun fill(blocks: Set<Block> = setOf(startPosition.block)) {
-        if (blocks.isEmpty())
+        if (blocks.isEmpty()) {
             return
+        }
+
         val next = mutableSetOf<Block>()
+
         for (block in blocks) {
             // Skip the current block if it already exists in the array
-            if (block.type in materials && !add(block))
+            if (block.type in materials && !add(block)) {
                 continue
+            }
             // Store the neighbors of the current block in the next set
             for (n in block.location.neighbors) {
-                val neighbor = n.world?.getBlockAt(n) ?: continue
-                if (neighbor.type in materials)
+                val neighbor = n.world
+                    ?.getBlockAt(n)
+                    ?: continue
+
+                if (neighbor.type in materials) {
                     next.add(neighbor)
+                }
             }
         }
         // Process the next set of blocks

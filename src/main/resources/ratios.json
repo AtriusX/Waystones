@@ -1,6 +1,3 @@
 {
-  "normal": 1,
-  "nether": 8,
-  "the_end": 1,
-  "custom:limbo": -1
+  "ratios": {}
 }

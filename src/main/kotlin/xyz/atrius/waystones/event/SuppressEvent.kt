@@ -4,17 +4,26 @@ import org.bukkit.Material
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockPlaceEvent
-import xyz.atrius.waystones.data.advancement.BLOCKED
-import xyz.atrius.waystones.utility.awardAdvancement
-import xyz.atrius.waystones.utility.isWaystone
+import org.koin.core.annotation.Single
+import xyz.atrius.waystones.advancement.BlockedAdvancement
+import xyz.atrius.waystones.manager.AdvancementManager
+import xyz.atrius.waystones.service.WaystoneService
+import xyz.atrius.waystones.utility.UP
 
-object SuppressEvent : Listener {
+@Single
+class SuppressEvent(
+    private val advancementManager: AdvancementManager,
+    private val waystoneService: WaystoneService,
+    private val blockedAdvancement: BlockedAdvancement,
+) : Listener {
 
     @EventHandler
     fun onSuppress(event: BlockPlaceEvent) {
         val block = event.block
-        val above = block.world.getBlockAt(block.location.add(0.0, 1.0, 0.0))
-        if (block.type == Material.OBSIDIAN && above.isWaystone())
-            event.player.awardAdvancement(BLOCKED)
+        val above = block.location.UP.block
+
+        if (block.type == Material.OBSIDIAN && waystoneService.isWaystone(above)) {
+            advancementManager.awardAdvancement(event.player, blockedAdvancement)
+        }
     }
 }

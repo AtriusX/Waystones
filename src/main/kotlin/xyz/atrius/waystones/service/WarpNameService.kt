@@ -1,10 +1,17 @@
 package xyz.atrius.waystones.service
 
+import com.google.gson.Gson
 import org.bukkit.Location
+import org.koin.core.annotation.Single
 import xyz.atrius.waystones.data.JsonFile
+import xyz.atrius.waystones.internal.KotlinPlugin
 import xyz.atrius.waystones.utility.locationCode
 
-object WarpNameService : JsonFile<String>("warpnames") {
+@Single
+class WarpNameService(
+    gson: Gson,
+    plugin: KotlinPlugin,
+) : JsonFile<HashMap<String, String>>("warpnames", gson, plugin, HashMap<String, String>()::class) {
 
     fun add(location: Location, name: String) {
         data[location.locationCode] = name

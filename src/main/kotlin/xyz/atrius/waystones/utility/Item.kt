@@ -1,37 +1,40 @@
 package xyz.atrius.waystones.utility
 
-import org.bukkit.Material
-import org.bukkit.NamespacedKey
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
-import org.bukkit.inventory.meta.CompassMeta
+import org.bukkit.inventory.PlayerInventory
 import org.bukkit.inventory.meta.ItemMeta
 import org.bukkit.persistence.PersistentDataType
 import org.bukkit.persistence.PersistentDataType.INTEGER
-import xyz.atrius.waystones.configuration
-import xyz.atrius.waystones.data.KeyState
-import xyz.atrius.waystones.data.KeyState.*
-import xyz.atrius.waystones.plugin
 
 operator fun ItemMeta.get(key: String) =
-    persistentDataContainer.get(NamespacedKey(plugin, key), INTEGER)
+    persistentDataContainer.get(key.toKey(), INTEGER)
 
 operator fun <T> ItemMeta.set(key: String, type: PersistentDataType<T, T>, value: T) =
-    persistentDataContainer.set(NamespacedKey(plugin, key), type, value ?: throw IllegalStateException("Value must be provided!"))
+    persistentDataContainer
+        .set(
+            key.toKey(),
+            type,
+            value
+                ?: error("Value must be provided!")
+        )
 
-fun ItemStack.isWarpKey() = if (configuration.keyItems())
-    itemMeta?.get("is_warp_key") == 1 else type == Material.COMPASS
-
-fun CompassMeta.isSevered(): Boolean =
-    !hasLodestone() && isLodestoneTracked
-
-fun ItemStack.getKeyState(player: Player): KeyState {
-    val meta = itemMeta as? CompassMeta
-    val lodestone = meta?.lodestone ?: return None
-    return when {
-        !isWarpKey() -> None
-        meta.isSevered() -> Severed
-        player.canWarp() -> Blocked
-        else -> Connected(lodestone)
+fun PlayerInventory.addItemNaturally(original: ItemStack, new: ItemStack) {
+    val player = holder as Player
+    // Add item to inventory
+    if (player.immortal) {
+        addItem(new)
+        return
     }
+    // Update item in slot if only one exists
+    if (original.amount == 1 && original.type == new.type) {
+        original.itemMeta = new.itemMeta
+        return
+    }
+
+    if (addItem(new).isNotEmpty()) {
+        player.world.dropItem(player.location.UP, new)
+    }
+
+    original.amount--
 }

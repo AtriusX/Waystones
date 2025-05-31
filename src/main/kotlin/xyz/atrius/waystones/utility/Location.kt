@@ -3,14 +3,12 @@ package xyz.atrius.waystones.utility
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.Sound
+import org.bukkit.SoundCategory
 import org.bukkit.World
 import org.bukkit.util.Vector
-import xyz.atrius.waystones.configuration
-import xyz.atrius.waystones.data.FloodFill
 import xyz.atrius.waystones.data.TeleportType
 import xyz.atrius.waystones.data.TeleportType.Interdimensional
 import xyz.atrius.waystones.data.TeleportType.Normal
-import xyz.atrius.waystones.service.WorldRatioService
 import kotlin.math.cos
 import kotlin.math.floor
 import kotlin.math.sin
@@ -48,21 +46,23 @@ val Location.locationCode
 
 // Determines if the selected block is safe to spawn on
 val Location.isSafe: Boolean
-    get() = !listOf(UP, UP.UP).map { world?.getBlockAt(it)?.type?.isSolid ?: true }.any { it }
+    get() = !listOf(UP, UP.UP)
+        .map {
+            world
+                ?.getBlockAt(it)
+                ?.type
+                ?.isSolid
+                ?: true
+        }
+        .any { it }
 
-fun Location.range(): Int {
-    val config = configuration
-    return config.baseDistance() + FloodFill(
-        this,
-        config.maxWarpSize(),
-        *config.defaultBlocks
-    ).breakdown.entries.sumOf { (key, value) ->
-        value * (config.blockMappings[key.type]?.invoke() ?: 1)
-    }
-}
-
-fun Location.rotateY(angle: Double, amp: Double = 1.0) =
-    add(Vector(cos(angle) * amp, 2.0, sin(angle) * amp))
+fun Location.rotateY(angle: Double, amp: Double = 1.0) = add(
+    Vector(
+        cos(angle) * amp,
+        2.0,
+        sin(angle) * amp,
+    )
+)
 
 fun Location.sameDimension(other: Location) =
     world == other.world
@@ -79,7 +79,4 @@ fun Location.sameDimension(world: World?) =
     world == this.world
 
 fun Location.playSound(sound: Sound, volume: Float = 1f, pitch: Float = 1f) = Bukkit.getOnlinePlayers()
-    .forEach { if (it.world == world) it.playSound(this, sound, volume, pitch)  }
-
-fun World.getRatio(): Double =
-    WorldRatioService[this]
+    .forEach { if (it.world == world) it.playSound(this, sound, SoundCategory.MASTER, volume, pitch, 0) }

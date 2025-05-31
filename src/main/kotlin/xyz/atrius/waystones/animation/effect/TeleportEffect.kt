@@ -6,7 +6,7 @@ interface TeleportEffect {
 
     fun start()
 
-    fun animation(timer: Long)
+    fun animation(timer: Long, max: Long)
 
     fun end()
 

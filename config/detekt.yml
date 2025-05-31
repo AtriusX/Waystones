@@ -1,0 +1,63 @@
+complexity:
+  LongParameterList:
+    constructorThreshold: 25
+    functionThreshold: 10
+  TooManyFunctions:
+    ignorePrivate: true
+  CognitiveComplexMethod:
+    active: true
+  NestedBlockDepth:
+    active: true
+  LongMethod:
+    active: false
+  CyclomaticComplexMethod:
+    active: true
+potential-bugs:
+  UnnecessarySafeCall:
+    active: true
+  NullCheckOnMutableProperty:
+    active: true
+  UnsafeCallOnNullableType:
+    active: true
+  IgnoredReturnValue:
+    active: true
+empty-blocks:
+  active: true
+formatting:
+  FinalNewline:
+    autoCorrect: true
+  SpacingAroundColon:
+    autoCorrect: true
+  NoConsecutiveBlankLines:
+    autoCorrect: true
+  NoMultipleSpaces:
+    autoCorrect: true
+  NoUnusedImports:
+    active: true
+    autoCorrect: true
+style:
+  MagicNumber:
+    active: false
+  ReturnCount:
+    active: false
+  UnusedImports:
+    active: true
+  UnusedPrivateClass:
+    active: true
+  UnusedPrivateMember:
+    active: true
+  OptionalUnit:
+    active: true
+performance:
+  SpreadOperator:
+    active: false
+  UnnecessaryTemporaryInstantiation:
+    active: true
+# Uncomment this later once we're ready to require full documentation
+#comments:
+#  UndocumentedPublicClass:
+#    active: true
+#  UndocumentedPublicFunction:
+#    active: true
+#  OutdatedDocumentation:
+#    active: true

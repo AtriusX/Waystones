@@ -5,32 +5,48 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
-import xyz.atrius.waystones.data.WarpErrorState
-import xyz.atrius.waystones.localization
+import org.koin.core.annotation.Single
+import xyz.atrius.waystones.manager.LocalizationManager
+import xyz.atrius.waystones.service.KeyService
 import xyz.atrius.waystones.service.WarpNameService
+import xyz.atrius.waystones.service.WaystoneService
 import xyz.atrius.waystones.utility.cancel
-import xyz.atrius.waystones.utility.getWarpState
-import xyz.atrius.waystones.utility.isWarpKey
 import xyz.atrius.waystones.utility.sendActionMessage
 
-object InfoEvent: Listener {
+@Single
+class InfoEvent(
+    private val localization: LocalizationManager,
+    private val warpNameService: WarpNameService,
+    private val keyService: KeyService,
+    private val waystoneService: WaystoneService,
+) : Listener {
 
     @EventHandler(ignoreCancelled = true)
     fun onClick(event: PlayerInteractEvent) {
         // Filter non left-click events
-        if (event.action != Action.LEFT_CLICK_BLOCK)
+        if (event.action != Action.LEFT_CLICK_BLOCK) {
             return
-        val block  = event.clickedBlock
+        }
+
+        val block = event.clickedBlock
         val player = event.player
-        val item   = event.item ?: return
+        val item = event.item
+            ?: return
         // Make sure the correct block/item pair is used
-        if (block?.type != Material.LODESTONE || !item.isWarpKey())
+        if (block?.type != Material.LODESTONE || !keyService.isWarpKey(item)) {
             return
-        val name = WarpNameService[block.location] ?: localization["unnamed-waystone"]
-        val state = block.getWarpState(player)
+        }
+
+        val name = warpNameService[block.location]
+            ?: localization["unnamed-waystone"]
+                .format(player)
         // Skip any non-warp blocks
-        if (state == WarpErrorState.None)
-            return
+        val state = waystoneService
+            .getWarpState(player, block)
+            ?.message()
+            ?.format(player)
+            ?: return
+
         player.sendActionMessage(localization["waystone-info", name, state])
         event.cancel()
     }
