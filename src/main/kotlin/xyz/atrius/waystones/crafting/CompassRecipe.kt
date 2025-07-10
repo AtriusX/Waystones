@@ -34,7 +34,7 @@ class CompassRecipe(
     override fun items(): HashMap<Char, Material> = hashMapOf<Char, Material>().apply {
         // For each item in the recipe, map it's material to it's hashcode
         for (item in keyRecipe.value().toHashSet()) {
-            if (item.name != "AIR" || item.isEmpty()) {
+            if (!item.isAir) {
                 this[item.hashChar()] = item
             }
         }

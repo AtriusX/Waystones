@@ -10,7 +10,7 @@ plugins {
     id("io.gitlab.arturbosch.detekt") version "1.23.8"
 }
 
-val pluginVersion = "2.0.0"
+val pluginVersion = "2.0.1"
 
 repositories {
     mavenCentral()
@@ -24,7 +24,7 @@ java {
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.21.7-R0.1-SNAPSHOT")
     implementation("org.jetbrains.kotlin:kotlin-stdlib:2.1.21")
     implementation("io.insert-koin:koin-core:4.1.0-RC1")
     implementation("io.arrow-kt:arrow-core:2.1.2")
@@ -81,6 +81,6 @@ detekt {
 task<LaunchMinecraftServerTask>("testPlugin") {
     dependsOn("buildPlugin")
 
-    jarUrl.set(LaunchMinecraftServerTask.JarUrl.Paper("1.21.4"))
+    jarUrl.set(LaunchMinecraftServerTask.JarUrl.Paper("1.21.7"))
     agreeEula.set(true)
 }
