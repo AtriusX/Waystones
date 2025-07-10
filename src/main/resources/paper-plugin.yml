@@ -1,7 +1,7 @@
 name: Waystones
-version: 2.0.0-1.21.5
+version: 2.0.1-1.21.7
 main: xyz.atrius.waystones.Waystones
-api-version: 1.21
+api-version: '1.21'
 prefix: Waystones
 authors: [Atri, Sepshun, NewbieOrange]
 description: Warp stones for survival
@@ -18,7 +18,7 @@ permissions:
       waystones.reload: true
       waystones.config: true
   waystones.getkey.all:
-    description: Allows giving warpkeys to all players
+    description: Allows giving warp keys to all players
     children:
       waystones.getkey.self: true
   waystones.getkey.self:

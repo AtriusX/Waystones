@@ -38,7 +38,7 @@ class InfoCommand(
 
     override val name: String = "info"
 
-    override fun build(base: ArgumentBuilder<CommandSourceStack, *>) = base
+    override fun build(base: ArgumentBuilder<CommandSourceStack, *>): ArgumentBuilder<CommandSourceStack, *> = base
         .executes {
             val sender = it.source.sender
 
