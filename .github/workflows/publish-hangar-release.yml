@@ -1,6 +1,6 @@
 name: Publish Plugin Release to Hangar
 on:
-  workflow_dispatch:
+  workflow_dispatch: {}
   release:
     types: [published]
 
