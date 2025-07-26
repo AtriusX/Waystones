@@ -3,6 +3,7 @@ package xyz.atrius.waystones.provider
 import net.kyori.adventure.text.Component
 import org.bukkit.Material
 import org.bukkit.entity.Player
+import org.bukkit.inventory.ItemRarity
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.CompassMeta
 import org.bukkit.persistence.PersistentDataType.INTEGER
@@ -21,7 +22,6 @@ class DefaultKeyProvider(
         amount: Int = 1,
     ): ItemStack = ItemStack(Material.COMPASS, amount).update<CompassMeta> {
         this["is_warp_key", INTEGER] = 1
-
         val lore = localization["key-lore"]
             .format(target)
             .let(Component::text)
@@ -29,6 +29,7 @@ class DefaultKeyProvider(
             .format(target)
             .let(Component::text)
 
+        setRarity(ItemRarity.UNCOMMON)
         lore(listOf(lore))
         displayName(name)
     }
