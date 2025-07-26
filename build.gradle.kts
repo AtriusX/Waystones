@@ -119,7 +119,14 @@ hangarPublish {
     }
 
     publications.register("WaystonesSnapshot") {
-        version = "$pluginVersion-SNAPSHOT"
+        val gitHash = providers
+            .exec { commandLine("git", "rev-parse", "--short", "HEAD") }
+            .standardOutput
+            .asText
+            .map { it.trim() }
+            .orElse("")
+
+        version = "$pluginVersion-SNAPSHOT+$gitHash"
         id = "waystones"
         channel = "Snapshot"
         apiKey = System.getenv("HANGAR_API_TOKEN")
