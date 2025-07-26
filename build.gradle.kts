@@ -111,8 +111,9 @@ hangarPublish {
         id = "waystones"
         channel = "Release"
         changelog = """
-            |# ${project.name} Release version $version
+            |# ${project.name} Release version ${version.get()}
             |This version is built for ${buildPaperVersion}!
+            |
             |See the full changelog on [GitHub](https://github.com/$repo/releases/tag/$version)
         """.trimMargin()
 
@@ -140,6 +141,7 @@ hangarPublish {
         changelog = """
             |# ${project.name} Dev Snapshot $gitHash
             |This version is built for ${buildPaperVersion}!
+            |
             |Check [Github](https://github.com/$repo/commits) for full commit history!
         """.trimMargin()
 
