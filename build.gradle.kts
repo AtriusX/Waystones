@@ -124,7 +124,7 @@ hangarPublish {
             .standardOutput
             .asText
             .map { it.trim() }
-            .orElse("")
+            .get()
 
         version = "$pluginVersion-SNAPSHOT+$gitHash"
         id = "waystones"
