@@ -1,0 +1,22 @@
+name: Publish Plugin Release to Hangar
+on:
+  workflow_dispatch:
+  release:
+    types: [published]
+
+jobs:
+  publish-snapshot:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+      - name: Validate Gradle
+        uses: gradle/actions/wrapper-validation@v4
+      - name: Change Wrapper Permissions
+        run: chmod +x ./gradlew
+      - name: Publish Snapshot
+        env:
+          HANGAR_API_TOKEN: ${{ secrets.HANGAR_API_TOKEN }}
+        run: ./gradlew build publishWaystonesReleasePublicationToHangar --stacktrace
