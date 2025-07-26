@@ -103,11 +103,19 @@ hangarPublish {
     val supported = paperVersions
         .split(",")
         .map { it.trim() }
+    val repo = System.getenv("GITHUB_REPOSITORY")
 
     publications.register("WaystonesRelease") {
+
         version = pluginVersion
         id = "waystones"
         channel = "Release"
+        changelog = """
+            |# ${project.name} Release version $version
+            |This version is built for ${buildPaperVersion}!
+            |See the full changelog on [GitHub](https://github.com/$repo/releases/tag/$version)
+        """.trimMargin()
+
         apiKey = System.getenv("HANGAR_API_TOKEN")
 
         platforms {
@@ -129,6 +137,12 @@ hangarPublish {
         version = "$pluginVersion-SNAPSHOT+$gitHash"
         id = "waystones"
         channel = "Snapshot"
+        changelog = """
+            |# ${project.name} Dev Snapshot $gitHash
+            |This version is built for ${buildPaperVersion}!
+            |Check [Github](https://github.com/$repo/commits) for full commit history!
+        """.trimMargin()
+
         apiKey = System.getenv("HANGAR_API_TOKEN")
 
         platforms {
