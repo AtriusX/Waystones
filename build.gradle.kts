@@ -8,10 +8,12 @@ plugins {
     id("dev.s7a.gradle.minecraft.server") version "3.2.1"
     id("com.google.devtools.ksp") version "2.1.21-2.0.1"
     id("io.gitlab.arturbosch.detekt") version "1.23.8"
+    id("io.papermc.hangar-publish-plugin") version "0.1.3"
 }
 
-val pluginVersion = "2.0.1"
-val paperVersion = "1.21.8"
+val buildPaperVersion: String by project
+val pluginApiVersion: String by project
+val paperVersions: String by project
 
 repositories {
     mavenCentral()
@@ -25,7 +27,7 @@ java {
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:$paperVersion-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:$buildPaperVersion-R0.1-SNAPSHOT")
     implementation("org.jetbrains.kotlin:kotlin-stdlib:2.1.21")
     implementation("io.insert-koin:koin-core:4.1.0-RC1")
     implementation("io.arrow-kt:arrow-core:2.1.2")
@@ -40,8 +42,10 @@ dependencies {
 }
 
 group = "xyz.atrius"
-version = pluginVersion
 description = "Waystones"
+
+val pluginVersion = "$version-$buildPaperVersion"
+val outputProjectName = "${project.name}-$pluginVersion"
 
 tasks.shadowJar {
     minimize()
@@ -53,10 +57,19 @@ tasks.withType<Test>().configureEach {
     useJUnitPlatform()
 }
 
+tasks.processResources {
+    filesMatching("paper-plugin.yml") {
+        expand(
+            "version" to version,
+            "apiVersion" to pluginApiVersion,
+        )
+    }
+}
+
 tasks.build {
     delete(
         "build/MinecraftServer/plugins/waystones",
-        "build/MinecraftServer/plugins/${project.name}-${project.version}.jar",
+        "build/MinecraftServer/plugins/$outputProjectName.jar",
         "build/libs"
     )
 }
@@ -67,7 +80,7 @@ task("buildPlugin") {
     doFirst {
         copy {
             from(rootDir.resolve("build/libs"))
-                .include("${project.name}-${project.version}.jar")
+                .include("$outputProjectName.jar")
             into(rootDir.resolve("build/MinecraftServer/plugins"))
         }
     }
@@ -82,6 +95,40 @@ detekt {
 task<LaunchMinecraftServerTask>("testPlugin") {
     dependsOn("buildPlugin")
 
-    jarUrl.set(LaunchMinecraftServerTask.JarUrl.Paper(paperVersion))
+    jarUrl.set(LaunchMinecraftServerTask.JarUrl.Paper(buildPaperVersion))
     agreeEula.set(true)
+}
+
+hangarPublish {
+    val supported = paperVersions
+        .split(",")
+        .map { it.trim() }
+
+    publications.register("WaystonesRelease") {
+        version = pluginVersion
+        id = "waystones"
+        channel = "Release"
+        apiKey = System.getenv("HANGAR_API_TOKEN")
+
+        platforms {
+            paper {
+                jar = tasks.shadowJar.flatMap { it.archiveFile }
+                platformVersions = supported
+            }
+        }
+    }
+
+    publications.register("WaystonesSnapshot") {
+        version = "$pluginVersion-SNAPSHOT"
+        id = "waystones"
+        channel = "Snapshot"
+        apiKey = System.getenv("HANGAR_API_TOKEN")
+
+        platforms {
+            paper {
+                jar = tasks.shadowJar.flatMap { it.archiveFile }
+                platformVersions = supported
+            }
+        }
+    }
 }

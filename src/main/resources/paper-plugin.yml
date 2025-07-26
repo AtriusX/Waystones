@@ -1,7 +1,7 @@
 name: Waystones
-version: 2.0.1-1.21.7
+version: ${version}
 main: xyz.atrius.waystones.Waystones
-api-version: '1.21'
+api-version: ${apiVersion}
 prefix: Waystones
 authors: [Atri, Sepshun, NewbieOrange]
 description: Warp stones for survival
