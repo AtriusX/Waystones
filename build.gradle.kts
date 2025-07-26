@@ -1,4 +1,5 @@
 import dev.s7a.gradle.minecraft.server.tasks.LaunchMinecraftServerTask
+import io.papermc.hangarpublishplugin.internal.util.capitalized
 
 plugins {
     id("java")
@@ -111,10 +112,10 @@ hangarPublish {
         id = "waystones"
         channel = "Release"
         changelog = """
-            |# ${project.name} Release version ${version.get()}
+            |# ${project.name.capitalized()} Release version ${version.get()}
             |This version is built for ${buildPaperVersion}!
             |
-            |See the full changelog on [GitHub](https://github.com/$repo/releases/tag/$version)
+            |See the full changelog on [GitHub](https://github.com/$repo/releases/tag/v${version.get()})
         """.trimMargin()
 
         apiKey = System.getenv("HANGAR_API_TOKEN")
@@ -139,7 +140,7 @@ hangarPublish {
         id = "waystones"
         channel = "Snapshot"
         changelog = """
-            |# ${project.name} Dev Snapshot $gitHash
+            |# ${project.name.capitalized()} Dev Snapshot $gitHash
             |This version is built for ${buildPaperVersion}!
             |
             |Check [Github](https://github.com/$repo/commits) for full commit history!
