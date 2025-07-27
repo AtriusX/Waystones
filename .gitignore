@@ -7,6 +7,9 @@
 
 # IntelliJ
 out/
+bin/
+.settings/
+.vscode/
 
 # Compiled class file
 *.class
