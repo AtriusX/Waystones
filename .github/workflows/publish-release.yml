@@ -34,5 +34,6 @@ jobs:
         run: chmod +x ./gradlew
       - name: Publish Modrinth Release
         env:
+          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
           MODRINTH_PUBLISH_CHANNEL: release
         run: ./gradlew build modrinth
