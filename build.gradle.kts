@@ -162,7 +162,7 @@ hangarPublish {
 modrinth {
     val channel = System
         .getenv("MODRINTH_PUBLISH_CHANNEL")
-        ?: "snapshot"
+        ?: "alpha"
 
     when (channel) {
         "release" -> {
@@ -179,7 +179,7 @@ modrinth {
     token = System.getenv("MODRINTH_TOKEN")
     projectId = "atri-waystones"
     versionName = "${project.name.capitalized()} $pluginVersion"
-    uploadFile.set(tasks.shadowJar.get().archiveFile)
+    uploadFile.set(tasks.shadowJar)
     gameVersions = supported
     loaders = listOf("paper")
     versionType = channel
