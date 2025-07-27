@@ -1,11 +1,11 @@
-name: Publish Plugin Release to Hangar
+name: Publish Plugin Release
 on:
   workflow_dispatch: {}
   release:
     types: [published]
 
 jobs:
-  publish-snapshot:
+  setup:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -16,10 +16,20 @@ jobs:
         uses: gradle/actions/wrapper-validation@v4
       - name: Change Wrapper Permissions
         run: chmod +x ./gradlew
+
+  publish-hangar:
+    runs-on: ubuntu-latest
+    needs: [setup]
+    steps:
       - name: Publish Hangar Release
         env:
           HANGAR_API_TOKEN: ${{ secrets.HANGAR_API_TOKEN }}
         run: ./gradlew build publishWaystonesReleasePublicationToHangar --stacktrace
+
+  publish-modrinth:
+    runs-on: ubuntu-latest
+    needs: [setup]
+    steps:
       - name: Publish Modrinth Release
         env:
           MODRINTH_PUBLISH_CHANNEL: release
