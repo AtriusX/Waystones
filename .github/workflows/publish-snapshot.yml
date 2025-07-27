@@ -1,8 +1,12 @@
 name: Publish Plugin Snapshot
 on:
+  workflow_dispatch: {}
   push:
     branches:
       - master
+    paths:
+      - 'src/main/**'
+      - 'gradle.properties'
 
 jobs:
   publish-hangar:
