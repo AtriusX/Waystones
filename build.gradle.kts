@@ -10,6 +10,7 @@ plugins {
     id("com.google.devtools.ksp") version "2.1.21-2.0.1"
     id("io.gitlab.arturbosch.detekt") version "1.23.8"
     id("io.papermc.hangar-publish-plugin") version "0.1.3"
+    id("com.modrinth.minotaur") version "2.8.7"
 }
 
 val buildPaperVersion: String by project
@@ -100,14 +101,22 @@ task<LaunchMinecraftServerTask>("testPlugin") {
     agreeEula.set(true)
 }
 
-hangarPublish {
-    val supported = paperVersions
-        .split(",")
+val gitHash: String by lazy {
+    providers
+        .exec { commandLine("git", "rev-parse", "--short", "HEAD") }
+        .standardOutput
+        .asText
         .map { it.trim() }
+        .get()
+}
+val supported = paperVersions
+    .split(",")
+    .map { it.trim() }
+
+hangarPublish {
     val repo = System.getenv("GITHUB_REPOSITORY")
 
     publications.register("WaystonesRelease") {
-
         version = pluginVersion
         id = "waystones"
         channel = "Release"
@@ -129,13 +138,6 @@ hangarPublish {
     }
 
     publications.register("WaystonesSnapshot") {
-        val gitHash = providers
-            .exec { commandLine("git", "rev-parse", "--short", "HEAD") }
-            .standardOutput
-            .asText
-            .map { it.trim() }
-            .get()
-
         version = "$pluginVersion-SNAPSHOT+$gitHash"
         id = "waystones"
         channel = "Snapshot"
@@ -155,4 +157,30 @@ hangarPublish {
             }
         }
     }
+}
+
+modrinth {
+    val channel = System
+        .getenv("MODRINTH_PUBLISH_CHANNEL")
+        ?: "snapshot"
+
+    when (channel) {
+        "release" -> {
+            versionNumber = pluginVersion
+            changelog = file("CHANGELOG.md").readText()
+        }
+
+        else -> {
+            versionNumber = "$pluginVersion-SNAPSHOT+$gitHash"
+            changelog = "${project.name.capitalized()} Dev Snapshot $gitHash"
+        }
+    }
+    // Common values
+    token = System.getenv("MODRINTH_TOKEN")
+    projectId = "atri-waystones"
+    versionName = "${project.name.capitalized()} $pluginVersion"
+    uploadFile.set(tasks.shadowJar.get().archiveFile)
+    gameVersions = supported
+    loaders = listOf("paper")
+    versionType = channel
 }
