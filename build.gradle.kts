@@ -117,19 +117,11 @@ val supported = paperVersions
     .map { it.trim() }
 
 hangarPublish {
-    val repo = System.getenv("GITHUB_REPOSITORY")
-
     publications.register("WaystonesRelease") {
         version = pluginVersion
         id = "waystones"
         channel = "Release"
-        changelog = """
-            |# ${project.name.capitalized()} Release version ${version.get()}
-            |This version is built for ${buildPaperVersion}!
-            |
-            |See the full changelog on [GitHub](https://github.com/$repo/releases/tag/v${version.get()})
-        """.trimMargin()
-
+        changelog = file("CHANGELOG.md").readText()
         apiKey = System.getenv("HANGAR_API_TOKEN")
 
         platforms {
@@ -144,13 +136,7 @@ hangarPublish {
         version = "$pluginVersion-SNAPSHOT+$gitHash"
         id = "waystones"
         channel = "Snapshot"
-        changelog = """
-            |# ${project.name.capitalized()} Dev Snapshot $gitHash
-            |This version is built for ${buildPaperVersion}!
-            |
-            |Check [Github](https://github.com/$repo/commits) for full commit history!
-        """.trimMargin()
-
+        changelog = "${project.name.capitalized()} Dev Snapshot [$gitHash]"
         apiKey = System.getenv("HANGAR_API_TOKEN")
 
         platforms {
@@ -175,7 +161,7 @@ modrinth {
 
         else -> {
             versionNumber = "$pluginVersion-SNAPSHOT+$gitHash"
-            changelog = "${project.name.capitalized()} Dev Snapshot $gitHash"
+            changelog = "${project.name.capitalized()} Dev Snapshot [$gitHash]"
         }
     }
     // Common values
