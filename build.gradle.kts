@@ -4,17 +4,16 @@ import io.papermc.hangarpublishplugin.internal.util.capitalized
 plugins {
     id("java")
     id("idea")
-    id("org.jetbrains.kotlin.jvm") version "2.1.21"
+    id("org.jetbrains.kotlin.jvm") version "2.2.0"
     id("com.gradleup.shadow") version "8.3.6"
     id("dev.s7a.gradle.minecraft.server") version "3.2.1"
-    id("com.google.devtools.ksp") version "2.1.21-2.0.1"
+    id("com.google.devtools.ksp") version "2.2.0-2.0.2"
     id("io.gitlab.arturbosch.detekt") version "1.23.8"
     id("io.papermc.hangar-publish-plugin") version "0.1.3"
     id("com.modrinth.minotaur") version "2.8.7"
 }
 
 val buildPaperVersion: String by project
-val pluginApiVersion: String by project
 val paperVersions: String by project
 
 repositories {
@@ -30,7 +29,7 @@ java {
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:$buildPaperVersion-R0.1-SNAPSHOT")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:2.1.21")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:2.2.0")
     implementation("io.insert-koin:koin-core:4.1.0-RC1")
     implementation("io.arrow-kt:arrow-core:2.1.2")
 
@@ -53,6 +52,13 @@ tasks.shadowJar {
     minimize()
     archiveClassifier.set("")
     archiveVersion.set(pluginVersion)
+
+    relocate("kotlin", "xyz.atrius.waystones.kotlin")
+
+    dependencies {
+        exclude(dependency("io.insert-koin:koin-core"))
+        exclude(dependency("io.arrow-kt:arrow-core"))
+    }
 }
 
 tasks.withType<Test>().configureEach {
@@ -61,10 +67,7 @@ tasks.withType<Test>().configureEach {
 
 tasks.processResources {
     filesMatching("paper-plugin.yml") {
-        expand(
-            "version" to version,
-            "apiVersion" to pluginApiVersion,
-        )
+        expand(project.properties)
     }
 }
 
@@ -114,19 +117,11 @@ val supported = paperVersions
     .map { it.trim() }
 
 hangarPublish {
-    val repo = System.getenv("GITHUB_REPOSITORY")
-
     publications.register("WaystonesRelease") {
         version = pluginVersion
         id = "waystones"
         channel = "Release"
-        changelog = """
-            |# ${project.name.capitalized()} Release version ${version.get()}
-            |This version is built for ${buildPaperVersion}!
-            |
-            |See the full changelog on [GitHub](https://github.com/$repo/releases/tag/v${version.get()})
-        """.trimMargin()
-
+        changelog = file("CHANGELOG.md").readText()
         apiKey = System.getenv("HANGAR_API_TOKEN")
 
         platforms {
@@ -141,13 +136,7 @@ hangarPublish {
         version = "$pluginVersion-SNAPSHOT+$gitHash"
         id = "waystones"
         channel = "Snapshot"
-        changelog = """
-            |# ${project.name.capitalized()} Dev Snapshot $gitHash
-            |This version is built for ${buildPaperVersion}!
-            |
-            |Check [Github](https://github.com/$repo/commits) for full commit history!
-        """.trimMargin()
-
+        changelog = "${project.name.capitalized()} Dev Snapshot [$gitHash]"
         apiKey = System.getenv("HANGAR_API_TOKEN")
 
         platforms {
@@ -172,7 +161,7 @@ modrinth {
 
         else -> {
             versionNumber = "$pluginVersion-SNAPSHOT+$gitHash"
-            changelog = "${project.name.capitalized()} Dev Snapshot $gitHash"
+            changelog = "${project.name.capitalized()} Dev Snapshot [$gitHash]"
         }
     }
     // Common values

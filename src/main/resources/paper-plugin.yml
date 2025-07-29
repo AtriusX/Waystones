@@ -1,10 +1,14 @@
 name: Waystones
 version: ${version}
 main: xyz.atrius.waystones.Waystones
-api-version: ${apiVersion}
+api-version: ${pluginApiVersion}
 prefix: Waystones
+website: ${pluginWebsite}
 authors: [Atri, Sepshun, NewbieOrange]
 description: Warp stones for survival
+libraries:
+  - io.insert-koin:koin-core:4.1.0-RC1
+  - io.arrow-kt:arrow-core:2.1.2
 commands:
   ws:
     description: Displays plugin info and usage
