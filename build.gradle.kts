@@ -4,10 +4,10 @@ import io.papermc.hangarpublishplugin.internal.util.capitalized
 plugins {
     id("java")
     id("idea")
-    id("org.jetbrains.kotlin.jvm") version "2.1.21"
+    id("org.jetbrains.kotlin.jvm") version "2.2.0"
     id("com.gradleup.shadow") version "8.3.6"
     id("dev.s7a.gradle.minecraft.server") version "3.2.1"
-    id("com.google.devtools.ksp") version "2.1.21-2.0.1"
+    id("com.google.devtools.ksp") version "2.2.0-2.0.2"
     id("io.gitlab.arturbosch.detekt") version "1.23.8"
     id("io.papermc.hangar-publish-plugin") version "0.1.3"
     id("com.modrinth.minotaur") version "2.8.7"
@@ -29,7 +29,7 @@ java {
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:$buildPaperVersion-R0.1-SNAPSHOT")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:2.1.21")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:2.2.0")
     implementation("io.insert-koin:koin-core:4.1.0-RC1")
     implementation("io.arrow-kt:arrow-core:2.1.2")
 
