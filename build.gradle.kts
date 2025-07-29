@@ -14,7 +14,6 @@ plugins {
 }
 
 val buildPaperVersion: String by project
-val pluginApiVersion: String by project
 val paperVersions: String by project
 
 repositories {
@@ -53,6 +52,13 @@ tasks.shadowJar {
     minimize()
     archiveClassifier.set("")
     archiveVersion.set(pluginVersion)
+
+    relocate("kotlin", "xyz.atrius.waystones.kotlin")
+
+    dependencies {
+        exclude(dependency("io.insert-koin:koin-core"))
+        exclude(dependency("io.arrow-kt:arrow-core"))
+    }
 }
 
 tasks.withType<Test>().configureEach {
@@ -61,10 +67,7 @@ tasks.withType<Test>().configureEach {
 
 tasks.processResources {
     filesMatching("paper-plugin.yml") {
-        expand(
-            "version" to version,
-            "apiVersion" to pluginApiVersion,
-        )
+        expand(project.properties)
     }
 }
 
