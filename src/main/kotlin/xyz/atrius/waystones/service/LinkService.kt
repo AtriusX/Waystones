@@ -16,6 +16,7 @@ import xyz.atrius.waystones.data.config.property.RelinkableKeysProperty
 import xyz.atrius.waystones.manager.LocalizationManager
 import xyz.atrius.waystones.manager.LocalizedString
 import xyz.atrius.waystones.provider.DefaultKeyProvider
+import xyz.atrius.waystones.repository.WaystoneInfoRepository
 import xyz.atrius.waystones.utility.addItemNaturally
 import xyz.atrius.waystones.utility.locationCode
 import xyz.atrius.waystones.utility.playSound
@@ -25,9 +26,9 @@ import xyz.atrius.waystones.utility.update
 class LinkService(
     private val localization: LocalizationManager,
     private val relinkableKeys: RelinkableKeysProperty,
-    private val warpNameService: WarpNameService,
     private val keyService: KeyService,
     private val defaultKeyProvider: DefaultKeyProvider,
+    private val waystoneInfoRepository: WaystoneInfoRepository,
 ) {
 
     fun process(player: Player, item: ItemStack, block: Block): Either<LinkServiceError, Unit> = either {
@@ -61,9 +62,10 @@ class LinkService(
         lodestone = block.location
         isLodestoneTracked = true
 
-        val name = warpNameService[block.location]
-            ?: localization["unnamed-waystone"].format(player)
-        val lore = localization["link-key-lore", name, lodestone?.locationCode]
+        val name = waystoneInfoRepository
+            .getWaystone(block.location)
+            .thenApplyAsync { it?.name ?: localization["unnamed-waystone"].format(player) }
+        val lore = localization["link-key-lore", name.get(), lodestone?.locationCode]
             .format(player)
             .let(Component::text)
 

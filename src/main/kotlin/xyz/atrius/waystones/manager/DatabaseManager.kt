@@ -70,17 +70,18 @@ class DatabaseManager(
         }
     }
 
-    fun queryUpdate(query: String, parameters: List<Any?>? = null): CompletableFuture<Int> {
+    fun queryUpdate(query: String, parameters: List<Any?>? = null): CompletableFuture<Int>  {
         val statement = connection
             ?.prepareStatement(query)
             ?: return CompletableFuture.failedFuture(IllegalStateException("Connection is not active!"))
         // Add parameters if any are provided
-        parameters?.forEachIndexed { i, p ->
-            statement.setObject(i + 1, p)
-        }
-
         return CompletableFuture.supplyAsync {
-            statement.executeUpdate()
+            parameters?.forEachIndexed { i, p ->
+                statement.setObject(i + 1, p)
+            }
+
+            statement
+                .executeUpdate()
         }
     }
 

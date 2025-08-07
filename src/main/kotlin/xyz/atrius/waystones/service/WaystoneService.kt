@@ -24,6 +24,7 @@ import xyz.atrius.waystones.data.config.property.type.Power
 import xyz.atrius.waystones.manager.AdvancementManager
 import xyz.atrius.waystones.manager.LocalizationManager
 import xyz.atrius.waystones.manager.LocalizedString
+import xyz.atrius.waystones.repository.WaystoneInfoRepository
 import xyz.atrius.waystones.utility.isActive
 import xyz.atrius.waystones.utility.isSafe
 import xyz.atrius.waystones.utility.powerBlock
@@ -44,20 +45,21 @@ class WaystoneService(
     private val gigawarpsAdvancement: GigawarpsAdvancement,
     private val worldRatioService: WorldRatioService,
     private val limitDistance: LimitDistanceProperty,
+    private val waystoneInfoRepository: WaystoneInfoRepository,
 ) {
 
     fun process(player: Player, block: Block, keyLocation: Location): Either<WaystoneServiceError, Warp> = either {
         // Ensure the warp is valid to use
-        val name = warpNameService[keyLocation]
-            ?.format(player)
-            ?: localization["unnamed-waystone"]
-                .format(player)
+        val name = waystoneInfoRepository
+            .getWaystone(keyLocation)
+            .thenApplyAsync { it?.name ?: localization["unnamed-waystone"].format(player) }
+            .get()
         val distance = validateWarp(player, block, name).bind()
         // Determine how the waystone requires power
         val usePower = when (requirePower.value()) {
             Power.ALL -> true
             Power.INTER_DIMENSION -> !hasInfinitePower(block) &&
-                !player.location.sameDimension(block.world)
+                    !player.location.sameDimension(block.world)
 
             Power.NONE -> false
         }
@@ -108,14 +110,14 @@ class WaystoneService(
 
         val range = range(block.location) / ratio
         val distance = calculateDistance(player.location, block.location, 1.0)
-        val name = warpNameService[block.location]
-            ?.format(player)
-            ?: localization["unnamed-waystone"]
-                .format(player)
 
         if (!hasInfinitePower(block) && limitDistance.value()) {
             ensure(distance <= range) {
-                WaystoneServiceError.WaystoneOutOfRange(localization, name, distance, range, block.location)
+                val name = waystoneInfoRepository
+                    .getWaystone(block.location)
+                    .thenApplyAsync { it?.name ?: localization["unnamed-waystone"].format(player) }
+
+                WaystoneServiceError.WaystoneOutOfRange(localization, name.get(), distance, range, block.location)
             }
         }
 
