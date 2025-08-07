@@ -65,9 +65,22 @@ tasks.withType<Test>().configureEach {
     useJUnitPlatform()
 }
 
+fun buildProviders(vararg properties: String): Map<String, Provider<Any>> = properties
+    .associateWith { providers.provider { project.properties[it] } }
+
 tasks.processResources {
-    filesMatching("paper-plugin.yml") {
-        expand(project.properties)
+    val providers = buildProviders(
+        "version",
+        "buildPaperVersion",
+        "pluginApiVersion",
+        "paperVersions",
+        "pluginWebsite",
+    )
+
+    doLast {
+        filesMatching("paper-plugin.yml") {
+            expand(providers.mapValues { it.value.get() })
+        }
     }
 }
 
@@ -79,7 +92,7 @@ tasks.build {
     )
 }
 
-task("buildPlugin") {
+tasks.register("buildPlugin") {
     dependsOn("shadowJar")
 
     doFirst {
@@ -97,7 +110,7 @@ detekt {
     config.setFrom("$projectDir/config/detekt.yml")
 }
 
-task<LaunchMinecraftServerTask>("testPlugin") {
+tasks.register<LaunchMinecraftServerTask>("testPlugin") {
     dependsOn("buildPlugin")
 
     jarUrl.set(LaunchMinecraftServerTask.JarUrl.Paper(buildPaperVersion))
