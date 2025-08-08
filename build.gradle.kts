@@ -36,6 +36,12 @@ val flywayVersion: String by project
 val sqliteVersion: String by project
 val mysqlVersion: String by project
 
+buildscript {
+    dependencies {
+        classpath("org.flywaydb:flyway-mysql:11.10.5")
+    }
+}
+
 dependencies {
     compileOnly("io.papermc.paper:paper-api:$buildPaperVersion-R0.1-SNAPSHOT")
     implementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
@@ -67,6 +73,29 @@ buildConfig {
     buildConfigField("flywayVersion", flywayVersion)
     buildConfigField("sqliteVersion", sqliteVersion)
     buildConfigField("mysqlVersion", mysqlVersion)
+}
+
+flyway {
+    url = System.getenv("DB_URL")
+    user = System.getenv("DB_USER")
+    password = System.getenv("DB_USER_PASSWORD")
+    locations = arrayOf(
+        "filesystem:$projectDir/src/main/resources/db/migration/common/**",
+        "filesystem:$projectDir/src/main/resources/db/migration/${System.getenv("DB_TYPE")}/**",
+    )
+    cleanDisabled = false
+}
+
+tasks.flywayClean {
+    notCompatibleWithConfigurationCache("Plugin does not handle this well currently")
+}
+
+tasks.flywayValidate {
+    notCompatibleWithConfigurationCache("Plugin does not handle this well currently")
+}
+
+tasks.flywayMigrate {
+    notCompatibleWithConfigurationCache("Plugin does not handle this well currently")
 }
 
 group = "xyz.atrius"

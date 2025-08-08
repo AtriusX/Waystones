@@ -1,0 +1,29 @@
+name: Validate Flyway Sqlite
+on:
+  pull_request:
+    paths:
+      - 'src/main/resources/db/migration/common/**'
+      - 'src/main/resources/db/migration/sqlite/**'
+    branches:
+      - master
+
+env:
+  DB_URL: 'jdbc:sqlite:./waystones.db'
+  DB_NAME: waystones
+  DB_TYPE: "sqlite"
+
+jobs:
+  validate-flyway:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+      - name: Validate Gradle
+        uses: gradle/actions/wrapper-validation@v4
+      - name: Change Wrapper Permissions
+        run: chmod +x ./gradlew
+      - name: Test Flyway Migrations (MySQL)
+        run: |-
+          ./gradlew flywayClean flywayValidate flywayMigrate
