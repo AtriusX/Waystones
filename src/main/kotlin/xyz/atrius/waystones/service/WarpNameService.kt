@@ -27,9 +27,15 @@ class WarpNameService(
             val world = Bukkit
                 .getWorld(worldName)
                 ?: continue
-            val (x, y, z) = location
+            val coordinates = location
                 .split(":")
                 .map { it.toIntOrNull() }
+
+            if (coordinates.size != 3) {
+                continue
+            }
+
+            val (x, y, z) = coordinates
             val info = WaystoneInfo(
                 worldUid = world.uid,
                 x = x ?: continue,

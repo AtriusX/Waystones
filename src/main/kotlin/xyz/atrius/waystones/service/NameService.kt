@@ -16,7 +16,6 @@ import xyz.atrius.waystones.repository.WaystoneInfoRepository
 
 @Single
 class NameService(
-    private val warpNameService: WarpNameService,
     private val waystoneInfoRepository: WaystoneInfoRepository,
 ) {
 

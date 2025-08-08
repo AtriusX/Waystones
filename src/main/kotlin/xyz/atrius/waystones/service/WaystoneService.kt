@@ -39,7 +39,6 @@ class WaystoneService(
     private val requirePower: RequirePowerProperty,
     private val powerCost: PowerCostProperty,
     private val boostBlockService: BoostBlockService,
-    private val warpNameService: WarpNameService,
     private val advancementManager: AdvancementManager,
     private val cleanEnergyAdvancement: CleanEnergyAdvancement,
     private val gigawarpsAdvancement: GigawarpsAdvancement,
@@ -59,7 +58,7 @@ class WaystoneService(
         val usePower = when (requirePower.value()) {
             Power.ALL -> true
             Power.INTER_DIMENSION -> !hasInfinitePower(block) &&
-                    !player.location.sameDimension(block.world)
+                !player.location.sameDimension(block.world)
 
             Power.NONE -> false
         }
