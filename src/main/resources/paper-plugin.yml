@@ -19,6 +19,7 @@ permissions:
       waystones.getkey.all: true
       waystones.reload: true
       waystones.config: true
+      waystones.admin: true
   waystones.getkey.all:
     description: Allows giving warp keys to all players
     children:
@@ -31,4 +32,7 @@ permissions:
     default: op
   waystones.config:
     description: Allows viewing and editing the plugin's configuration files
+    default: op
+  waystones.admin:
+    description: Allows the performance of various admin actions, such as legacy data migration
     default: op
