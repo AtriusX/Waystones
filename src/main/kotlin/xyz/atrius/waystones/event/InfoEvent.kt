@@ -7,8 +7,8 @@ import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
 import org.koin.core.annotation.Single
 import xyz.atrius.waystones.manager.LocalizationManager
+import xyz.atrius.waystones.repository.WaystoneInfoRepository
 import xyz.atrius.waystones.service.KeyService
-import xyz.atrius.waystones.service.WarpNameService
 import xyz.atrius.waystones.service.WaystoneService
 import xyz.atrius.waystones.utility.cancel
 import xyz.atrius.waystones.utility.sendActionMessage
@@ -16,9 +16,9 @@ import xyz.atrius.waystones.utility.sendActionMessage
 @Single
 class InfoEvent(
     private val localization: LocalizationManager,
-    private val warpNameService: WarpNameService,
     private val keyService: KeyService,
     private val waystoneService: WaystoneService,
+    private val waystoneInfoRepository: WaystoneInfoRepository,
 ) : Listener {
 
     @EventHandler(ignoreCancelled = true)
@@ -37,9 +37,9 @@ class InfoEvent(
             return
         }
 
-        val name = warpNameService[block.location]
-            ?: localization["unnamed-waystone"]
-                .format(player)
+        val name = waystoneInfoRepository
+            .getWaystone(block.location)
+            .thenApplyAsync { it?.name ?: localization["unnamed-waystone"].format(player) }
         // Skip any non-warp blocks
         val state = waystoneService
             .getWarpState(player, block)
@@ -47,7 +47,7 @@ class InfoEvent(
             ?.format(player)
             ?: return
 
-        player.sendActionMessage(localization["waystone-info", name, state])
+        player.sendActionMessage(localization["waystone-info", name.get(), state])
         event.cancel()
     }
 }

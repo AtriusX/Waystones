@@ -4,6 +4,10 @@ import org.bukkit.ChatColor
 import org.bukkit.NamespacedKey
 import xyz.atrius.waystones.internal.KotlinPlugin
 import java.util.Locale
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
+import kotlin.enums.enumEntries
 
 // Translate ChatColors using custom ColorCode
 fun String.translateColors(colorCode: Char = '&') = ChatColor
@@ -47,3 +51,42 @@ fun Any.sanitizedStringFormat(): String = toString()
  */
 fun Locale.despecify(): Locale =
     Locale.of(language)
+
+/**
+ * Performs a binding on the value of a string to an enum instance.
+ *
+ * @receiver The string to bind.
+ * @param T The enum type to bind our receiver to.
+ * @return The associated enum entry for the provided enum type.
+ */
+inline fun <reified T : Enum<T>> String?.bindAsEnum(): T {
+    val entries = enumEntries<T>()
+    val entry = entries
+        .firstOrNull { it.toString() == this || it.name == this }
+        ?: throw IllegalArgumentException(
+            "Unsupported value for ${T::class.simpleName}! Must be one of: ${entries.joinToString()}}"
+        )
+
+    return entry
+}
+
+/**
+ * Performs a check on the provided
+ */
+@OptIn(ExperimentalContracts::class)
+inline fun <T> List<T>.expectSizeOrDefault(
+    size: Int,
+    otherwise: (List<T>) -> List<T>,
+): List<T> {
+    // We can treat this as an experiment. We cannot use keywords like "continue" in the otherwise scope
+    // without the compiler yelling at us unless we define a contract specifying the ways in which the
+    // lambda is called by our function.
+    contract {
+        callsInPlace(otherwise, InvocationKind.AT_MOST_ONCE)
+    }
+
+    return when (this.size == size) {
+        true -> this
+        else -> otherwise(this)
+    }
+}

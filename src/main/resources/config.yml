@@ -28,3 +28,13 @@ key-recipe:
   - AIR
   - IRON_INGOT
   - AIR
+# If you want to change to another database, you must fully reboot the server
+database:
+  # This can be either "sqlite" or "mysql"
+  type: sqlite
+  # These fields are ignored for SQLite, put your database information here if you are using MySQL
+  host: "localhost"
+  port: 3306
+  username: "root"
+  password: "password"
+  database-name: "waystones"

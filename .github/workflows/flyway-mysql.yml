@@ -1,0 +1,47 @@
+name: Validate Flyway MySQL
+on:
+  pull_request:
+    paths:
+      - 'src/main/resources/db/migration/common/**'
+      - 'src/main/resources/db/migration/mysql/**'
+    branches:
+      - master
+
+env:
+  DB_URL: 'jdbc:mysql://localhost:3306/waystones'
+  DB_ROOT_PASSWORD: root
+  DB_NAME: waystones
+  DB_USER: waystones
+  DB_USER_PASSWORD: test-waystones
+  DB_TYPE: "mysql"
+
+jobs:
+  validate-flyway:
+    runs-on: ubuntu-latest
+    services:
+      database:
+        image: mysql:8.4
+        env:
+          MYSQL_ROOT_PASSWORD: ${{ env.DB_ROOT_PASSWORD }}
+          MYSQL_DATABASE: ${{ env.DB_NAME }}
+          MYSQL_USER: ${{ env.DB_USER }}
+          MYSQL_PASSWORD: ${{ env.DB_USER_PASSWORD }}
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h localhost -u root -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+      - name: Validate Gradle
+        uses: gradle/actions/wrapper-validation@v4
+      - name: Change Wrapper Permissions
+        run: chmod +x ./gradlew
+      - name: Test Flyway Migrations (MySQL)
+        run: |-
+          ./gradlew flywayClean flywayValidate flywayMigrate

@@ -48,6 +48,8 @@ style:
     active: true
   OptionalUnit:
     active: true
+  LoopWithTooManyJumpStatements:
+    maxJumpCount: 8
 performance:
   SpreadOperator:
     active: false
