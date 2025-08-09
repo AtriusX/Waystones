@@ -33,6 +33,22 @@ class WaystoneInfoRepository(
             .query(query, params, this)
     }
 
+    fun existsByLocation(location: Location): CompletableFuture<Boolean> {
+        val query = """
+            |select 1
+            |from waystone_info
+            |where world_uid = ?
+            |  and x = ?
+            |  and y = ?
+            |  and z = ?
+            |limit 1;
+        """.trimMargin()
+        val params = listOf(location.world.uid, location.x, location.y, location.z)
+
+        return databaseManager
+            .queryExists(query, params)
+    }
+
     fun save(info: WaystoneInfo): CompletableFuture<Int> {
         val query = when (databaseProperties.type) {
             SupportedDatabase.MYSQL -> """

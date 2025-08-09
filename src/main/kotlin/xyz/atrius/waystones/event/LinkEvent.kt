@@ -42,8 +42,15 @@ class LinkEvent(
                 player.sendActionError(it.message())
                 event.cancel()
             }
-
-        waystoneInfoRepository.save(WaystoneInfo.fromLocation(block.location))
+        // Check if an entry exists already before saving the waystone again
+        waystoneInfoRepository
+            .existsByLocation(block.location)
+            .thenApplyAsync { exists ->
+                // If the location isn't present in the database, it should be safe to write
+                if (!exists) {
+                    waystoneInfoRepository.save(WaystoneInfo.fromLocation(block.location))
+                }
+            }
         advancementManager.awardAdvancement(player, waystonesAdvancement)
         event.cancel()
     }
