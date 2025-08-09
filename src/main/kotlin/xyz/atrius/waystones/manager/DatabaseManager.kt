@@ -64,9 +64,13 @@ class DatabaseManager(
         }
         // Execute the query and map the row
         return CompletableFuture.supplyAsync {
-            statement
+            val result = statement
                 .executeQuery()
-                .let(rowMapper::mapRow)
+
+            when (result.next()) {
+                true -> rowMapper.mapRow(result)
+                else -> null
+            }
         }
     }
 

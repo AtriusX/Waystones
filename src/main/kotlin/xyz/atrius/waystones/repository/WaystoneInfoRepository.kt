@@ -22,7 +22,7 @@ class WaystoneInfoRepository(
         val query = """
             |select *
             |from waystone_info
-            |where worldUid = ?
+            |where world_uid = ?
             |  and x = ?
             |  and y = ?
             |  and z = ?;
