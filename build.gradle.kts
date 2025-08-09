@@ -1,4 +1,5 @@
 import dev.s7a.gradle.minecraft.server.tasks.LaunchMinecraftServerTask
+import io.papermc.hangarpublishplugin.HangarPublishTask
 import io.papermc.hangarpublishplugin.internal.util.capitalized
 
 plugins {
@@ -129,6 +130,10 @@ val supported = paperVersions
     .split(",")
     .map { it.trim() }
 
+tasks.withType<HangarPublishTask> {
+    notCompatibleWithConfigurationCache("Do not cache artifacts")
+}
+
 hangarPublish {
     publications.register("WaystonesRelease") {
         version = pluginVersion
@@ -159,6 +164,10 @@ hangarPublish {
             }
         }
     }
+}
+
+tasks.modrinth {
+    notCompatibleWithConfigurationCache("Do not cache artifacts")
 }
 
 modrinth {
