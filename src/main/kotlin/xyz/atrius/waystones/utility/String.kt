@@ -4,6 +4,9 @@ import org.bukkit.ChatColor
 import org.bukkit.NamespacedKey
 import xyz.atrius.waystones.internal.KotlinPlugin
 import java.util.Locale
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 import kotlin.enums.enumEntries
 
 // Translate ChatColors using custom ColorCode
@@ -65,4 +68,25 @@ inline fun <reified T : Enum<T>> String?.bindAsEnum(): T {
         )
 
     return entry
+}
+
+/**
+ * Performs a check on the provided
+ */
+@OptIn(ExperimentalContracts::class)
+inline fun <T> List<T>.expectSizeOrDefault(
+    size: Int,
+    otherwise: (List<T>) -> List<T>,
+): List<T> {
+    // We can treat this as an experiment. We cannot use keywords like "continue" in the otherwise scope
+    // without the compiler yelling at us unless we define a contract specifying the ways in which the
+    // lambda is called by our function.
+    contract {
+        callsInPlace(otherwise, InvocationKind.AT_MOST_ONCE)
+    }
+
+    return when (this.size == size) {
+        true -> this
+        else -> otherwise(this)
+    }
 }
