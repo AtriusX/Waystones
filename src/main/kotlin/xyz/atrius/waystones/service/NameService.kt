@@ -11,10 +11,12 @@ import org.bukkit.block.Block
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.koin.core.annotation.Single
+import xyz.atrius.waystones.dao.WaystoneInfo
+import xyz.atrius.waystones.repository.WaystoneInfoRepository
 
 @Single
 class NameService(
-    private val warpNameService: WarpNameService,
+    private val waystoneInfoRepository: WaystoneInfoRepository,
 ) {
 
     fun process(
@@ -43,8 +45,10 @@ class NameService(
         val name = PlainTextComponentSerializer
             .plainText()
             .serialize(displayName)
+        val info = WaystoneInfo
+            .fromLocation(block.location, name)
 
-        warpNameService.add(block.location, name)
+        waystoneInfoRepository.save(info)
 
         if (player.gameMode != GameMode.CREATIVE) {
             item.amount--

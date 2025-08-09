@@ -22,8 +22,7 @@ open class KotlinPlugin(private vararg val modules: Module) : JavaPlugin() {
 
     final override fun onEnable() {
         config.options().copyDefaults(true)
-        saveDefaultConfig()
-
+        saveConfig()
         enable(koin)
     }
 

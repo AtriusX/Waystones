@@ -4,6 +4,7 @@ import org.bukkit.ChatColor
 import org.bukkit.NamespacedKey
 import xyz.atrius.waystones.internal.KotlinPlugin
 import java.util.Locale
+import kotlin.enums.enumEntries
 
 // Translate ChatColors using custom ColorCode
 fun String.translateColors(colorCode: Char = '&') = ChatColor
@@ -47,3 +48,21 @@ fun Any.sanitizedStringFormat(): String = toString()
  */
 fun Locale.despecify(): Locale =
     Locale.of(language)
+
+/**
+ * Performs a binding on the value of a string to an enum instance.
+ *
+ * @receiver The string to bind.
+ * @param T The enum type to bind our receiver to.
+ * @return The associated enum entry for the provided enum type.
+ */
+inline fun <reified T : Enum<T>> String?.bindAsEnum(): T {
+    val entries = enumEntries<T>()
+    val entry = entries
+        .firstOrNull { it.toString() == this || it.name == this }
+        ?: throw IllegalArgumentException(
+            "Unsupported value for ${T::class.simpleName}! Must be one of: ${entries.joinToString()}}"
+        )
+
+    return entry
+}

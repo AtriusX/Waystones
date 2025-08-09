@@ -9,12 +9,14 @@ import xyz.atrius.waystones.manager.AdvancementManager
 import xyz.atrius.waystones.manager.CommandManager
 import xyz.atrius.waystones.manager.ConfigManager
 import xyz.atrius.waystones.manager.CraftingRecipeManager
+import xyz.atrius.waystones.manager.DatabaseManager
 import xyz.atrius.waystones.manager.EventManager
 import xyz.atrius.waystones.service.WarpNameService
 import xyz.atrius.waystones.service.WorldRatioService
 
 @Single
 class WaystonesInitializer(
+    private val databaseManager: DatabaseManager,
     private val configManager: ConfigManager,
     private val warpNameService: WarpNameService,
     private val worldRatioService: WorldRatioService,
@@ -27,6 +29,7 @@ class WaystonesInitializer(
 ) : PluginInitializer {
 
     override fun enable() {
+        databaseManager.load()
         configManager.load()
         // Load services
         warpNameService.load()
@@ -48,6 +51,8 @@ class WaystonesInitializer(
     }
 
     override fun disable() {
+        databaseManager.close()
+
         logger.info("Waystones disabled!")
     }
 

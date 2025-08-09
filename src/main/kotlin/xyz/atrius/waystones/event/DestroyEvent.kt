@@ -9,19 +9,22 @@ import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.block.BlockExplodeEvent
 import org.bukkit.event.entity.EntityExplodeEvent
 import org.koin.core.annotation.Single
-import xyz.atrius.waystones.service.WarpNameService
+import xyz.atrius.waystones.repository.WaystoneInfoRepository
 
 @Single
 class DestroyEvent(
-    private val warpNameService: WarpNameService,
+    private val waystoneInfoRepository: WaystoneInfoRepository,
 ) : Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     fun onBreak(event: BlockBreakEvent) {
         val block = event.block
-        if (block.type == Material.LODESTONE) {
-            warpNameService.remove(block.location)
+
+        if (block.type != Material.LODESTONE) {
+            return
         }
+
+        waystoneInfoRepository.deleteByLocation(block.location)
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -30,6 +33,8 @@ class DestroyEvent(
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     fun onEntityExplode(event: EntityExplodeEvent) = destroy(event.blockList())
 
-    private fun destroy(blocks: List<Block>) =
-        warpNameService.remove(blocks.firstOrNull { it.type == Material.LODESTONE }?.location)
+    private fun destroy(blocks: List<Block>) = blocks
+        .filter { it.type == Material.LODESTONE }
+        .map { it.location }
+        .onEach { waystoneInfoRepository.deleteByLocation(it) }
 }

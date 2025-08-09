@@ -6,7 +6,9 @@ import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
 import org.koin.core.annotation.Single
 import xyz.atrius.waystones.advancement.WaystonesAdvancement
+import xyz.atrius.waystones.dao.WaystoneInfo
 import xyz.atrius.waystones.manager.AdvancementManager
+import xyz.atrius.waystones.repository.WaystoneInfoRepository
 import xyz.atrius.waystones.service.LinkService
 import xyz.atrius.waystones.service.LinkService.LinkServiceError
 import xyz.atrius.waystones.utility.cancel
@@ -17,6 +19,7 @@ class LinkEvent(
     private val linkService: LinkService,
     private val advancementManager: AdvancementManager,
     private val waystonesAdvancement: WaystonesAdvancement,
+    private val waystoneInfoRepository: WaystoneInfoRepository,
 ) : Listener {
 
     @EventHandler(ignoreCancelled = true)
@@ -39,7 +42,15 @@ class LinkEvent(
                 player.sendActionError(it.message())
                 event.cancel()
             }
-
+        // Check if an entry exists already before saving the waystone again
+        waystoneInfoRepository
+            .existsByLocation(block.location)
+            .thenApplyAsync { exists ->
+                // If the location isn't present in the database, it should be safe to write
+                if (!exists) {
+                    waystoneInfoRepository.save(WaystoneInfo.fromLocation(block.location))
+                }
+            }
         advancementManager.awardAdvancement(player, waystonesAdvancement)
         event.cancel()
     }

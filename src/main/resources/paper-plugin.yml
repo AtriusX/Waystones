@@ -6,9 +6,7 @@ prefix: Waystones
 website: ${pluginWebsite}
 authors: [Atri, Sepshun, NewbieOrange]
 description: Warp stones for survival
-libraries:
-  - io.insert-koin:koin-core:4.1.0-RC1
-  - io.arrow-kt:arrow-core:2.1.2
+loader: xyz.atrius.waystones.WaystonesLoader
 commands:
   ws:
     description: Displays plugin info and usage
