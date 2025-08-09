@@ -9,6 +9,8 @@ import xyz.atrius.waystones.config.DatabaseProperties
 import xyz.atrius.waystones.internal.KotlinPlugin
 import java.sql.Connection
 import java.sql.DriverManager
+import java.sql.PreparedStatement
+import java.util.UUID
 import java.util.concurrent.CompletableFuture
 
 @Single
@@ -42,7 +44,12 @@ class DatabaseManager(
         }
 
         logger.info("Creating connection to database...")
-        connection = DriverManager.getConnection(properties.getHostUrl(plugin))
+        connection = DriverManager.getConnection(
+            properties.getHostUrl(plugin),
+            properties.username,
+            properties.password
+        )
+
         logger.info("Connection generated!")
     }
 
@@ -57,50 +64,69 @@ class DatabaseManager(
     fun <T> query(query: String, parameters: List<Any?>? = null, rowMapper: RowMapper<T>): CompletableFuture<T?> {
         val statement = connection
             ?.prepareStatement(query)
-            ?: return CompletableFuture.failedFuture(IllegalStateException("Connection is not active!"))
-        // Add parameters if any are provided
-        parameters?.forEachIndexed { i, p ->
-            statement.setObject(i + 1, p)
-        }
+            ?: return connectionInactive()
         // Execute the query and map the row
-        return CompletableFuture.supplyAsync {
-            val result = statement
-                .executeQuery()
+        return CompletableFuture
+            .supplyAsync {
+                val result = statement
+                    .populateParameters(parameters)
+                    .executeQuery()
 
-            when (result.next()) {
-                true -> rowMapper.mapRow(result)
-                else -> null
+                when (result.next()) {
+                    true -> rowMapper.mapRow(result)
+                    else -> null
+                }
             }
-        }
+            .exceptionally { logAndDefault(it, null) }
     }
 
     fun queryExists(query: String, parameters: List<Any?>? = null): CompletableFuture<Boolean> {
         val statement = connection
             ?.prepareStatement(query)
-            ?: return CompletableFuture.failedFuture(IllegalStateException("Connection is not active!"))
-        // Add parameters if any are provided
-        parameters?.forEachIndexed { i, p ->
-            statement.setObject(i + 1, p)
-        }
+            ?: return connectionInactive()
 
-        return CompletableFuture.supplyAsync {
-            statement.executeQuery().next()
-        }
+        return CompletableFuture
+            .supplyAsync {
+                statement
+                    .populateParameters(parameters)
+                    .executeQuery()
+                    .next()
+            }
+            .exceptionally { logAndDefault(it, false) }
     }
 
     fun queryUpdate(query: String, parameters: List<Any?>? = null): CompletableFuture<Int> {
         val statement = connection
             ?.prepareStatement(query)
-            ?: return CompletableFuture.failedFuture(IllegalStateException("Connection is not active!"))
-        // Add parameters if any are provided
-        return CompletableFuture.supplyAsync {
-            parameters?.forEachIndexed { i, p ->
-                statement.setObject(i + 1, p)
-            }
+            ?: return connectionInactive()
 
-            statement
-                .executeUpdate()
+        return CompletableFuture
+            .supplyAsync {
+                statement
+                    .populateParameters(parameters)
+                    .executeUpdate()
+            }
+            .exceptionally { logAndDefault(it, 0) }
+    }
+
+    private fun <T> connectionInactive(): CompletableFuture<T> = CompletableFuture.failedFuture<T>(
+        IllegalStateException("Connection is not active!")
+    )
+
+    private fun PreparedStatement.populateParameters(
+        parameters: List<Any?>?
+    ): PreparedStatement = apply {
+        parameters?.forEachIndexed { i, p ->
+            when (p) {
+                is UUID -> setObject(i + 1, p.toString())
+                else -> setObject(i + 1, p)
+            }
         }
+    }
+
+    private fun <T> logAndDefault(ex: Throwable, value: T): T {
+        logger.error("Failed transaction: ${ex.message}")
+        return value
     }
 
     override fun close() {

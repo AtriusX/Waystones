@@ -60,7 +60,7 @@ class WaystoneInfoRepository(
             SupportedDatabase.SQLITE -> """
                 |insert into waystone_info (world_uid, x, y, z, name)
                 |values (?, ?, ?, ?, ?)
-                |on conflict(world_uid, x, y, z) do update set
+                |on conflict (world_uid, x, y, z) do update set
                 |   name = excluded.name
             """.trimMargin()
         }

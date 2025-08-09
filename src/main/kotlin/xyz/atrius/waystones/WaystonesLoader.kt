@@ -24,6 +24,7 @@ class WaystonesLoader : PluginLoader {
         val resolver = MavenLibraryResolver().apply {
             addDependency("io.arrow-kt:arrow-core-jvm:${WaystoneDependencyVersions.arrowVersion}")
             addDependency("org.flywaydb:flyway-core:${WaystoneDependencyVersions.flywayVersion}")
+            addDependency("org.flywaydb:flyway-mysql:${WaystoneDependencyVersions.flywayVersion}")
             addDependency("org.xerial:sqlite-jdbc:${WaystoneDependencyVersions.sqliteVersion}")
             addDependency("com.mysql:mysql-connector-j:${WaystoneDependencyVersions.mysqlVersion}")
             // Add Paper's dependency repo
