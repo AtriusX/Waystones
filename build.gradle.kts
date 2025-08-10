@@ -128,11 +128,11 @@ tasks.processResources {
         "pluginWebsite",
     )
 
-    doLast {
+//    doLast {
         filesMatching("paper-plugin.yml") {
             expand(providers.mapValues { it.value.get() })
         }
-    }
+//    }
 }
 
 tasks.build {
