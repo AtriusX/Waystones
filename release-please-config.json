@@ -1,8 +1,13 @@
 {
   "packages": {
     ".": {
-      "release-type": "simple",
-      "extra-files": ["gradle.properties"]
+      "release-type": "go",
+      "extra-files": [
+        {
+          "type": "generic",
+          "path": "gradle.properties"
+        }
+      ]
     }
   }
 }
