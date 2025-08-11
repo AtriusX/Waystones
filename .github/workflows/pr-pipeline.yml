@@ -11,6 +11,9 @@ on:
       - 'gradle.properties'
       - '.github/workflows/pr-pipeline.yml'
 
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest

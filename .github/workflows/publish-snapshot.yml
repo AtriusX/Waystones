@@ -8,6 +8,9 @@ on:
       - 'src/main/**'
       - 'gradle.properties'
 
+permissions:
+  contents: read
+
 jobs:
   publish-hangar:
     if: ${{ github.actor != 'github-actions[bot]' }}

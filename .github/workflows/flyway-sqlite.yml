@@ -12,6 +12,9 @@ env:
   DB_NAME: waystones
   DB_TYPE: "sqlite"
 
+permissions:
+  contents: read
+
 jobs:
   validate-flyway:
     runs-on: ubuntu-latest
