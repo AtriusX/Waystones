@@ -1,0 +1,38 @@
+name: CodeQL Scanning
+on:
+  push:
+    branches:
+      - 'master'
+  pull_request:
+    paths:
+      - 'src/main/kotlin/**'
+      - 'src/test/kotlin/**'
+      - 'src/main/resources/**'
+      - 'src/test/resources/**'
+      - '.github/workflows/code-ql.yml'
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  codeql:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Project
+        uses: actions/checkout@v4
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: java-kotlin
+          build-mode: manual
+      - name: Build Project
+        run: |-
+          ./gradlew --no-daemon --info -S clean testClasses \
+          -Pkotlin.incremental=false \
+          -Dorg.gradle.workers.max=1 \
+          -Pkotlin.compiler.execution.strategy=in-process
+      - name: Analyze Build
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: '/language:java-kotlin'
