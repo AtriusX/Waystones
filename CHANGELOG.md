@@ -1,5 +1,21 @@
 # Changelog
 
+## [2.1.0](https://github.com/AtriusX/Waystones/compare/v2.0.0...v2.1.0) (2025-08-11)
+
+
+### Features
+
+* Add database JDBC-style repository for waystone info ([15ae8fb](https://github.com/AtriusX/Waystones/commit/15ae8fbbd651d0e0cd4aba8b9038179185d867bd))
+* Add early database support, migrate dependency loading to loader class ([8f8e378](https://github.com/AtriusX/Waystones/commit/8f8e3789298e5d6fdc36f8caadc42c161a8c7713))
+* Add early database support, migrate dependency loading to loader class ([f5bc484](https://github.com/AtriusX/Waystones/commit/f5bc484c5418ff87802afd335b3e9f3c36bd8214))
+
+
+### Bug Fixes
+
+* Database mapping logic ([fda6bd5](https://github.com/AtriusX/Waystones/commit/fda6bd53e9e9df5d80cf72dd2528f33bd999fc5d))
+* Name overwrite issue on key linking ([59cea25](https://github.com/AtriusX/Waystones/commit/59cea25039f665036f9e0f3b106b15ebc1110b56))
+* Update parsing of UUID values for MySQL ([1fedfb9](https://github.com/AtriusX/Waystones/commit/1fedfb9372fa79e966e38c359d9b5bc1fc8ad7b5))
+
 ## [2.0.0](https://github.com/AtriusX/Waystones/compare/1.2.0...v2.0.0) (2025-07-26)
 
 
