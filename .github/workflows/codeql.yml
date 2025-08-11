@@ -1,0 +1,52 @@
+name: CodeQL Scanning
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+    paths:
+      - 'src/main/kotlin/**'
+      - 'src/test/kotlin/**'
+      - 'src/main/resources/**'
+      - 'src/test/resources/**'
+      - '.github/workflows/codeql.yml'
+  schedule:
+    - cron: '26 4 * * 6'
+
+permissions:
+  security-events: write
+  packages: read
+
+jobs:
+  analyze:
+    name: Analyze (${{ matrix.language }})
+    runs-on: 'ubuntu-latest'
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+        - language: actions
+          build-mode: none
+        - language: java-kotlin
+          build-mode: manual
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    - name: Change Wrapper Permissions
+      run: chmod +x ./gradlew
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v3
+      with:
+        languages: ${{ matrix.language }}
+        build-mode: ${{ matrix.build-mode }}
+    - name: Build Project
+      run: |-
+        ./gradlew --no-daemon --info -S clean testClasses \
+        -Pkotlin.incremental=false \
+        -Dorg.gradle.workers.max=1 \
+        -Pkotlin.compiler.execution.strategy=in-process
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v3
+      with:
+        category: "/language:${{matrix.language}}"
