@@ -80,6 +80,31 @@ class DatabaseManager(
             .exceptionally { logAndDefault(it, null) }
     }
 
+    fun <T> queryAll(
+        query: String,
+        parameters: List<Any?>? = null,
+        rowMapper: RowMapper<T>,
+    ): CompletableFuture<List<T>> {
+        val statement = connection
+            ?.prepareStatement(query)
+            ?: return connectionInactive()
+        // Execute the query and map the row
+        return CompletableFuture
+            .supplyAsync {
+                val output = mutableListOf<T>()
+                val result = statement
+                    .populateParameters(parameters)
+                    .executeQuery()
+
+                while (result.next()) {
+                    output.add(rowMapper.mapRow(result))
+                }
+
+                output as List<T>
+            }
+            .exceptionally { logAndDefault(it, null) }
+    }
+
     fun queryExists(query: String, parameters: List<Any?>? = null): CompletableFuture<Boolean> {
         val statement = connection
             ?.prepareStatement(query)

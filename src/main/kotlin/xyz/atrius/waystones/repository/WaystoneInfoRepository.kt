@@ -33,6 +33,29 @@ class WaystoneInfoRepository(
             .query(query, params, this)
     }
 
+    fun getAll(limit: Int, offset: Int): CompletableFuture<List<WaystoneInfo>> {
+        val query = """
+            |select *
+            |from waystone_info
+            |limit ? offset ?;
+        """.trimMargin()
+        val params = listOf(limit, offset)
+
+        return databaseManager
+            .queryAll(query, params, this)
+    }
+
+    fun entries(): CompletableFuture<Int> {
+        val query = """
+            |select count(*)
+            |from waystone_info;
+        """.trimMargin()
+
+        return databaseManager
+            .query(query, rowMapper = CountRowMapper)
+            .thenApplyAsync { it ?: 0 }
+    }
+
     fun existsByLocation(location: Location): CompletableFuture<Boolean> {
         val query = """
             |select 1
