@@ -53,5 +53,9 @@ class LinkEvent(
             }
         advancementManager.awardAdvancement(player, waystonesAdvancement)
         event.cancel()
+        // This is silly but due to https://github.com/PaperMC/Paper/issues/12954 the inventory is getting
+        // de-synced from the server. To ensure our linked keys do not get duplicated, we force an update
+        // event here to keep the server and client synchronized. Once the bug is fixed, this can be removed.
+        player.updateInventory()
     }
 }
