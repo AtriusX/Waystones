@@ -183,12 +183,41 @@ tasks.withType<HangarPublishTask> {
     notCompatibleWithConfigurationCache("Do not cache artifacts")
 }
 
+private fun extractChangelog(content: String): String {
+    val lines = content.split("\n")
+    var skip = true
+
+    if (lines.size == 1) {
+        return content
+    }
+
+    for (i in lines.indices) {
+        if (!lines[i].startsWith("## ")) {
+            continue
+        }
+
+        if (skip) {
+            skip = false
+            continue
+        }
+
+        return lines
+            .subList(0, i)
+            .joinToString("\n")
+            .trim()
+    }
+
+    return content
+}
+
 hangarPublish {
     publications.register("WaystonesRelease") {
         version = pluginVersion
         id = "waystones"
         channel = "Release"
-        changelog = file("CHANGELOG.md").readText()
+        changelog = file("CHANGELOG.md")
+            .readText()
+            .let(::extractChangelog)
         apiKey = System.getenv("HANGAR_API_TOKEN")
 
         platforms {
@@ -227,7 +256,9 @@ modrinth {
     when (channel) {
         "release" -> {
             versionNumber = pluginVersion
-            changelog = file("CHANGELOG.md").readText()
+            changelog = file("CHANGELOG.md")
+                .readText()
+                .let(::extractChangelog)
         }
 
         else -> {
