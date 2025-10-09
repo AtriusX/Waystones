@@ -1,5 +1,41 @@
 # Changelog
 
+## [2.1.0](https://github.com/AtriusX/Waystones/compare/v2.0.0...v2.1.0) (2025-10-09)
+
+
+### Feature Changes
+
+* Add database JDBC-style repository for waystone info ([15ae8fb](https://github.com/AtriusX/Waystones/commit/15ae8fbbd651d0e0cd4aba8b9038179185d867bd))
+* Add early database support, migrate dependency loading to loader class ([8f8e378](https://github.com/AtriusX/Waystones/commit/8f8e3789298e5d6fdc36f8caadc42c161a8c7713))
+* Add early database support, migrate dependency loading to loader class ([f5bc484](https://github.com/AtriusX/Waystones/commit/f5bc484c5418ff87802afd335b3e9f3c36bd8214))
+* Add list command to show known waystone data ([6b58a89](https://github.com/AtriusX/Waystones/commit/6b58a89cb7e949cd67e9098ff4380e0cdc4ce2ac))
+* Add list command to show known waystone data ([16a0f0c](https://github.com/AtriusX/Waystones/commit/16a0f0c990b88d0c26351cd44bbd579c1993a899))
+
+
+### Bug Fixes
+
+* Database mapping logic ([fda6bd5](https://github.com/AtriusX/Waystones/commit/fda6bd53e9e9df5d80cf72dd2528f33bd999fc5d))
+* Name overwrite issue on key linking ([59cea25](https://github.com/AtriusX/Waystones/commit/59cea25039f665036f9e0f3b106b15ebc1110b56))
+* New empty list message for page one ([a4aa849](https://github.com/AtriusX/Waystones/commit/a4aa849ed1a1aedcda85f74b2fd49648242612a5))
+* New empty list message for page one ([05a86d8](https://github.com/AtriusX/Waystones/commit/05a86d84fe56a39964dd4f9d81102f2731d3afcd))
+* Resolve de-syncing issue with inventories on link ([d20cbf9](https://github.com/AtriusX/Waystones/commit/d20cbf99a58929d201f67091166c862ad57aa28a))
+* Resolve de-syncing issue with inventories on link ([b41bc3b](https://github.com/AtriusX/Waystones/commit/b41bc3b7ce21f0bb099976bf60c53bc3800d6b83))
+* Update parsing of UUID values for MySQL ([1fedfb9](https://github.com/AtriusX/Waystones/commit/1fedfb9372fa79e966e38c359d9b5bc1fc8ad7b5))
+
+
+### Miscellaneous Changes
+
+* Add admin permission to paper-plugin.yml ([b46a058](https://github.com/AtriusX/Waystones/commit/b46a05803129516ffc4b37ee1f6123b218006003))
+* Add extra auto-generated folders to .gitignore ([8ba5017](https://github.com/AtriusX/Waystones/commit/8ba5017ba8854445cbe3e71569a8cb70a2e81d86))
+* Add new config fields for database information ([428ea02](https://github.com/AtriusX/Waystones/commit/428ea027a0dbb37dd92c66028bb9b7bfed904d4c))
+* Add temporary migration command for waystone names ([8af6796](https://github.com/AtriusX/Waystones/commit/8af67962dbfd36f472b32319a7ec6a0a4c8c9187))
+* Fix detekt issues ([e8cb548](https://github.com/AtriusX/Waystones/commit/e8cb54862e4520c096597af50317b80c7af02df9))
+* Improve migration function safety ([3156c52](https://github.com/AtriusX/Waystones/commit/3156c52e3917148c8740d7d130c8f7ccebf5a052))
+* Introduce issue templates ([bf80bf5](https://github.com/AtriusX/Waystones/commit/bf80bf56afca116603f22f2bee3f1cee14039a2c))
+* Introduce issue templates ([156b7bd](https://github.com/AtriusX/Waystones/commit/156b7bd94d12b1b090d21c36c151e8c9c28a7f1d))
+* Minimize plugin shadowing ([60206cf](https://github.com/AtriusX/Waystones/commit/60206cf916bef88239e381919c8be6e9557ebab0))
+* Minimize plugin shadowing ([9da5194](https://github.com/AtriusX/Waystones/commit/9da5194f6eb017e4e888ad2e4823771560a55547))
+
 ## [2.0.0](https://github.com/AtriusX/Waystones/compare/1.2.0...v2.0.0) (2025-07-26)
 
 
