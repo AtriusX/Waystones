@@ -65,7 +65,7 @@ class ListCommand(
             .format(sender as? Player)
 
         if (waystones.isEmpty()) {
-            sender.message(localization["waystone-list-no-entries", page])
+            emptyWaystoneList(sender, page)
             return Command.SINGLE_SUCCESS
         }
 
@@ -111,6 +111,11 @@ class ListCommand(
         .thenApplyAsync { ceil(it.toDouble() / PAGE_SIZE).toInt() }
         .get()
         .coerceAtLeast(1)
+
+    private fun emptyWaystoneList(sender: CommandSender, page: Int) = when (page) {
+        1 -> sender.message(localization["waystone-list-empty"])
+        else -> sender.message(localization["waystone-list-no-entries", page])
+    }
 
     private fun getTeleportComponent(
         name: String,
