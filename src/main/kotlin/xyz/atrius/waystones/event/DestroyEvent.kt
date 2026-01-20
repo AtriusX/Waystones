@@ -28,10 +28,14 @@ class DestroyEvent(
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    fun onExplode(event: BlockExplodeEvent) = destroy(event.blockList())
+    fun onExplode(event: BlockExplodeEvent) {
+        destroy(event.blockList())
+    }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    fun onEntityExplode(event: EntityExplodeEvent) = destroy(event.blockList())
+    fun onEntityExplode(event: EntityExplodeEvent) {
+        destroy(event.blockList())
+    }
 
     private fun destroy(blocks: List<Block>) = blocks
         .filter { it.type == Material.LODESTONE }
