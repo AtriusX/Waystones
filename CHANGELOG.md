@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.1.1](https://github.com/AtriusX/Waystones/compare/v2.1.0...v2.1.1) (2026-01-20)
+
+
+### Bug Fixes
+
+* Remove implicit List&lt;T&gt; return on DestroyEvent event listeners ([19038e8](https://github.com/AtriusX/Waystones/commit/19038e8546d2d2bd88e6946b010de5c62d20d6a8))
+
+
+### Miscellaneous Changes
+
+* Bump plugin version to 1.21.11 ([8bca086](https://github.com/AtriusX/Waystones/commit/8bca086191e9653da61146d396ebb0c914ba99f8))
+* Bump plugin version to 1.21.11 ([8b2c5be](https://github.com/AtriusX/Waystones/commit/8b2c5be6daeb7952c26e2c877d06d22439db1524))
+
 ## [2.1.0](https://github.com/AtriusX/Waystones/compare/v2.0.0...v2.1.0) (2025-10-09)
 
 
