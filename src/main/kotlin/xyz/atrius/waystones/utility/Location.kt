@@ -78,5 +78,10 @@ fun Location.synchronize(other: Location): TeleportType =
 fun Location.sameDimension(world: World?) =
     world == this.world
 
-fun Location.playSound(sound: Sound, volume: Float = 1f, pitch: Float = 1f) = Bukkit.getOnlinePlayers()
-    .forEach { if (it.world == world) it.playSound(this, sound, SoundCategory.MASTER, volume, pitch, 0) }
+fun Location.playSound(sound: Sound, volume: Float = 1f, pitch: Float = 1f) = Bukkit
+    .getOnlinePlayers()
+    .forEach {
+        when (it.world) {
+            world -> it.playSound(this, sound, SoundCategory.MASTER, volume, pitch, 0)
+        }
+    }

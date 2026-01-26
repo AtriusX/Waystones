@@ -105,7 +105,7 @@ class SimpleTeleportEffect(
         )
         // Warp sound effects
         location.playSound(Sound.ENTITY_STRAY_DEATH, 0.5f, 0f)
-        location.playSound(Sound.BLOCK_BELL_RESONATE, 20f, 0f)
+        location.playSound(Sound.BLOCK_BELL_RESONATE, 1f, 0f)
         location.playSound(Sound.BLOCK_RESPAWN_ANCHOR_DEPLETE)
     }
 
@@ -113,6 +113,6 @@ class SimpleTeleportEffect(
         val player = warp.player
         player.hideBossBar(bar)
         player.stopSound(Sound.BLOCK_PORTAL_AMBIENT)
-        player.location.playSound(Sound.BLOCK_BEACON_DEACTIVATE, 20f, 0f)
+        player.location.playSound(Sound.BLOCK_BEACON_DEACTIVATE, 1f, 0f)
     }
 }
