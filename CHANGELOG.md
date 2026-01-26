@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.1.2](https://github.com/AtriusX/Waystones/compare/v2.1.1...v2.1.2) (2026-01-26)
+
+
+### Bug Fixes
+
+* Lower volume of some sounds ([4e86519](https://github.com/AtriusX/Waystones/commit/4e86519114704b7f7babad653b8bab3313be8a59))
+* Lower volume of some sounds ([f8fff13](https://github.com/AtriusX/Waystones/commit/f8fff13afc171c1e0c04cd2dae3b29466f1417fa))
+
 ## [2.1.1](https://github.com/AtriusX/Waystones/compare/v2.1.0...v2.1.1) (2026-01-20)
 
 
