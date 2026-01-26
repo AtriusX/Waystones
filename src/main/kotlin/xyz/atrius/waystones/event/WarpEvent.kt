@@ -57,7 +57,7 @@ class WarpEvent(
         val warp = waystoneService
             .process(player, key.location.block, key.location)
             .foldResult {
-                player.location.playSound(Sound.ENTITY_ENDER_EYE_DEATH, 20f, 0f)
+                player.location.playSound(Sound.ENTITY_ENDER_EYE_DEATH, 1f, 0f)
                 return player.sendActionError(it.message())
             }
 
