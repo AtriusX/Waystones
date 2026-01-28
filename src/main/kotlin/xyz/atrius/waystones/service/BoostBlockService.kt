@@ -19,7 +19,14 @@ class BoostBlockService(
         Material.EMERALD_BLOCK to ::emeraldBoost,
         Material.DIAMOND_BLOCK to ::diamondBoost,
         Material.GOLD_BLOCK to ::goldBoost,
+        Material.WAXED_COPPER_BLOCK to ::optimizedCopperBoost,
         Material.COPPER_BLOCK to ::copperBoost,
+        Material.WAXED_EXPOSED_COPPER to ::copperBoost,
+        Material.EXPOSED_COPPER to ::copperBoost,
+        Material.WAXED_WEATHERED_COPPER to ::copperBoost,
+        Material.WEATHERED_COPPER to ::copperBoost,
+        Material.WAXED_OXIDIZED_COPPER to ::copperBoost,
+        Material.OXIDIZED_COPPER to ::copperBoost,
         Material.IRON_BLOCK to ::ironBoost
     )
 
@@ -42,6 +49,9 @@ class BoostBlockService(
 
     // Gold grants 33% of the max boost per block
     private fun goldBoost(): Int = maxBoost.value() / 3
+
+    // A waxed, unoxidized copper block grants 30% of the max boost per block
+    private fun optimizedCopperBoost(): Int = (maxBoost.value() * 0.3).toInt()
 
     // Copper grants 25% of the max boost per block
     private fun copperBoost(): Int = maxBoost.value() / 4
