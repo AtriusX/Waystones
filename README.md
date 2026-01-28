@@ -11,7 +11,7 @@ Players can create and warp to a waystone by creating a lodestone and linking it
 
 - When single use warp keys is enabled, warp keys will be destroyed upon warping.
 - When distance limiting is enabled, users can place blocks around the warp stone to increase its max range!
-	- Supported blocks include **Netherite (max boost)**, **Emerald (75% boost)**, **Diamond (50% boost)**, **Gold (33% boost)** or **Iron (20% boost)** blocks.
+	- Supported blocks include **Netherite (max boost)**, **Emerald (75% boost)**, **Diamond (50% boost)**, **Gold (33% boost)**, **Waxed Copper Block (30% Boost)**, **Other Copper Blocks (25% Boost)** or **Iron (20% boost)** blocks.
 	- Obsidian can be placed under a lodestone to prevent it from being used as a waystone!
 	- For admins, a **command block** can be placed under a lodestone to remove the range limit and power requirements!
 - When power requirements are enabled, users can place a respawn anchor under the waystone to allow for teleportation!
