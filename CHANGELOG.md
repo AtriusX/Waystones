@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.1.3](https://github.com/AtriusX/Waystones/compare/v2.1.2...v2.1.3) (2026-01-28)
+
+
+### Bug Fixes
+
+* Introduce oxidized copper blocks to boost block mappings, add optimized boost for waxed unoxidized copper blocks ([15a6f25](https://github.com/AtriusX/Waystones/commit/15a6f251a7f0db167711f98c364a2c53308474ac))
+
+
+### Miscellaneous Changes
+
+* Update README.md ([a201bb5](https://github.com/AtriusX/Waystones/commit/a201bb5579e022a4ad17ac52023f8356767798e0))
+
 ## [2.1.2](https://github.com/AtriusX/Waystones/compare/v2.1.1...v2.1.2) (2026-01-26)
 
 
