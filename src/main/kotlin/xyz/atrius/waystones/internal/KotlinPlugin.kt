@@ -29,10 +29,10 @@ open class KotlinPlugin(private vararg val modules: Module) : JavaPlugin() {
     final override fun onDisable() = disable(koin)
 
     inline fun <reified T : PluginInitializer> enablePlugin(koin: Koin) {
-        koin.get<T>().enable()
+        koin.get<T>().enable(this)
     }
 
     inline fun <reified T : PluginInitializer> disablePlugin(koin: Koin) {
-        koin.get<T>().disable()
+        koin.get<T>().disable(this)
     }
 }

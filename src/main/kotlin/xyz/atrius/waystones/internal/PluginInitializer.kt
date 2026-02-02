@@ -2,7 +2,7 @@ package xyz.atrius.waystones.internal
 
 interface PluginInitializer {
 
-    fun enable()
+    fun enable(plugin: KotlinPlugin)
 
-    fun disable()
+    fun disable(plugin: KotlinPlugin)
 }
