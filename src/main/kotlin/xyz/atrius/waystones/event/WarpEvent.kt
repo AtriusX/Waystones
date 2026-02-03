@@ -20,6 +20,7 @@ import xyz.atrius.waystones.manager.AdvancementManager
 import xyz.atrius.waystones.manager.LocalizationManager
 import xyz.atrius.waystones.service.KeyService
 import xyz.atrius.waystones.service.TeleportService
+import xyz.atrius.waystones.service.WarpValidationService
 import xyz.atrius.waystones.service.WaystoneService
 import xyz.atrius.waystones.utility.cancel
 import xyz.atrius.waystones.utility.foldResult
@@ -37,16 +38,18 @@ class WarpEvent(
     private val advancementManager: AdvancementManager,
     private val secretTunnelAdvancement: SecretTunnelAdvancement,
     private val shootTheMessenger: ShootTheMessengerAdvancement,
+    private val warpValidationService: WarpValidationService,
 ) : Listener {
 
     @EventHandler
     fun onClick(event: PlayerInteractEvent) {
         val player = event.player
-        // Don't start warp while flying with elytra, not right-clicking, or a lodestone was clicked
-        if (player.isGliding ||
-            !event.action.isRightClick ||
-            waystoneService.isWaystone(event.clickedBlock)
-        ) {
+        // We only care about right-click actions
+        if (!event.action.isRightClick) {
+            return
+        }
+
+        if (!warpValidationService.validateCanWarp(player, event.clickedBlock)) {
             return
         }
         // Make sure the key is connected before we continue
