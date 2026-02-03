@@ -2,9 +2,12 @@ package xyz.atrius.waystones.config
 
 import xyz.atrius.waystones.internal.KotlinPlugin
 
-enum class SupportedDatabase(private val type: String) {
-    SQLITE("sqlite"),
-    MYSQL("mysql");
+enum class SupportedDatabase(
+    val type: String,
+    val description: String
+) {
+    SQLITE("sqlite", "SQLite"),
+    MYSQL("mysql", "MySQL");
 
     override fun toString(): String = type
 }

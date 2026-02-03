@@ -32,6 +32,7 @@ java {
 
 val kotlinVersion: String by project
 val koinVersion: String by project
+val bstatsVersion: String by project
 val arrowVersion: String by project
 val flywayVersion: String by project
 val sqliteVersion: String by project
@@ -47,6 +48,7 @@ dependencies {
     compileOnly("io.papermc.paper:paper-api:$buildPaperVersion-R0.1-SNAPSHOT")
     implementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
     implementation("io.insert-koin:koin-core:$koinVersion")
+    implementation("org.bstats:bstats-bukkit:$bstatsVersion")
     shadow("io.arrow-kt:arrow-core:$arrowVersion")
     // Database dependencies
     shadow("org.flywaydb:flyway-core:$flywayVersion")
@@ -109,7 +111,9 @@ tasks.shadowJar {
     minimize()
     archiveClassifier.set("")
     archiveVersion.set(pluginVersion)
-    relocate("kotlin", "xyz.atrius.waystones.kotlin")
+    val location = project.group.toString()
+    relocate("kotlin", location)
+    relocate("org.bstats", location)
 }
 
 tasks.withType<Test>().configureEach {

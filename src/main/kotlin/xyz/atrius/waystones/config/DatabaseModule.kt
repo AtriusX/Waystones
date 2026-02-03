@@ -1,5 +1,7 @@
 package xyz.atrius.waystones.config
 
+import org.bstats.bukkit.Metrics
+import org.bstats.charts.SimplePie
 import org.flywaydb.core.Flyway
 import org.koin.core.annotation.Module
 import org.koin.core.annotation.Single
@@ -13,17 +15,25 @@ object DatabaseModule {
     @Single
     fun getDatabaseConfiguration(
         plugin: KotlinPlugin,
+        metrics: Metrics,
     ): DatabaseProperties {
         logger.info("Attempting to load database configuration...")
 
         val config = plugin.config
             .getConfigurationSection("database")
             ?: return defaultDatabaseProperties()
+        val database = config
+            .getString("type")
+            .bindAsEnum<SupportedDatabase>()
+        // Track database type usage
+        metrics.addCustomChart(
+            SimplePie("database_type") {
+                database.description
+            }
+        )
 
         return DatabaseProperties(
-            type = config
-                .getString("type")
-                .bindAsEnum<SupportedDatabase>(),
+            type = database,
             host = config.getString("host"),
             port = config.getInt("port"),
             username = config.getString("username"),

@@ -4,6 +4,7 @@ import org.koin.core.annotation.Single
 import org.slf4j.LoggerFactory
 import xyz.atrius.waystones.data.config.property.EnableAdvancementsProperty
 import xyz.atrius.waystones.data.config.property.EnableKeyItemsProperty
+import xyz.atrius.waystones.internal.KotlinPlugin
 import xyz.atrius.waystones.internal.PluginInitializer
 import xyz.atrius.waystones.manager.AdvancementManager
 import xyz.atrius.waystones.manager.CommandManager
@@ -28,7 +29,7 @@ class WaystonesInitializer(
     private val commandManager: CommandManager,
 ) : PluginInitializer {
 
-    override fun enable() {
+    override fun enable(plugin: KotlinPlugin) {
         databaseManager.load()
         configManager.load()
         // Load services
@@ -47,13 +48,13 @@ class WaystonesInitializer(
 
         commandManager.register()
 
-        logger.info("Waystones loaded!")
+        logger.info("${plugin.name} loaded!")
     }
 
-    override fun disable() {
+    override fun disable(plugin: KotlinPlugin) {
         databaseManager.close()
 
-        logger.info("Waystones disabled!")
+        logger.info("${plugin.name} disabled!")
     }
 
     companion object {
