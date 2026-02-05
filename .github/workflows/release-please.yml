@@ -3,7 +3,7 @@ name: Generate Release PR
 on:
   push:
     branches:
-      - master
+      - main
 
 permissions:
   contents: write

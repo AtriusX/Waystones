@@ -5,7 +5,7 @@ on:
       - 'src/main/resources/db/migration/common/**'
       - 'src/main/resources/db/migration/sqlite/**'
     branches:
-      - master
+      - main
 
 env:
   DB_URL: 'jdbc:sqlite:./waystones.db'
