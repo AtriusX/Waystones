@@ -11,8 +11,10 @@ import org.bukkit.block.Block
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.koin.core.annotation.Single
+import org.slf4j.LoggerFactory
 import xyz.atrius.waystones.dao.WaystoneInfo
 import xyz.atrius.waystones.repository.WaystoneInfoRepository
+import xyz.atrius.waystones.utility.locationCode
 
 @Single
 class NameService(
@@ -45,10 +47,18 @@ class NameService(
         val name = PlainTextComponentSerializer
             .plainText()
             .serialize(displayName)
-        val info = WaystoneInfo
-            .fromLocation(block.location, name)
+        val info = waystoneInfoRepository
+            .getWaystone(block.location)
+            .get()
 
-        waystoneInfoRepository.save(info)
+        ensure(name != info?.name) {
+            logger.debug("Waystone at ${block.location.locationCode} already has name '$name'! Skipping rename.")
+            NameServiceError.Ignore
+        }
+
+        val newInfo = WaystoneInfo
+            .fromLocation(block.location, name)
+        waystoneInfoRepository.save(newInfo)
 
         if (player.gameMode != GameMode.CREATIVE) {
             item.amount--
@@ -60,5 +70,11 @@ class NameService(
     sealed class NameServiceError {
 
         object Ignore : NameServiceError()
+    }
+
+    companion object {
+
+        private val logger = LoggerFactory
+            .getLogger(NameService::class.java.name)
     }
 }

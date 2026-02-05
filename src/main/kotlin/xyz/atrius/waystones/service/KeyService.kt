@@ -11,6 +11,7 @@ import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.CompassMeta
+import org.bukkit.persistence.PersistentDataType
 import org.koin.core.annotation.Single
 import xyz.atrius.waystones.data.config.property.EnableKeyItemsProperty
 import xyz.atrius.waystones.data.config.property.PortalSicknessWarpingProperty
@@ -41,10 +42,8 @@ class KeyService(
     }
 
     fun isWarpKey(key: ItemStack) = when (enableKeyItems.value()) {
-        true -> key.itemMeta?.get("is_warp_key") == 1
-        else ->
-            key.type == Material.COMPASS &&
-                (key.itemMeta as? CompassMeta)?.lodestone != null
+        true -> key.itemMeta?.get("is_warp_key", PersistentDataType.INTEGER) == 1
+        else -> key.type == Material.COMPASS && (key.itemMeta as? CompassMeta)?.lodestone != null
     }
 
     private fun validateKey(player: Player, key: ItemStack): Either<KeyServiceError, Location> = either {
