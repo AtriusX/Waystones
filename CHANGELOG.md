@@ -1,5 +1,22 @@
 # Changelog
 
+## [2.1.4](https://github.com/AtriusX/Waystones/compare/v2.1.3...v2.1.4) (2026-02-05)
+
+
+### Bug Fixes
+
+* Allow waystone keys to be relinked if the waystone name has changed ([8dc2d58](https://github.com/AtriusX/Waystones/commit/8dc2d58d250008522d75da4bbc9e5dd131b0a63d))
+* Prevent naming a waystone if a nametag has the same name as the waystone ([6feddf7](https://github.com/AtriusX/Waystones/commit/6feddf792802fbec2fad95989958d1c8c99af5cb))
+* Various waystone naming bugs ([33e0b61](https://github.com/AtriusX/Waystones/commit/33e0b6190a5afb3f5078a18333380e70cde8f371))
+
+
+### Miscellaneous Changes
+
+* Add early bStats support ([aafc799](https://github.com/AtriusX/Waystones/commit/aafc799217026451bfa3b686a661e84a3646becd))
+* Add early bStats support ([e85133e](https://github.com/AtriusX/Waystones/commit/e85133e2a9800a731756ec727e8be4df2ce6c017))
+* Improve warp validation for waystone keys ([64b0f72](https://github.com/AtriusX/Waystones/commit/64b0f72912f20d5d4930cde154ecb935aa105190))
+* Improve warp validation for waystone keys ([f203757](https://github.com/AtriusX/Waystones/commit/f203757834c35dfa2c98d1ccf329788284614f8c))
+
 ## [2.1.3](https://github.com/AtriusX/Waystones/compare/v2.1.2...v2.1.3) (2026-01-28)
 
 
