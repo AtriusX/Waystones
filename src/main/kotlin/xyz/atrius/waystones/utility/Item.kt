@@ -5,19 +5,14 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.PlayerInventory
 import org.bukkit.inventory.meta.ItemMeta
 import org.bukkit.persistence.PersistentDataType
-import org.bukkit.persistence.PersistentDataType.INTEGER
 
-operator fun ItemMeta.get(key: String) =
-    persistentDataContainer.get(key.toKey(), INTEGER)
+operator fun <T : Any> ItemMeta.get(key: String, type: PersistentDataType<T, T>) =
+    persistentDataContainer
+        .get(key.toKey(), type)
 
 operator fun <T> ItemMeta.set(key: String, type: PersistentDataType<T, T>, value: T) =
     persistentDataContainer
-        .set(
-            key.toKey(),
-            type,
-            value
-                ?: error("Value must be provided!")
-        )
+        .set(key.toKey(), type, value ?: error("Value must be provided!"))
 
 fun PlayerInventory.addItemNaturally(original: ItemStack, new: ItemStack) {
     val player = holder as Player
