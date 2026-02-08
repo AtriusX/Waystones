@@ -6,6 +6,7 @@ import org.bukkit.block.Block
 import org.bukkit.block.BlockState
 import org.bukkit.block.ShulkerBox
 import org.bukkit.block.data.BlockData
+import org.bukkit.block.data.type.Chest
 import org.bukkit.block.data.type.ChiseledBookshelf
 import org.bukkit.block.data.type.Door
 import org.bukkit.block.data.type.Gate
@@ -35,11 +36,9 @@ class WarpValidationService(
         Material.BLAST_FURNACE,
         Material.BREWING_STAND,
         Material.CARTOGRAPHY_TABLE,
-        Material.CHEST,
         Material.COMMAND_BLOCK,
         Material.CHAIN_COMMAND_BLOCK,
         Material.REPEATING_COMMAND_BLOCK,
-        Material.COPPER_CHEST,
         Material.CRAFTER,
         Material.CRAFTING_TABLE,
         Material.DAMAGED_ANVIL,
@@ -68,6 +67,7 @@ class WarpValidationService(
         Material.COMPARATOR,
         Material.DAYLIGHT_DETECTOR,
         Material.DECORATED_POT,
+        Material.JUKEBOX,
         Material.LEVER,
         Material.NOTE_BLOCK,
         Material.REPEATER,
@@ -109,6 +109,11 @@ class WarpValidationService(
         // Check if block is any door type
         is Door, is TrapDoor, is Gate -> {
             logValidationFailure(player, "Player is interacting with a door, trapdoor, or gate")
+            false
+        }
+        // Check for any chest type blocks
+        is Chest -> {
+            logValidationFailure(player, "Player is interacting with a chest")
             false
         }
         // This should primarily catch levers and buttons
