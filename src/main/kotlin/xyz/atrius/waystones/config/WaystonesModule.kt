@@ -8,6 +8,7 @@ import org.bukkit.Material
 import org.koin.core.annotation.ComponentScan
 import org.koin.core.annotation.Module
 import org.koin.core.annotation.Named
+import org.koin.core.annotation.Provided
 import org.koin.core.annotation.Single
 import xyz.atrius.waystones.data.json.serializer.MaterialTypeAdapter
 import xyz.atrius.waystones.internal.KotlinPlugin
@@ -38,6 +39,6 @@ object WaystonesModule {
     fun defaultPluginLocale(): Locale = Locale.ENGLISH
 
     @Single(createdAtStart = true)
-    fun metrics(plugin: KotlinPlugin): Metrics =
+    fun metrics(@Provided plugin: KotlinPlugin): Metrics =
         Metrics(plugin, BSTATS_PLUGIN_ID)
 }

@@ -3,6 +3,7 @@ package xyz.atrius.waystones.repository
 import org.bukkit.Location
 import org.bukkit.World
 import org.flywaydb.core.internal.jdbc.RowMapper
+import org.koin.core.annotation.Provided
 import org.koin.core.annotation.Single
 import xyz.atrius.waystones.config.DatabaseProperties
 import xyz.atrius.waystones.config.SupportedDatabase
@@ -15,7 +16,7 @@ import java.util.concurrent.CompletableFuture
 @Single
 class WaystoneInfoRepository(
     private val databaseManager: DatabaseManager,
-    private val databaseProperties: DatabaseProperties,
+    @Provided private val databaseProperties: DatabaseProperties,
 ) : RowMapper<WaystoneInfo> {
 
     fun getWaystone(location: Location): CompletableFuture<WaystoneInfo?> {

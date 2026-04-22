@@ -6,7 +6,7 @@ import xyz.atrius.waystones.command.resolver.EnumArgumentType
 import xyz.atrius.waystones.data.config.ListConfigProperty
 import xyz.atrius.waystones.utility.sanitizedStringFormat
 
-@Single
+@Single(binds = [ListConfigProperty::class])
 class KeyRecipeProperty : ListConfigProperty<Material>(
     property = "key-recipe",
     default = listOf(

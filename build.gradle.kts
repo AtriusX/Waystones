@@ -5,11 +5,11 @@ import io.papermc.hangarpublishplugin.internal.util.capitalized
 plugins {
     id("java")
     id("idea")
-    id("org.jetbrains.kotlin.jvm") version "2.2.0"
-    id("com.gradleup.shadow") version "8.3.6"
-    id("dev.s7a.gradle.minecraft.server") version "3.2.1"
-    id("com.google.devtools.ksp") version "2.2.0-2.0.2"
-    id("io.gitlab.arturbosch.detekt") version "1.23.8"
+    id("org.jetbrains.kotlin.jvm") version "2.3.0"
+    id("com.gradleup.shadow") version "9.4.1"
+    id("dev.s7a.gradle.minecraft.server") version "4.0.2"
+    id("io.insert-koin.compiler.plugin") version "1.0.0-RC1"
+    id("dev.detekt") version "2.0.0-alpha.2"
     id("io.papermc.hangar-publish-plugin") version "0.1.3"
     id("com.modrinth.minotaur") version "2.8.7"
     id("org.flywaydb.flyway") version "11.10.5"
@@ -27,7 +27,11 @@ repositories {
 }
 
 java {
-    toolchain.languageVersion.set(JavaLanguageVersion.of(21))
+    toolchain.languageVersion.set(JavaLanguageVersion.of(25))
+}
+
+kotlin {
+    jvmToolchain(25)
 }
 
 val kotlinVersion: String by project
@@ -45,9 +49,11 @@ buildscript {
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:$buildPaperVersion-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:$buildPaperVersion.build.+")
     implementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
     implementation("io.insert-koin:koin-core:$koinVersion")
+    implementation("io.insert-koin:koin-annotations:$koinVersion")
+
     implementation("org.bstats:bstats-bukkit:$bstatsVersion")
     shadow("io.arrow-kt:arrow-core:$arrowVersion")
     // Database dependencies
@@ -55,10 +61,8 @@ dependencies {
     shadow("org.xerial:sqlite-jdbc:$sqliteVersion")
     shadow("com.mysql:mysql-connector-j:$mysqlVersion")
 
-    api("io.insert-koin:koin-annotations:2.0.1-RC1")
-    ksp("io.insert-koin:koin-ksp-compiler:2.0.1-RC1")
 
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.8")
+    detektPlugins("dev.detekt:detekt-rules-ktlint-wrapper:2.0.0-alpha.2")
 
     testImplementation("io.mockk:mockk:1.14.2")
     testImplementation("io.kotest:kotest-runner-junit5:5.9.1")
@@ -148,6 +152,7 @@ tasks.build {
 }
 
 tasks.register("buildPlugin") {
+    notCompatibleWithConfigurationCache("Do not cache artifacts")
     dependsOn("shadowJar")
 
     doFirst {
@@ -166,6 +171,7 @@ detekt {
 }
 
 tasks.register<LaunchMinecraftServerTask>("testPlugin") {
+    notCompatibleWithConfigurationCache("Do not cache artifacts")
     dependsOn("buildPlugin")
     jarUrl.set(LaunchMinecraftServerTask.JarUrl.Paper(buildPaperVersion))
     agreeEula.set(true)

@@ -1,6 +1,7 @@
 package xyz.atrius.waystones.data
 
 import com.google.gson.Gson
+import org.koin.core.annotation.Provided
 import org.slf4j.LoggerFactory
 import xyz.atrius.waystones.internal.KotlinPlugin
 import java.io.File
@@ -11,7 +12,7 @@ import kotlin.reflect.KClass
 open class JsonFile<T : Any>(
     name: String,
     private val gson: Gson,
-    private val plugin: KotlinPlugin,
+    @Provided private val plugin: KotlinPlugin,
     private val type: KClass<out T>,
 ) {
 

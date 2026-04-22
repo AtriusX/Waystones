@@ -3,6 +3,7 @@ package xyz.atrius.waystones.animation
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.entity.Player
+import org.koin.core.annotation.Provided
 import org.koin.core.annotation.Single
 import xyz.atrius.waystones.animation.effect.TeleportEffect
 import xyz.atrius.waystones.data.config.property.WaitTimeProperty
@@ -12,7 +13,7 @@ import xyz.atrius.waystones.utility.scheduleRepeatingAutoCancelTask
 @Single
 class AnimationManager(
     private val waitTime: WaitTimeProperty,
-    private val plugin: KotlinPlugin,
+    @Provided private val plugin: KotlinPlugin,
 ) {
 
     private val scheduler = Bukkit.getScheduler()

@@ -4,7 +4,7 @@ import com.mojang.brigadier.arguments.BoolArgumentType
 import org.koin.core.annotation.Single
 import xyz.atrius.waystones.data.config.ConfigProperty
 
-@Single
+@Single(binds = [ConfigProperty::class])
 class EnableKeyItemsProperty : ConfigProperty<Boolean>(
     property = "enable-key-items",
     default = true,

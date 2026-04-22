@@ -1,5 +1,6 @@
 package xyz.atrius.waystones.manager
 
+import org.koin.core.annotation.Provided
 import org.koin.core.annotation.Single
 import xyz.atrius.waystones.data.config.ConfigProperty
 import xyz.atrius.waystones.data.config.ConfigPropertyBase
@@ -8,7 +9,7 @@ import xyz.atrius.waystones.internal.KotlinPlugin
 
 @Single
 class ConfigManager(
-    val plugin: KotlinPlugin,
+    @Provided val plugin: KotlinPlugin,
     properties: List<ConfigProperty<*>>,
     listProperties: List<ListConfigProperty<*>>,
 ) {

@@ -1,6 +1,7 @@
 package xyz.atrius.waystones.crafting
 
 import org.bukkit.Material
+import org.koin.core.annotation.Provided
 import org.koin.core.annotation.Single
 import xyz.atrius.waystones.data.config.property.KeyRecipeProperty
 import xyz.atrius.waystones.internal.KotlinPlugin
@@ -12,7 +13,7 @@ import xyz.atrius.waystones.utility.toKey
 
 @Single
 class CompassRecipe(
-    plugin: KotlinPlugin,
+    @Provided plugin: KotlinPlugin,
     defaultKeyProvider: DefaultKeyProvider,
     private val keyRecipe: KeyRecipeProperty,
 ) : CraftingRecipe("is_warp_key".toKey(plugin), defaultKeyProvider.getKey()) {

@@ -7,7 +7,7 @@ import xyz.atrius.waystones.data.config.ConfigProperty
 import xyz.atrius.waystones.utility.sanitizedStringFormat
 import java.util.Locale
 
-@Single
+@Single(binds = [ConfigProperty::class])
 class FallbackLocaleProperty(
     @Named("supportedLocales")
     private val supportedLocales: Set<Locale>,

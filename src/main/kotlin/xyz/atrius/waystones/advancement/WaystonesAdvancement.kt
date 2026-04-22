@@ -5,7 +5,7 @@ import org.koin.core.annotation.Single
 import xyz.atrius.waystones.manager.LocalizationManager
 import xyz.atrius.waystones.provider.AdvancementProvider
 
-@Single
+@Single(binds = [AdvancementProvider::class])
 class WaystonesAdvancement(
     localization: LocalizationManager,
 ) : AdvancementProvider(
