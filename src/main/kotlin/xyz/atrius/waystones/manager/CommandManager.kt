@@ -1,6 +1,7 @@
 package xyz.atrius.waystones.manager
 
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents
+import org.koin.core.annotation.Provided
 import org.koin.core.annotation.Single
 import org.slf4j.LoggerFactory
 import xyz.atrius.waystones.command.BaseCommand
@@ -8,7 +9,7 @@ import xyz.atrius.waystones.internal.KotlinPlugin
 
 @Single
 class CommandManager(
-    private val plugin: KotlinPlugin,
+    @Provided private val plugin: KotlinPlugin,
     private val commands: List<BaseCommand<*>>,
 ) {
 

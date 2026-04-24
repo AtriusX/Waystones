@@ -1,5 +1,6 @@
 package xyz.atrius.waystones.config
 
+import org.koin.core.annotation.Provided
 import xyz.atrius.waystones.internal.KotlinPlugin
 
 enum class SupportedDatabase(
@@ -21,7 +22,7 @@ data class DatabaseProperties(
     val databaseName: String? = null,
 ) {
 
-    fun getHostUrl(plugin: KotlinPlugin): String {
+    fun getHostUrl(@Provided plugin: KotlinPlugin): String {
         // We should configure flyway to pull migrations from the correct database directory
         val url = when (type) {
             SupportedDatabase.SQLITE -> plugin.dataFolder.resolve("waystones.db")

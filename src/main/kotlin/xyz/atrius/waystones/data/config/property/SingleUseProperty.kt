@@ -4,7 +4,7 @@ import com.mojang.brigadier.arguments.BoolArgumentType
 import org.koin.core.annotation.Single
 import xyz.atrius.waystones.data.config.ConfigProperty
 
-@Single
+@Single(binds = [ConfigProperty::class])
 class SingleUseProperty : ConfigProperty<Boolean>(
     property = "single-use",
     default = false,

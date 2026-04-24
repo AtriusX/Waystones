@@ -3,6 +3,7 @@ package xyz.atrius.waystones.service
 import com.google.gson.Gson
 import org.bukkit.Bukkit
 import org.bukkit.World
+import org.koin.core.annotation.Provided
 import org.koin.core.annotation.Single
 import xyz.atrius.waystones.data.JsonFile
 import xyz.atrius.waystones.data.config.property.WorldRatioProperty
@@ -13,7 +14,7 @@ import java.util.UUID
 @Single
 class WorldRatioService(
     gson: Gson,
-    plugin: KotlinPlugin,
+    @Provided plugin: KotlinPlugin,
     private val defaultRatioProperty: WorldRatioProperty,
 ) : JsonFile<RatioConfig>("ratios", gson, plugin, RatioConfig::class), Iterable<Map.Entry<World, Double>> {
 

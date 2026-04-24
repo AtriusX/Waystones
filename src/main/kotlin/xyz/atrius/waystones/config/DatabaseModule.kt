@@ -4,6 +4,7 @@ import org.bstats.bukkit.Metrics
 import org.bstats.charts.SimplePie
 import org.flywaydb.core.Flyway
 import org.koin.core.annotation.Module
+import org.koin.core.annotation.Provided
 import org.koin.core.annotation.Single
 import org.slf4j.LoggerFactory
 import xyz.atrius.waystones.internal.KotlinPlugin
@@ -14,8 +15,8 @@ object DatabaseModule {
 
     @Single
     fun getDatabaseConfiguration(
-        plugin: KotlinPlugin,
-        metrics: Metrics,
+        @Provided plugin: KotlinPlugin,
+        @Provided metrics: Metrics,
     ): DatabaseProperties {
         logger.info("Attempting to load database configuration...")
 
@@ -47,7 +48,7 @@ object DatabaseModule {
 
     @Single
     fun configureFlyway(
-        plugin: KotlinPlugin,
+        @Provided plugin: KotlinPlugin,
         props: DatabaseProperties,
     ): Flyway = Flyway
         .configure(this::class.java.classLoader)

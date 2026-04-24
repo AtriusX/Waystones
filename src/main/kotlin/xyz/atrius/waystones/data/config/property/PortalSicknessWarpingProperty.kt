@@ -6,7 +6,7 @@ import xyz.atrius.waystones.data.config.ConfigProperty
 import xyz.atrius.waystones.data.config.property.type.SicknessOption
 import xyz.atrius.waystones.utility.sanitizedStringFormat
 
-@Single
+@Single(binds = [ConfigProperty::class])
 class PortalSicknessWarpingProperty : ConfigProperty<SicknessOption>(
     property = "portal-sickness-warping",
     default = SicknessOption.DAMAGE_ON_TELEPORT,

@@ -2,6 +2,7 @@ package xyz.atrius.waystones.manager
 
 import com.google.gson.Gson
 import org.bukkit.entity.Player
+import org.koin.core.annotation.Provided
 import org.koin.core.annotation.Single
 import org.slf4j.LoggerFactory
 import xyz.atrius.waystones.data.config.property.EnableAdvancementsProperty
@@ -11,7 +12,7 @@ import org.bukkit.advancement.Advancement as SpigotAdvancement
 
 @Single
 class AdvancementManager(
-    private val plugin: KotlinPlugin,
+    @Provided private val plugin: KotlinPlugin,
     private val enableAdvancements: EnableAdvancementsProperty,
     private val gson: Gson,
     private val advancementContainers: List<AdvancementProvider>,

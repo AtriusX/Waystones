@@ -3,6 +3,7 @@ package xyz.atrius.waystones.manager
 import org.flywaydb.core.Flyway
 import org.flywaydb.core.api.output.MigrateResult
 import org.flywaydb.core.internal.jdbc.RowMapper
+import org.koin.core.annotation.Provided
 import org.koin.core.annotation.Single
 import org.slf4j.LoggerFactory
 import xyz.atrius.waystones.config.DatabaseProperties
@@ -15,9 +16,9 @@ import java.util.concurrent.CompletableFuture
 
 @Single
 class DatabaseManager(
-    private val flyway: Flyway,
-    private val properties: DatabaseProperties,
-    private val plugin: KotlinPlugin,
+    @Provided private val flyway: Flyway,
+    @Provided private val properties: DatabaseProperties,
+    @Provided private val plugin: KotlinPlugin,
 ) : AutoCloseable {
     private var connection: Connection? = null
 

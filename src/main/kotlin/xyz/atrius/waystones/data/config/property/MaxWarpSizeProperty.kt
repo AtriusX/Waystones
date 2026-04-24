@@ -4,7 +4,7 @@ import com.mojang.brigadier.arguments.IntegerArgumentType
 import org.koin.core.annotation.Single
 import xyz.atrius.waystones.data.config.ConfigProperty
 
-@Single
+@Single(binds = [ConfigProperty::class])
 class MaxWarpSizeProperty : ConfigProperty<Int>(
     property = "max-warp-size",
     default = 25,

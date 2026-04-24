@@ -4,6 +4,7 @@ import com.mojang.brigadier.Command
 import com.mojang.brigadier.builder.ArgumentBuilder
 import io.papermc.paper.command.brigadier.CommandSourceStack
 import org.bukkit.entity.Player
+import org.koin.core.annotation.Provided
 import org.koin.core.annotation.Single
 import xyz.atrius.waystones.internal.KotlinPlugin
 import xyz.atrius.waystones.manager.LocalizationManager
@@ -11,7 +12,7 @@ import xyz.atrius.waystones.utility.translateColors
 
 @Single
 class InfoCommand(
-    plugin: KotlinPlugin,
+    @Provided plugin: KotlinPlugin,
     private val localization: LocalizationManager,
 ) : WaystoneSubcommand {
 

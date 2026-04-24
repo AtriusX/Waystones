@@ -1,13 +1,14 @@
 package xyz.atrius.waystones.manager
 
 import org.bukkit.event.Listener
+import org.koin.core.annotation.Provided
 import org.koin.core.annotation.Single
 import org.slf4j.LoggerFactory
 import xyz.atrius.waystones.internal.KotlinPlugin
 
 @Single
 class EventManager(
-    private val plugin: KotlinPlugin,
+    @Provided private val plugin: KotlinPlugin,
     private val listeners: List<Listener>,
 ) {
 

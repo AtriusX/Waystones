@@ -4,7 +4,7 @@ import com.mojang.brigadier.arguments.DoubleArgumentType
 import org.koin.core.annotation.Single
 import xyz.atrius.waystones.data.config.ConfigProperty
 
-@Single
+@Single(binds = [ConfigProperty::class])
 class WaitTimeProperty : ConfigProperty<Double>(
     property = "wait-time",
     default = 3.0,

@@ -1,5 +1,6 @@
 package xyz.atrius.waystones.manager
 
+import org.koin.core.annotation.Provided
 import org.koin.core.annotation.Single
 import org.slf4j.LoggerFactory
 import xyz.atrius.waystones.crafting.CraftingRecipe
@@ -7,7 +8,7 @@ import xyz.atrius.waystones.internal.KotlinPlugin
 
 @Single
 class CraftingRecipeManager(
-    private val plugin: KotlinPlugin,
+    @Provided private val plugin: KotlinPlugin,
     private val recipes: List<CraftingRecipe>,
 ) {
 

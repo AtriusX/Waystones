@@ -2,6 +2,7 @@ package xyz.atrius.waystones.service
 
 import com.google.gson.Gson
 import org.bukkit.Bukkit
+import org.koin.core.annotation.Provided
 import org.koin.core.annotation.Single
 import org.slf4j.LoggerFactory
 import xyz.atrius.waystones.dao.WaystoneInfo
@@ -14,7 +15,7 @@ import xyz.atrius.waystones.utility.expectSizeOrDefault
 @Deprecated("Database support is included now, so this will be phased out in the future")
 class WarpNameService(
     gson: Gson,
-    plugin: KotlinPlugin,
+    @Provided plugin: KotlinPlugin,
     private val waystoneInfoRepository: WaystoneInfoRepository,
     private val waystoneService: WaystoneService,
 ) : JsonFile<HashMap<String, String>>("warpnames", gson, plugin, HashMap<String, String>()::class) {

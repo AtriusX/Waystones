@@ -6,7 +6,7 @@ import xyz.atrius.waystones.data.json.advancement.AdvancementType
 import xyz.atrius.waystones.manager.LocalizationManager
 import xyz.atrius.waystones.provider.AdvancementProvider
 
-@Single
+@Single(binds = [AdvancementProvider::class])
 class HeavyArtilleryAdvancement(
     localization: LocalizationManager,
     secretTunnelAdvancement: SecretTunnelAdvancement,

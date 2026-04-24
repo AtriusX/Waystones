@@ -6,7 +6,7 @@ import xyz.atrius.waystones.data.config.ConfigProperty
 import xyz.atrius.waystones.data.config.property.type.Power
 import xyz.atrius.waystones.utility.sanitizedStringFormat
 
-@Single
+@Single(binds = [ConfigProperty::class])
 class RequirePowerProperty : ConfigProperty<Power>(
     property = "require-power",
     default = Power.INTER_DIMENSION,
