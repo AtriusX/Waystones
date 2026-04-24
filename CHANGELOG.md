@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.5](https://github.com/AtriusX/Waystones/compare/v2.1.4...v2.1.5) (2026-04-24)
+
+
+### Miscellaneous Changes
+
+* Update Waystones to MC 26.1.2 ([#123](https://github.com/AtriusX/Waystones/issues/123)) ([eff1b32](https://github.com/AtriusX/Waystones/commit/eff1b321287fca1a98a7e5724fb425dc8dc29cbf))
+
 ## [2.1.4](https://github.com/AtriusX/Waystones/compare/v2.1.3...v2.1.4) (2026-02-08)
 
 
