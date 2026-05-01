@@ -38,3 +38,5 @@ database:
   username: "root"
   password: "password"
   database-name: "waystones"
+use-xp: false
+max-xp-usage: "3L"
