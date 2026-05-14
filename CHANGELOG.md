@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.2.0](https://github.com/AtriusX/Waystones/compare/v2.1.5...v2.2.0) (2026-05-14)
+
+
+### Feature Changes
+
+* [#125](https://github.com/AtriusX/Waystones/issues/125) Conditionally show compass coordinates in lore ([#126](https://github.com/AtriusX/Waystones/issues/126)) ([5180552](https://github.com/AtriusX/Waystones/commit/518055254a0dd47ee56a6ac58c1938fae68e638e))
+
 ## [2.1.5](https://github.com/AtriusX/Waystones/compare/v2.1.4...v2.1.5) (2026-04-24)
 
 
