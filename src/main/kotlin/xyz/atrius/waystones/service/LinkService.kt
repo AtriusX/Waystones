@@ -14,6 +14,7 @@ import org.bukkit.inventory.meta.CompassMeta
 import org.bukkit.persistence.PersistentDataType
 import org.koin.core.annotation.Single
 import xyz.atrius.waystones.data.config.property.RelinkableKeysProperty
+import xyz.atrius.waystones.data.config.property.ShowCompassCoordinatesProperty
 import xyz.atrius.waystones.manager.LocalizationManager
 import xyz.atrius.waystones.manager.LocalizedString
 import xyz.atrius.waystones.provider.DefaultKeyProvider
@@ -32,6 +33,7 @@ class LinkService(
     private val keyService: KeyService,
     private val defaultKeyProvider: DefaultKeyProvider,
     private val waystoneInfoRepository: WaystoneInfoRepository,
+    private val showCompassCoordinates: ShowCompassCoordinatesProperty,
 ) {
 
     fun process(player: Player, item: ItemStack, block: Block): Either<LinkServiceError, Unit> = either {
@@ -116,11 +118,15 @@ class LinkService(
         }
 
         val name = name ?: localization["unnamed-waystone"].format(player)
-        val lore = localization["link-key-lore", name, lodestone?.locationCode]
-            .format(player)
-            .let(Component::text)
 
-        lore(listOf(lore))
+        if (showCompassCoordinates.value() || player.hasPermission("waystones.admin")) {
+            val lore = localization["link-key-lore", name, lodestone?.locationCode]
+                .format(player)
+                .let(Component::text)
+            lore(listOf(lore))
+        } else {
+            lore(listOf())
+        }
     }
 
     sealed class LinkServiceError(val message: () -> LocalizedString?) {

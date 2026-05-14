@@ -18,6 +18,7 @@ portal-sickness-damage: 5.0
 relinkable-keys: true
 enable-key-items: true
 enable-advancements: true
+show-compass-coordinates: true
 key-recipe:
   - AIR
   - IRON_INGOT

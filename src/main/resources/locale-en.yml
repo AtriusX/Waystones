@@ -93,6 +93,7 @@ property-wait-time-info: "The amount of time (in ticks) the player must wait for
 property-warp-animations-info: "Whether to use particle animations while warping"
 property-default-world-ratio-info: "The world ratio to use for worlds which have no ratio set"
 property-base-distance-info: "The baseline for which all waystones are given as a minimum teleport distance"
+property-show-compass-coordinates-info: "Whether to show waystone coordinates in the compass lore upon linking"
 default-subcommand-desc: "No description provided"
 ws-ratio-subcommand-desc: "Adjust the warp distance ratios between worlds"
 ws-reload-subcommand-desc: "Reload aspects of the plugin"
