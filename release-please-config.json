@@ -18,6 +18,10 @@
           "section": "Bug Fixes"
         },
         {
+          "type": "refactor",
+          "section": "Code Refactors"
+        },
+        {
           "type": "chore",
           "section": "Miscellaneous Changes"
         }

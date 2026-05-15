@@ -37,14 +37,8 @@ jobs:
           --health-timeout=5s
           --health-retries=5
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
-      - name: Validate Gradle
-        uses: gradle/actions/wrapper-validation@v4
-      - name: Change Wrapper Permissions
-        run: chmod +x ./gradlew
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-gradle
       - name: Test Flyway Migrations (MySQL)
         run: |-
           ./gradlew flywayClean flywayValidate flywayMigrate

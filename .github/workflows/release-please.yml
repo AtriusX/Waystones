@@ -1,9 +1,9 @@
-name: Generate Release PR
-
+name: Release and Publish
 on:
   push:
     branches:
       - main
+  workflow_dispatch: {}
 
 permissions:
   contents: write
@@ -13,5 +13,33 @@ permissions:
 jobs:
   release:
     runs-on: ubuntu-latest
+    outputs:
+      release_created: ${{ steps.release.outputs.release_created }}
     steps:
       - uses: googleapis/release-please-action@v4
+        id: release
+
+  publish-hangar:
+    needs: release
+    if: ${{ needs.release.outputs.release_created == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-gradle
+      - name: Publish Hangar Release
+        env:
+          HANGAR_API_TOKEN: ${{ secrets.HANGAR_API_TOKEN }}
+        run: ./gradlew build publishWaystonesReleasePublicationToHangar --stacktrace
+
+  publish-modrinth:
+    needs: release
+    if: ${{ needs.release.outputs.release_created == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-gradle
+      - name: Publish Modrinth Release
+        env:
+          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+          MODRINTH_PUBLISH_CHANNEL: release
+        run: ./gradlew build modrinth
