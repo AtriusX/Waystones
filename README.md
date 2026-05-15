@@ -20,7 +20,7 @@ The default recipe is as follows:
 | | Column 1 | Column 2 | Column 3 | $\rightarrow$ | Result |
 | :---: | :---: | :---: | :---: | :---: |:-------------------------------------------------------------------------------------------------------------:|
 | **Row 1** | $\text{ }$ | <img src="https://minecraft.wiki/images/Iron_Ingot_JE3_BE2.png" width="48" height="48" alt="Iron Ingot"> | $\text{ }$ | | |
-| **Row 2** | <img src="https://minecraft.wiki/images/Iron_Ingot_JE3_BE2.png" width="48" height="48" alt="Iron Ingot"> | <img src="https://minecraft.wiki/images/thumb/Block_of_Redstone_JE2_BE2.png/150px-Block_of_Redstone_JE2_BE2.png" width="48" height="48" alt="Redstone Block"> | <img src="https://minecraft.wiki/images/Iron_Ingot_JE3_BE2.png" width="48" height="48" alt="Iron Ingot"> | $\rightarrow$ | <img src="https://minecraft.wiki/images/Lodestone_Compass_JE2_BE2.gif" width="48" height="48" alt="Warp Key"> |
+| **Row 2** | <img src="https://minecraft.wiki/images/Iron_Ingot_JE3_BE2.png" width="48" height="48" alt="Iron Ingot"> | <img src="https://minecraft.wiki/images/thumb/Block_of_Redstone_JE2_BE2.png/150px-Block_of_Redstone_JE2_BE2.png" width="48" height="48" alt="Redstone Block"> | <img src="https://minecraft.wiki/images/Iron_Ingot_JE3_BE2.png" width="48" height="48" alt="Iron Ingot"> | $\rightarrow$ | <img width="48" height="48" alt="Key" src="https://github.com/user-attachments/assets/6748ec5e-b867-40b4-9560-58485a61b6bb" /> |
 | **Row 3** | $\text{ }$ | <img src="https://minecraft.wiki/images/Iron_Ingot_JE3_BE2.png" width="48" height="48" alt="Iron Ingot"> | $\text{ }$ | | |
 
 **2. Create a Waystone**
