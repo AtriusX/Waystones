@@ -1,0 +1,14 @@
+name: 'Setup Gradle'
+description: 'Sets up Gradle, validates wrapper, and sets permissions'
+runs:
+  using: "composite"
+  steps:
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@v4
+
+    - name: Validate Gradle
+      uses: gradle/actions/wrapper-validation@v4
+
+    - name: Change Wrapper Permissions
+      shell: bash
+      run: chmod +x ./gradlew
