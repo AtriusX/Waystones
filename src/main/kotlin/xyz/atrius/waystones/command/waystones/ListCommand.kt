@@ -14,18 +14,21 @@ import org.bukkit.Bukkit
 import org.bukkit.World
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
+import org.koin.core.annotation.Provided
 import org.koin.core.annotation.Single
 import xyz.atrius.waystones.dao.WaystoneInfo
+import xyz.atrius.waystones.internal.KotlinPlugin
 import xyz.atrius.waystones.manager.LocalizationManager
 import xyz.atrius.waystones.repository.WaystoneInfoRepository
 import xyz.atrius.waystones.utility.center
 import xyz.atrius.waystones.utility.message
+import xyz.atrius.waystones.utility.runOnMainThread
 import xyz.atrius.waystones.utility.translateColors
 import java.util.UUID
-import kotlin.math.ceil
 
 @Single
 class ListCommand(
+    @Provided private val plugin: KotlinPlugin,
     private val waystoneInfoRepository: WaystoneInfoRepository,
     private val localization: LocalizationManager,
 ) : WaystoneSubcommand {
@@ -47,7 +50,7 @@ class ListCommand(
 
     override fun build(base: ArgumentBuilder<CommandSourceStack, *>): ArgumentBuilder<CommandSourceStack, *> = base
         .then(
-            argument("page", IntegerArgumentType.integer(1, pageCount()))
+            argument("page", IntegerArgumentType.integer(1, Int.MAX_VALUE))
                 .executes {
                     val page = it.getArgument("page", Int::class.java)
 
@@ -58,39 +61,48 @@ class ListCommand(
 
     private fun listEntries(sender: CommandSender, page: Int = 1): Int {
         val offset = (page - 1) * PAGE_SIZE
-        val waystones = waystoneInfoRepository
+
+        waystoneInfoRepository
             .getAll(PAGE_SIZE, offset)
-            .get()
-        val unnamedWaystone = localization["unnamed-waystone"]
-            .format(sender as? Player)
-
-        if (waystones.isEmpty()) {
-            emptyWaystoneList(sender, page)
-            return Command.SINGLE_SUCCESS
-        }
-
-        sender.message(localization["plugin-header"])
-
-        val worlds = mutableMapOf<UUID, World?>()
-        val hover = localization["waystone-list-hover"]
-            .format(sender as? Player)
-            .let(Component::text)
-
-        for (info in waystones) {
-            val world = worlds
-                .computeIfAbsent(info.worldUid) { Bukkit.getWorld(info.worldUid) }
-                ?: continue
-            val entry = getTeleportComponent(world.name, info, hover) {
-                click(sender, world, info)
+            .thenAccept { waystones ->
+                renderEntries(sender, waystones, page)
             }
-                .appendSpace()
-                .append(getNameComponent(info, unnamedWaystone))
 
-            sender.sendMessage(entry)
-        }
-
-        sender.message(localization["plugin-footer"])
         return Command.SINGLE_SUCCESS
+    }
+
+    private fun renderEntries(sender: CommandSender, waystones: List<WaystoneInfo>, page: Int) {
+        plugin.runOnMainThread {
+            val unnamedWaystone = localization["unnamed-waystone"]
+                .format(sender as? Player)
+
+            if (waystones.isEmpty()) {
+                emptyWaystoneList(sender, page)
+                return@runOnMainThread
+            }
+
+            sender.message(localization["plugin-header"])
+
+            val worlds = mutableMapOf<UUID, World?>()
+            val hover = localization["waystone-list-hover"]
+                .format(sender as? Player)
+                .let(Component::text)
+
+            for (info in waystones) {
+                val world = worlds
+                    .computeIfAbsent(info.worldUid) { Bukkit.getWorld(info.worldUid) }
+                    ?: continue
+                val entry = getTeleportComponent(world.name, info, hover) {
+                    click(sender, world, info)
+                }
+                    .appendSpace()
+                    .append(getNameComponent(info, unnamedWaystone))
+
+                sender.sendMessage(entry)
+            }
+
+            sender.message(localization["plugin-footer"])
+        }
     }
 
     fun click(sender: CommandSender, world: World, info: WaystoneInfo) {
@@ -105,12 +117,6 @@ class ListCommand(
         sender.teleport(location.center)
         sender.playSound(teleportSound)
     }
-
-    private fun pageCount(): Int = waystoneInfoRepository
-        .entries()
-        .thenApplyAsync { ceil(it.toDouble() / PAGE_SIZE).toInt() }
-        .get()
-        .coerceAtLeast(1)
 
     private fun emptyWaystoneList(sender: CommandSender, page: Int) = when (page) {
         1 -> sender.message(localization["waystone-list-empty"])

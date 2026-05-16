@@ -29,6 +29,7 @@ import xyz.atrius.waystones.utility.isActive
 import xyz.atrius.waystones.utility.isSafe
 import xyz.atrius.waystones.utility.powerBlock
 import xyz.atrius.waystones.utility.sameDimension
+import java.util.concurrent.CompletableFuture
 
 @Single
 class WaystoneService(
@@ -47,14 +48,25 @@ class WaystoneService(
     private val waystoneInfoRepository: WaystoneInfoRepository,
 ) {
 
-    fun process(player: Player, block: Block, keyLocation: Location): Either<WaystoneServiceError, Warp> = either {
-        // Ensure the warp is valid to use
-        val name = waystoneInfoRepository
+    fun process(
+        player: Player,
+        block: Block,
+        keyLocation: Location,
+    ): CompletableFuture<Either<WaystoneServiceError, Warp>> {
+        return waystoneInfoRepository
             .getWaystone(keyLocation)
-            .thenApplyAsync { it?.name ?: localization["unnamed-waystone"].format(player) }
-            .get()
+            .thenApplyAsync { info ->
+                val name = info?.name ?: localization["unnamed-waystone"].format(player)
+                validateWarpSync(player, block, name)
+            }
+    }
+
+    private fun validateWarpSync(
+        player: Player,
+        block: Block,
+        name: String,
+    ): Either<WaystoneServiceError, Warp> = either {
         val distance = validateWarp(player, block, name).bind()
-        // Determine how the waystone requires power
         val usePower = when (requirePower.value()) {
             Power.ALL -> true
             Power.INTER_DIMENSION -> !hasInfinitePower(block) &&
@@ -112,11 +124,7 @@ class WaystoneService(
 
         if (!hasInfinitePower(block) && limitDistance.value()) {
             ensure(distance <= range) {
-                val name = waystoneInfoRepository
-                    .getWaystone(block.location)
-                    .thenApplyAsync { it?.name ?: localization["unnamed-waystone"].format(player) }
-
-                WaystoneServiceError.WaystoneOutOfRange(localization, name.get(), distance, range, block.location)
+                WaystoneServiceError.WaystoneOutOfRange(localization, name, distance, range, block.location)
             }
         }
 

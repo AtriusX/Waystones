@@ -40,17 +40,17 @@ class LinkEvent(
                 }
 
                 player.sendActionError(it.message())
-                event.cancel()
             }
         // Check if an entry exists already before saving the waystone again
         waystoneInfoRepository
             .existsByLocation(block.location)
-            .thenApplyAsync { exists ->
+            .thenAccept { exists ->
                 // If the location isn't present in the database, it should be safe to write
                 if (!exists) {
                     waystoneInfoRepository.save(WaystoneInfo.fromLocation(block.location))
                 }
             }
+
         advancementManager.awardAdvancement(player, waystonesAdvancement)
         event.cancel()
         // This is silly but due to https://github.com/PaperMC/Paper/issues/12954 the inventory is getting

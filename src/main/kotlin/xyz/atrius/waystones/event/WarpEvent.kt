@@ -1,5 +1,6 @@
 package xyz.atrius.waystones.event
 
+import arrow.core.getOrElse
 import org.bukkit.Sound
 import org.bukkit.entity.Arrow
 import org.bukkit.entity.Player
@@ -12,10 +13,12 @@ import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.player.PlayerDropItemEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerMoveEvent
+import org.koin.core.annotation.Provided
 import org.koin.core.annotation.Single
 import xyz.atrius.waystones.advancement.SecretTunnelAdvancement
 import xyz.atrius.waystones.advancement.ShootTheMessengerAdvancement
 import xyz.atrius.waystones.data.config.property.DamageStopsWarpingProperty
+import xyz.atrius.waystones.internal.KotlinPlugin
 import xyz.atrius.waystones.manager.AdvancementManager
 import xyz.atrius.waystones.manager.LocalizationManager
 import xyz.atrius.waystones.service.KeyService
@@ -23,13 +26,14 @@ import xyz.atrius.waystones.service.TeleportService
 import xyz.atrius.waystones.service.WarpValidationService
 import xyz.atrius.waystones.service.WaystoneService
 import xyz.atrius.waystones.utility.cancel
-import xyz.atrius.waystones.utility.foldResult
 import xyz.atrius.waystones.utility.hasMovedBlock
 import xyz.atrius.waystones.utility.playSound
+import xyz.atrius.waystones.utility.runEitherOnMainThread
 import xyz.atrius.waystones.utility.sendActionError
 
 @Single
 class WarpEvent(
+    @Provided private val plugin: KotlinPlugin,
     private val teleportService: TeleportService,
     private val localization: LocalizationManager,
     private val damageStopsWarping: DamageStopsWarpingProperty,
@@ -44,7 +48,6 @@ class WarpEvent(
     @EventHandler
     fun onClick(event: PlayerInteractEvent) {
         val player = event.player
-        // We only care about right-click actions
         if (!event.action.isRightClick) {
             return
         }
@@ -52,23 +55,28 @@ class WarpEvent(
         if (!warpValidationService.validateCanWarp(player, event.clickedBlock)) {
             return
         }
-        // Make sure the key is connected before we continue
+
         val key = keyService
             .process(player, event)
-            .foldResult { return player.sendActionError(it.message()) }
-        // Handle key actions and terminate if handler fails
-        val warp = waystoneService
-            .process(player, key.location.block, key.location)
-            .foldResult {
-                player.location.playSound(Sound.ENTITY_ENDER_EYE_DEATH, 1f, 0f)
-                return player.sendActionError(it.message())
-            }
+            .getOrElse { return player.sendActionError(it.message()) }
 
-        teleportService.queueEvent(warp, key) {
-            advancementManager.awardAdvancement(player, secretTunnelAdvancement)
-            waystoneService.gigawarpsAdvancement(player, warp)
-            waystoneService.cleanEnergyAdvancement(player, warp)
-        }
+        waystoneService
+            .process(player, key.location.block, key.location)
+            .runEitherOnMainThread(
+                plugin,
+                onSuccess = { warp ->
+                    teleportService.queueEvent(warp, key) {
+                        advancementManager.awardAdvancement(player, secretTunnelAdvancement)
+                        waystoneService.gigawarpsAdvancement(player, warp)
+                        waystoneService.cleanEnergyAdvancement(player, warp)
+                    }
+                },
+                onFailure = { error ->
+                    player.location.playSound(Sound.ENTITY_ENDER_EYE_DEATH, 1f, 0f)
+                    player.sendActionError(error.message())
+                }
+            )
+
         event.cancel()
     }
 
@@ -123,7 +131,7 @@ class WarpEvent(
             return
         }
 
-        if (player.health in 1.0..2.0) {
+        if (player.health in 0.1..2.5) {
             advancementManager.awardAdvancement(player, shootTheMessenger)
         }
     }
