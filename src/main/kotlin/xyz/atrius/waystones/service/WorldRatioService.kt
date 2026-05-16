@@ -47,9 +47,7 @@ class WorldRatioService(
             data.ratios = hashMapOf()
         }
 
-        return data.ratios
-            ?.get(uuid)
-            ?: defaultRatioProperty.value()
+        return data.ratios?.get(uuid) ?: defaultRatioProperty.value()
     }
 
     fun add(world: World?, ratio: Double): Boolean {
@@ -58,7 +56,7 @@ class WorldRatioService(
         }
 
         if (data.ratios == null) {
-            data.ratios == hashMapOf<UUID, Double>()
+            data.ratios = hashMapOf<UUID, Double>()
         }
 
         data.ratios?.set(world.uid, ratio)
@@ -87,7 +85,7 @@ class WorldRatioService(
         val uuid = world.uid
 
         if (data.ratios == null) {
-            data.ratios == hashMapOf<UUID, Double>()
+            data.ratios = hashMapOf<UUID, Double>()
         }
 
         data.defaultWorld = uuid
