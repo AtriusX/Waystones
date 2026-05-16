@@ -42,7 +42,7 @@ val Location.neighbors: List<Location>
 
 // Returns the code of this location
 val Location.locationCode
-    get() = "${world?.name}@$blockX:$blockY:$blockZ"
+    get() = "${world?.name ?: "unknown"}@$blockX:$blockY:$blockZ"
 
 // Determines if the selected block is safe to spawn on
 val Location.isSafe: Boolean
