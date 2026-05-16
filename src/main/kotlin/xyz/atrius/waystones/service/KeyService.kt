@@ -11,7 +11,6 @@ import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.CompassMeta
-import org.bukkit.persistence.PersistentDataType
 import org.koin.core.annotation.Single
 import xyz.atrius.waystones.data.config.property.EnableKeyItemsProperty
 import xyz.atrius.waystones.data.config.property.PortalSicknessWarpingProperty
@@ -19,7 +18,7 @@ import xyz.atrius.waystones.data.config.property.SingleUseProperty
 import xyz.atrius.waystones.data.config.property.type.SicknessOption.PREVENT_TELEPORT
 import xyz.atrius.waystones.manager.LocalizationManager
 import xyz.atrius.waystones.manager.LocalizedString
-import xyz.atrius.waystones.utility.get
+import xyz.atrius.waystones.utility.getPersistent
 import xyz.atrius.waystones.utility.hasPortalSickness
 import xyz.atrius.waystones.utility.immortal
 
@@ -42,26 +41,25 @@ class KeyService(
     }
 
     fun isWarpKey(key: ItemStack) = when (enableKeyItems.value()) {
-        true -> key.itemMeta?.get("is_warp_key", PersistentDataType.INTEGER) == 1
+        true -> key.getPersistent<Int>("is_warp_key") == 1
         else -> key.type == Material.COMPASS && (key.itemMeta as? CompassMeta)?.lodestone != null
     }
 
     private fun validateKey(player: Player, key: ItemStack): Either<KeyServiceError, Location> = either {
-        val meta = key.itemMeta as? CompassMeta
-        val lodestone = meta?.lodestone
-
         ensure(isWarpKey(key)) {
             KeyServiceError.Ignore
         }
 
-        ensure(meta?.hasLodestone() == true || meta?.isLodestoneTracked == false) {
-            KeyServiceError.Severed(localization)
+        val meta = key.itemMeta as? CompassMeta
+        if (meta != null && meta.isLodestoneTracked && !meta.hasLodestone()) {
+            raise(KeyServiceError.Severed(localization))
         }
 
         ensure(!player.hasPortalSickness() && portalSickWarping.value() != PREVENT_TELEPORT) {
             KeyServiceError.Blocked(localization)
         }
 
+        val lodestone = meta?.lodestone
         ensureNotNull(lodestone) {
             KeyServiceError.Ignore
         }

@@ -40,7 +40,6 @@ class WarpValidationService(
         Material.CHAIN_COMMAND_BLOCK,
         Material.REPEATING_COMMAND_BLOCK,
         Material.CRAFTER,
-        Material.CRAFTING_TABLE,
         Material.DAMAGED_ANVIL,
         Material.DISPENSER,
         Material.DROPPER,
