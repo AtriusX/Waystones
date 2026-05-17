@@ -15,7 +15,7 @@ operator fun <T> ItemMeta.set(key: String, type: PersistentDataType<T, T>, value
         .set(key.toKey(), type, value ?: error("Value must be provided!"))
 
 fun PlayerInventory.addItemNaturally(original: ItemStack, new: ItemStack) {
-    val player = holder as Player
+    val player = holder as? Player ?: return
     // Add item to inventory
     if (player.immortal) {
         addItem(new)
