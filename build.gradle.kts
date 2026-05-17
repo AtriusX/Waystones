@@ -24,4 +24,17 @@ dependencies {
     detektPlugins(libs.detekt.ktlint)
     testImplementation(libs.mockk)
     testImplementation(libs.kotest.runner)
+    testImplementation(libs.mockbukkit)
+    testImplementation("io.papermc.paper:paper-api:$buildPaperVersion.build.+")
+}
+
+tasks.withType<Test> {
+    useJUnitPlatform()
+    systemProperty("bstats.relocatecheck", "false")
+    systemProperty("kotest.framework.classpath.scanning.autoscan.disable", "true")
+    systemProperty("kotest.framework.coroutine.test.scope", "false")
+    testLogging {
+        events("passed", "skipped", "failed")
+        showStandardStreams = true
+    }
 }

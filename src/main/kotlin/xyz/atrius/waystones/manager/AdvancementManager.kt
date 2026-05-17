@@ -39,7 +39,11 @@ class AdvancementManager(
 
         for (item in current) {
             logger.info("Loading advancement '${item.namespacedKey().asString()}'")
-            server.unsafe.loadAdvancement(item.namespacedKey(), gson.toJson(item.asAdvancement))
+            runCatching {
+                server.unsafe.loadAdvancement(item.namespacedKey(), gson.toJson(item.asAdvancement))
+            }.onFailure {
+                logger.warn("Failed to load advancement: ${it.message}")
+            }
             load(groups, item.namespacedKey().asString())
         }
     }
