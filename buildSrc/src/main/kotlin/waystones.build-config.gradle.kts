@@ -5,7 +5,7 @@ plugins {
     id("com.github.gmazzo.buildconfig")
 }
 
-val libs = the<LibrariesForLibs>()
+val libs = extensions.getByName<LibrariesForLibs>("libs")
 
 buildConfig {
     generateAtSync = true

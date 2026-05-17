@@ -14,8 +14,4 @@ flyway {
     cleanDisabled = false
 }
 
-listOf("flywayClean", "flywayValidate", "flywayMigrate").forEach { taskName ->
-    tasks.named(taskName) {
-        notCompatibleWithConfigurationCache("Plugin does not handle configuration cache well")
-    }
-}
+tasks.disableConfigurationCache("flywayClean", "flywayValidate", "flywayMigrate")

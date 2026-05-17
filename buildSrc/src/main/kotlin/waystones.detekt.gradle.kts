@@ -1,10 +1,14 @@
+import org.gradle.accessors.dm.LibrariesForLibs
+
 plugins {
     id("waystones.base")
     id("dev.detekt")
 }
 
+val libs = the<LibrariesForLibs>()
+
 dependencies {
-    detektPlugins("dev.detekt:detekt-rules-ktlint-wrapper:2.0.0-alpha.2")
+    detektPlugins(libs.detekt.ktlint)
 }
 
 detekt {

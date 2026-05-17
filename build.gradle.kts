@@ -11,7 +11,7 @@ plugins {
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:${project.properties["buildPaperVersion"]}.build.+")
+    compileOnly("io.papermc.paper:paper-api:$buildPaperVersion.build.+")
     implementation(libs.kotlin.stdlib)
     implementation(libs.koin.core)
     implementation(libs.koin.annotations)

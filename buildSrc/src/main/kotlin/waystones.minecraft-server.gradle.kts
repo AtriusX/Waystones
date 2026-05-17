@@ -6,10 +6,6 @@ plugins {
     id("dev.s7a.gradle.minecraft.server")
 }
 
-val buildPaperVersion: String by project
-val pluginVersion = "${project.version}-$buildPaperVersion"
-val outputProjectName = "${project.name}-$pluginVersion"
-
 tasks.build {
     delete(
         "build/MinecraftServer/plugins/waystones",
