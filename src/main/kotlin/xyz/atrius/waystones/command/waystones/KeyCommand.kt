@@ -3,6 +3,7 @@ package xyz.atrius.waystones.command.waystones
 import com.mojang.brigadier.Command
 import com.mojang.brigadier.arguments.IntegerArgumentType
 import com.mojang.brigadier.builder.ArgumentBuilder
+import com.mojang.brigadier.context.CommandContext
 import io.papermc.paper.command.brigadier.CommandSourceStack
 import io.papermc.paper.command.brigadier.Commands.argument
 import io.papermc.paper.command.brigadier.argument.ArgumentTypes
@@ -14,6 +15,7 @@ import xyz.atrius.waystones.manager.LocalizationManager
 import xyz.atrius.waystones.provider.DefaultKeyProvider
 import xyz.atrius.waystones.utility.getArgument
 import xyz.atrius.waystones.utility.message
+import xyz.atrius.waystones.utility.senderTypeName
 
 @Single
 class KeyCommand(
@@ -28,17 +30,12 @@ class KeyCommand(
     override fun build(base: ArgumentBuilder<CommandSourceStack, *>): ArgumentBuilder<CommandSourceStack, *> {
         val base = base
             .requires { it.sender is Player }
-            .executes {
-                val sender = it.source.sender as Player
-                command(sender, 1, sender)
-            }
+            .executes { executeWithPlayer(it, 1) }
         val count = argument("count", IntegerArgumentType.integer())
             .requires { it.sender is Player }
             .executes {
-                val sender = it.source.sender as Player
                 val amount = it.getArgument<Int>("count")
-
-                command(sender, amount, sender)
+                executeWithPlayer(it, amount)
             }
         val target = argument("target", ArgumentTypes.player())
             .requires { it.sender.hasPermission("waystones.getkey.all") }
@@ -54,6 +51,18 @@ class KeyCommand(
 
         count.then(target)
         return base.then(count)
+    }
+
+    private fun executeWithPlayer(context: CommandContext<CommandSourceStack>, amount: Int): Int {
+        val sender = context.source.sender
+        val player = sender as? Player
+
+        if (player == null) {
+            sender.message(localization["command-bad-sender", sender.senderTypeName(localization)])
+            return Command.SINGLE_SUCCESS
+        }
+
+        return command(sender, amount, player)
     }
 
     private fun command(sender: CommandSender, amount: Int, target: Player): Int {

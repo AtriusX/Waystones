@@ -24,7 +24,8 @@ abstract class BaseCommand<S : SubCommand>(
                 .build(literal(command.name))
 
             command.basePermission?.let { permission ->
-                subCommand.requires { it.sender.hasPermission(permission) }
+                val existing = subCommand.requirement
+                subCommand.requires { (existing == null || existing.test(it)) && it.sender.hasPermission(permission) }
             }
 
             base.then(subCommand)
