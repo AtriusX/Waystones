@@ -1,5 +1,6 @@
 package xyz.atrius.waystones.event
 
+import io.kotest.assertions.nondeterministic.eventually
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import net.kyori.adventure.text.Component
@@ -10,10 +11,10 @@ import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.block.BlockExplodeEvent
 import org.bukkit.event.entity.EntityExplodeEvent
 import org.bukkit.inventory.ItemStack
-import org.bukkit.inventory.meta.ItemMeta
 import xyz.atrius.waystones.repository.WaystoneInfoRepository
 import xyz.atrius.waystones.test.ServerFunSpec
 import java.util.concurrent.TimeUnit
+import kotlin.time.Duration.Companion.seconds
 
 class DestroyEventTest : ServerFunSpec({
 
@@ -29,12 +30,16 @@ class DestroyEventTest : ServerFunSpec({
         simulateRightClick(player, waystone, nameTag)
 
         val repository = get<WaystoneInfoRepository>()
-        repository.getWaystone(waystone.location).get(5, TimeUnit.SECONDS) shouldNotBe null
+        eventually(1.seconds) {
+            repository.getWaystone(waystone.location).get(5, TimeUnit.SECONDS) shouldNotBe null
+        }
 
         val breakEvent = BlockBreakEvent(waystone, player)
         server.pluginManager.callEvent(breakEvent)
-
-        repository.getWaystone(waystone.location).get(5, TimeUnit.SECONDS) shouldBe null
+        
+        eventually(1.seconds) {
+            repository.getWaystone(waystone.location).get(5, TimeUnit.SECONDS) shouldBe null
+        }
     }
 
     test("Breaking a non-waystone block does not affect the database") {
@@ -71,7 +76,9 @@ class DestroyEventTest : ServerFunSpec({
         simulateRightClick(player, waystone, nameTag)
 
         val repository = get<WaystoneInfoRepository>()
-        repository.getWaystone(waystone.location).get(5, TimeUnit.SECONDS) shouldNotBe null
+        eventually(1.seconds) {
+            repository.getWaystone(waystone.location).get(5, TimeUnit.SECONDS) shouldNotBe null
+        }
 
         val explodeEvent = BlockExplodeEvent(
             waystone,
@@ -81,8 +88,10 @@ class DestroyEventTest : ServerFunSpec({
             ExplosionResult.DESTROY,
         )
         server.pluginManager.callEvent(explodeEvent)
-
-        repository.getWaystone(waystone.location).get(5, TimeUnit.SECONDS) shouldBe null
+        
+        eventually(1.seconds) {
+            repository.getWaystone(waystone.location).get(5, TimeUnit.SECONDS) shouldBe null
+        }
     }
 
     test("Destroying a waystone via entity explosion removes it from the database") {
@@ -97,7 +106,9 @@ class DestroyEventTest : ServerFunSpec({
         simulateRightClick(player, waystone, nameTag)
 
         val repository = get<WaystoneInfoRepository>()
-        repository.getWaystone(waystone.location).get(5, TimeUnit.SECONDS) shouldNotBe null
+        eventually(1.seconds) {
+            repository.getWaystone(waystone.location).get(5, TimeUnit.SECONDS) shouldNotBe null
+        }
 
         val tnt = world.spawn(waystone.location, TNTPrimed::class.java)
         val explodeEvent = EntityExplodeEvent(
@@ -108,7 +119,9 @@ class DestroyEventTest : ServerFunSpec({
             ExplosionResult.DESTROY,
         )
         server.pluginManager.callEvent(explodeEvent)
-
-        repository.getWaystone(waystone.location).get(5, TimeUnit.SECONDS) shouldBe null
+        
+        eventually(1.seconds) {
+            repository.getWaystone(waystone.location).get(5, TimeUnit.SECONDS) shouldBe null
+        }
     }
 })
