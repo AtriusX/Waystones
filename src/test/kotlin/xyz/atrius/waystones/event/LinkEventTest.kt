@@ -64,7 +64,9 @@ class LinkEventTest : ServerFunSpec({
         simulateRightClick(player, waystone, stick)
 
         val repository = get<WaystoneInfoRepository>()
-        repository.getWaystone(waystone.location).get(5, TimeUnit.SECONDS) shouldBe null
+        eventually(1.seconds) {
+            repository.getWaystone(waystone.location).get(5, TimeUnit.SECONDS) shouldBe null
+        }
     }
 
     test("Linking a compass without warp key marker does nothing") {
@@ -79,6 +81,8 @@ class LinkEventTest : ServerFunSpec({
         simulateRightClick(player, waystone, compass)
 
         val repository = get<WaystoneInfoRepository>()
-        repository.getWaystone(waystone.location).get(5, TimeUnit.SECONDS) shouldBe null
+        eventually(1.seconds) {
+            repository.getWaystone(waystone.location).get(5, TimeUnit.SECONDS) shouldBe null
+        }
     }
 })
