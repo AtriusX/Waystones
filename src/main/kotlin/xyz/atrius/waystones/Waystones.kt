@@ -15,7 +15,7 @@ typealias KoinApp =
     org.koin.core.KoinApplication
 
 @PluginEntrypoint
-class Waystones : KotlinPlugin() {
+open class Waystones : KotlinPlugin() {
 
     private lateinit var koin: KoinApp
 
@@ -36,4 +36,6 @@ class Waystones : KotlinPlugin() {
     override fun onDisable() {
         koin.koin.get<WaystonesInitializer>().disable(this)
     }
+
+    internal fun getKoinApp(): KoinApp = koin
 }

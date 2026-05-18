@@ -15,6 +15,7 @@ modrinth = "2.8.7"
 buildconfig = "5.6.7"
 mockk = "1.14.2"
 kotest = "5.9.1"
+mockbukkit = "4.113.1"
 
 [libraries]
 paper-api = { module = "io.papermc.paper:paper-api", version = "26.1.2.build.+" }
@@ -30,6 +31,7 @@ mysql-connector = { module = "com.mysql:mysql-connector-j", version.ref = "mysql
 detekt-ktlint = { module = "dev.detekt:detekt-rules-ktlint-wrapper", version.ref = "detekt" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 kotest-runner = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
+mockbukkit = { module = "org.mockbukkit.mockbukkit:mockbukkit-v26.1.2", version.ref = "mockbukkit" }
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
