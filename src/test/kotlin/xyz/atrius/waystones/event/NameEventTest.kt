@@ -1,5 +1,6 @@
 package xyz.atrius.waystones.event
 
+import io.kotest.assertions.nondeterministic.eventually
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import net.kyori.adventure.text.Component
@@ -9,6 +10,7 @@ import org.bukkit.inventory.meta.ItemMeta
 import xyz.atrius.waystones.repository.WaystoneInfoRepository
 import xyz.atrius.waystones.test.ServerFunSpec
 import java.util.concurrent.TimeUnit
+import kotlin.time.Duration.Companion.seconds
 
 class NameEventTest : ServerFunSpec({
 
@@ -27,8 +29,9 @@ class NameEventTest : ServerFunSpec({
         simulateRightClick(player, waystone, nameTag)
 
         val repository = get<WaystoneInfoRepository>()
-        val info = repository.getWaystone(waystone.location).get(5, TimeUnit.SECONDS)
-        info?.name shouldBe "My Waystone"
+        eventually(1.seconds) {
+            repository.getWaystone(waystone.location).get(5, TimeUnit.SECONDS)?.name shouldBe "My Waystone"
+        }
     }
 
     test("Renaming a waystone updates the database entry") {
@@ -49,8 +52,9 @@ class NameEventTest : ServerFunSpec({
         simulateRightClick(player, waystone, nameTag2)
 
         val repository = get<WaystoneInfoRepository>()
-        val info = repository.getWaystone(waystone.location).get(5, TimeUnit.SECONDS)
-        info?.name shouldBe "Second Name"
+        eventually(1.seconds) {
+            repository.getWaystone(waystone.location).get(5, TimeUnit.SECONDS)?.name shouldBe "Second Name"
+        }
     }
 
     test("Using a non-name-tag item does not name the waystone") {
@@ -64,8 +68,9 @@ class NameEventTest : ServerFunSpec({
         simulateRightClick(player, waystone, stick)
 
         val repository = get<WaystoneInfoRepository>()
-        val info = repository.getWaystone(waystone.location).get(5, TimeUnit.SECONDS)
-        info?.name shouldBe null
+        eventually(1.seconds) {
+            repository.getWaystone(waystone.location).get(5, TimeUnit.SECONDS)?.name shouldBe null
+        }
     }
 
     test("Naming a waystone with a name tag without display name does nothing") {
@@ -79,8 +84,9 @@ class NameEventTest : ServerFunSpec({
         simulateRightClick(player, waystone, nameTag)
 
         val repository = get<WaystoneInfoRepository>()
-        val info = repository.getWaystone(waystone.location).get(5, TimeUnit.SECONDS)
-        info?.name shouldBe null
+        eventually(1.seconds) {
+            repository.getWaystone(waystone.location).get(5, TimeUnit.SECONDS)?.name shouldBe null
+        }
     }
 
     test("Naming a non-lodestone block does nothing") {
@@ -111,7 +117,9 @@ class NameEventTest : ServerFunSpec({
         simulateRightClick(player, waystone, nameTag1)
 
         val repository = get<WaystoneInfoRepository>()
-        repository.getWaystone(waystone.location).get(5, TimeUnit.SECONDS)?.name shouldBe "Same Name"
+        eventually(1.seconds) {
+            repository.getWaystone(waystone.location).get(5, TimeUnit.SECONDS)?.name shouldBe "Same Name"
+        }
 
         val nameTag2 = ItemStack(Material.NAME_TAG)
         nameTag2.editMeta { it.displayName(Component.text("Same Name")) }
