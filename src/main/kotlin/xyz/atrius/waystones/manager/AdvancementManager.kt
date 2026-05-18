@@ -62,8 +62,12 @@ class AdvancementManager(
         loadAdvancements()
     }
 
-    fun awardAdvancement(player: Player, adv: AdvancementProvider) =
+    fun awardAdvancement(player: Player, adv: AdvancementProvider) {
+        if (!enableAdvancements.value()) {
+            return
+        }
         awardAdvancement(player, plugin.server.getAdvancement(adv.namespacedKey()))
+    }
 
     fun awardAdvancement(player: Player, adv: SpigotAdvancement?) {
         if (adv == null || !enableAdvancements.value()) {

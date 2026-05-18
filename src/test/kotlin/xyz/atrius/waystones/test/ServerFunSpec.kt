@@ -12,6 +12,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.ItemStack
+import org.koin.core.context.stopKoin
 import org.mockbukkit.mockbukkit.MockBukkit
 import org.mockbukkit.mockbukkit.ServerMock
 import xyz.atrius.waystones.Waystones
@@ -51,14 +52,21 @@ abstract class ServerFunSpec private constructor() : FunSpec() {
         extensions(
             object : SpecExtension {
                 override suspend fun intercept(spec: Spec, execute: suspend (Spec) -> Unit) {
-                    _server = MockBukkit.mock()
-                    _plugin = MockBukkit.load(Waystones::class.java)
+                    _server = MockBukkit.mock(TestServerMock())
+
+                    // Load plugin with custom config
+                    val configStream = javaClass.getResourceAsStream("/test-config.yml")
+                        ?: throw IllegalStateException("test-config.yml not found")
+                    _plugin = MockBukkit.loadWithConfig(Waystones::class.java, configStream.use {
+                        org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(java.io.InputStreamReader(it))
+                    })
                     _koin = _plugin!!.getKoinApp().koin
 
                     try {
                         execute(spec)
                     } finally {
                         MockBukkit.unmock()
+                        stopKoin()
                     }
                 }
             }
