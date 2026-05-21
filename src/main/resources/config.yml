@@ -19,6 +19,7 @@ relinkable-keys: true
 enable-key-items: true
 enable-advancements: true
 show-compass-coordinates: true
+safe-liquids: WATER
 key-recipe:
   - AIR
   - IRON_INGOT

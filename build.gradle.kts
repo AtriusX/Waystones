@@ -24,6 +24,7 @@ dependencies {
     detektPlugins(libs.detekt.ktlint)
     testImplementation(libs.mockk)
     testImplementation(libs.kotest.runner)
+    testImplementation(libs.kotest.datatest)
     testImplementation(libs.mockbukkit)
     testImplementation("io.papermc.paper:paper-api:$buildPaperVersion.build.+")
 }

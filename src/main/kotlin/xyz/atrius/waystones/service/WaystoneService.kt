@@ -26,7 +26,6 @@ import xyz.atrius.waystones.manager.LocalizationManager
 import xyz.atrius.waystones.manager.LocalizedString
 import xyz.atrius.waystones.repository.WaystoneInfoRepository
 import xyz.atrius.waystones.utility.isActive
-import xyz.atrius.waystones.utility.isSafe
 import xyz.atrius.waystones.utility.powerBlock
 import xyz.atrius.waystones.utility.sameDimension
 
@@ -45,6 +44,7 @@ class WaystoneService(
     private val worldRatioService: WorldRatioService,
     private val limitDistance: LimitDistanceProperty,
     private val waystoneInfoRepository: WaystoneInfoRepository,
+    private val blockSafetyService: BlockSafetyService,
 ) {
 
     fun process(player: Player, block: Block, keyLocation: Location): Either<WaystoneServiceError, Warp> = either {
@@ -209,7 +209,7 @@ class WaystoneService(
             return WaystoneStatus.Unpowered(localization)
         }
 
-        if (!block.location.isSafe) {
+        if (!blockSafetyService.isLocationSafe(block.location)) {
             return WaystoneStatus.Obstructed(localization)
         }
 
