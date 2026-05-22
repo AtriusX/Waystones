@@ -31,6 +31,7 @@ mysql-connector = { module = "com.mysql:mysql-connector-j", version.ref = "mysql
 detekt-ktlint = { module = "dev.detekt:detekt-rules-ktlint-wrapper", version.ref = "detekt" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 kotest-runner = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
+kotest-datatest = { module = "io.kotest:kotest-framework-datatest", version.ref = "kotest" }
 mockbukkit = { module = "org.mockbukkit.mockbukkit:mockbukkit-v26.1.2", version.ref = "mockbukkit" }
 
 [plugins]

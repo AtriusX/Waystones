@@ -44,18 +44,6 @@ val Location.neighbors: List<Location>
 val Location.locationCode
     get() = "${world?.name}@$blockX:$blockY:$blockZ"
 
-// Determines if the selected block is safe to spawn on
-val Location.isSafe: Boolean
-    get() = !listOf(UP, UP.UP)
-        .map {
-            world
-                ?.getBlockAt(it)
-                ?.type
-                ?.isSolid
-                ?: true
-        }
-        .any { it }
-
 fun Location.rotateY(angle: Double, amp: Double = 1.0) = add(
     Vector(
         cos(angle) * amp,

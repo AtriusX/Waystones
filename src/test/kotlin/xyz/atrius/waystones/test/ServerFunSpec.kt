@@ -12,6 +12,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.ItemStack
+import org.koin.core.context.stopKoin
 import org.mockbukkit.mockbukkit.MockBukkit
 import org.mockbukkit.mockbukkit.ServerMock
 import xyz.atrius.waystones.Waystones
@@ -42,10 +43,12 @@ abstract class ServerFunSpec private constructor() : FunSpec() {
     private var _server: ServerMock? = null
     private var _plugin: Waystones? = null
     private var _koin: org.koin.core.Koin? = null
+    private var _world: World? = null
 
     internal val server: ServerMock get() = _server!!
     internal val plugin: Waystones get() = _plugin!!
     internal val koin: org.koin.core.Koin get() = _koin!!
+    internal val world: World get() = _world!!
 
     constructor(body: ServerFunSpec.() -> Unit = {}) : this() {
         extensions(
@@ -54,11 +57,13 @@ abstract class ServerFunSpec private constructor() : FunSpec() {
                     _server = MockBukkit.mock()
                     _plugin = MockBukkit.load(Waystones::class.java)
                     _koin = _plugin!!.getKoinApp().koin
+                    _world = _server!!.addSimpleWorld("test_world")
 
                     try {
                         execute(spec)
                     } finally {
                         MockBukkit.unmock()
+                        stopKoin()
                     }
                 }
             }
