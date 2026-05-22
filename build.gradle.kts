@@ -10,23 +10,29 @@ plugins {
     id("waystones.resource-processing")
 }
 
+configurations {
+    testImplementation {
+        extendsFrom(compileOnly)
+    }
+}
+
 dependencies {
     compileOnly("io.papermc.paper:paper-api:$buildPaperVersion.build.+")
     implementation(libs.kotlin.stdlib)
     implementation(libs.koin.core)
     implementation(libs.koin.annotations)
     implementation(libs.bstats.bukkit)
-    implementation(libs.arrow.core)
-    implementation(libs.flyway.core)
-    implementation(libs.flyway.mysql)
-    implementation(libs.sqlite.jdbc)
-    implementation(libs.mysql.connector)
+    // Resolved at runtime via PluginLoader - not bundled in shadow JAR
+    compileOnly(libs.arrow.core)
+    compileOnly(libs.flyway.core)
+    compileOnly(libs.flyway.mysql)
+    compileOnly(libs.sqlite.jdbc)
+    compileOnly(libs.mysql.connector)
     detektPlugins(libs.detekt.ktlint)
     testImplementation(libs.mockk)
     testImplementation(libs.kotest.runner)
     testImplementation(libs.kotest.datatest)
     testImplementation(libs.mockbukkit)
-    testImplementation("io.papermc.paper:paper-api:$buildPaperVersion.build.+")
 }
 
 tasks.withType<Test> {
