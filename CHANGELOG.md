@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.2.1](https://github.com/AtriusX/Waystones/compare/v2.2.0...v2.2.1) (2026-05-22)
+
+
+### Bug Fixes
+
+* [#136](https://github.com/AtriusX/Waystones/issues/136) Add more robust block safety checks ([#137](https://github.com/AtriusX/Waystones/issues/137)) ([8e937a2](https://github.com/AtriusX/Waystones/commit/8e937a2e245aad0e3b073bcbcfda5fe0883c8bde))
+* Key command can be executed in invalid ways ([#132](https://github.com/AtriusX/Waystones/issues/132)) ([56e928d](https://github.com/AtriusX/Waystones/commit/56e928d181af9f7e62f44ad238831e41d347a8a8))
+
 ## [2.2.0](https://github.com/AtriusX/Waystones/compare/v2.1.5...v2.2.0) (2026-05-14)
 
 
