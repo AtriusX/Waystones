@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.2.2](https://github.com/AtriusX/Waystones/compare/v2.2.1...v2.2.2) (2026-05-22)
+
+
+### Bug Fixes
+
+* Shrink plugin size, disable snapshot config caching ([#138](https://github.com/AtriusX/Waystones/issues/138)) ([d76566e](https://github.com/AtriusX/Waystones/commit/d76566e47712be397d6f1700b41898c60c13c12c))
+
 ## [2.2.1](https://github.com/AtriusX/Waystones/compare/v2.2.0...v2.2.1) (2026-05-22)
 
 
