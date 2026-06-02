@@ -1,5 +1,6 @@
 package xyz.atrius.waystones
 
+import org.bstats.bukkit.Metrics
 import org.koin.core.annotation.KoinApplication
 import org.koin.dsl.module
 import org.koin.plugin.module.dsl.startKoin
@@ -31,6 +32,7 @@ open class Waystones : KotlinPlugin() {
             modules(defaultModule())
         }
         koin.koin.get<WaystonesInitializer>().enable(this)
+        koin.koin.get<Metrics>()
     }
 
     override fun onDisable() {
