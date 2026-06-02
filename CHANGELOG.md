@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.3.0](https://github.com/AtriusX/Waystones/compare/v2.2.2...v2.3.0) (2026-06-02)
+
+
+### Feature Changes
+
+* Implement plugin update check command and caching mechanism ([#140](https://github.com/AtriusX/Waystones/issues/140)) ([cf892b9](https://github.com/AtriusX/Waystones/commit/cf892b94966b270f152368af09b6116f51938c89))
+
+
+### Miscellaneous Changes
+
+* Improve bStats tracking and move metrics to a dedicated module ([#142](https://github.com/AtriusX/Waystones/issues/142)) ([35bfc11](https://github.com/AtriusX/Waystones/commit/35bfc1103d79ea912956cbfec005869078caa977))
+
 ## [2.2.2](https://github.com/AtriusX/Waystones/compare/v2.2.1...v2.2.2) (2026-05-22)
 
 
