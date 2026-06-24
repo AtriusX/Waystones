@@ -20,6 +20,8 @@ enable-key-items: true
 enable-advancements: true
 show-compass-coordinates: true
 safe-liquids: WATER
+# Waystone locking mode: ALL, PER_WAYSTONE, or NONE
+waystone-locking: NONE
 key-recipe:
   - AIR
   - IRON_INGOT

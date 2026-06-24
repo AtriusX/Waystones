@@ -74,21 +74,29 @@ class WaystoneInfoRepository(
     }
 
     fun save(info: WaystoneInfo): CompletableFuture<Int> {
-        val query = when (databaseProperties.type) {
-            SupportedDatabase.MYSQL -> """
-                |insert into waystone_info (world_uid, x, y, z, name)
-                |values (?, ?, ?, ?, ?)
-                |on duplicate key update
-                |   name = values(name)
-            """.trimMargin()
+        val conflictClause = when (databaseProperties.type) {
             SupportedDatabase.SQLITE -> """
-                |insert into waystone_info (world_uid, x, y, z, name)
-                |values (?, ?, ?, ?, ?)
                 |on conflict (world_uid, x, y, z) do update set
-                |   name = excluded.name
+                |   name = excluded.name,
+                |   primary_owner_uuid = excluded.primary_owner_uuid,
+                |   is_locked = excluded.is_locked
+            """.trimMargin()
+            SupportedDatabase.MYSQL -> """
+                |on duplicate key update
+                |   name = values(name),
+                |   primary_owner_uuid = values(primary_owner_uuid),
+                |   is_locked = values(is_locked)
             """.trimMargin()
         }
-        val params = listOf(info.worldUid, info.x, info.y, info.z, info.name)
+        val query = """
+            |insert into waystone_info (world_uid, x, y, z, name, waystone_uuid, primary_owner_uuid, is_locked)
+            |values (?, ?, ?, ?, ?, ?, ?, ?)
+            |$conflictClause
+        """.trimMargin()
+        val params = listOf(
+            info.worldUid, info.x, info.y, info.z, info.name,
+            info.waystoneUuid?.toString(), info.primaryOwnerUuid?.toString(), info.isLocked,
+        )
 
         return databaseManager
             .queryUpdate(query, params)
@@ -119,11 +127,25 @@ class WaystoneInfoRepository(
             .queryUpdate(query, params)
     }
 
+    fun getLockedCount(): CompletableFuture<Int> {
+        val query = """
+            |select count(*)
+            |from waystone_info
+            |where is_locked = true;
+        """.trimMargin()
+        return databaseManager
+            .query(query, rowMapper = CountRowMapper)
+            .thenApplyAsync { it ?: 0 }
+    }
+
     override fun mapRow(rs: ResultSet): WaystoneInfo = WaystoneInfo(
         worldUid = UUID.fromString(rs.getString("world_uid")),
         x = rs.getInt("x"),
         y = rs.getInt("y"),
         z = rs.getInt("z"),
         name = rs.getString("name"),
+        waystoneUuid = rs.getString("waystone_uuid")?.let(UUID::fromString),
+        primaryOwnerUuid = rs.getString("primary_owner_uuid")?.let(UUID::fromString),
+        isLocked = rs.getBoolean("is_locked"),
     )
 }
