@@ -25,18 +25,6 @@ import xyz.atrius.waystones.Waystones
  * - The Waystones plugin loaded with full Koin DI
  * - A temporary SQLite database (auto-cleaned)
  * - Access to all plugin services via Koin
- *
- * Usage:
- * ```
- * class MyTest : ServerFunSpec({
- *     test("something works") {
- *         val player = createPlayer()
- *         val world = createWorld()
- *         val waystone = placeWaystone(world)
- *         // ... assertions
- *     }
- * })
- * ```
  */
 abstract class ServerFunSpec private constructor() : FunSpec() {
 
@@ -96,7 +84,6 @@ abstract class ServerFunSpec private constructor() : FunSpec() {
         y: Int = 64,
         z: Int = 0,
     ): Location = Location(world, x.toDouble(), y.toDouble(), z.toDouble())
-
 
     /** Place a block at the given coordinates. */
     internal fun placeBlock(

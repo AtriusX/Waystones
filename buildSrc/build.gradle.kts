@@ -15,6 +15,7 @@ dependencies {
     implementation(plugin(libs.plugins.modrinth))
     implementation(plugin(libs.plugins.flyway))
     implementation(plugin(libs.plugins.buildconfig))
+    implementation(libs.flyway.mysql)
 
     implementation(files(libs.javaClass.superclass.protectionDomain.codeSource.location))
 }
