@@ -1,0 +1,38 @@
+fallback-locale: en
+wait-time: 3.0
+damage-stops-warping: true
+limit-distance: true
+base-distance: 100
+max-boost: 150
+max-warp-size: 50
+jump-worlds: true
+default-world-ratio: 1.0
+warp-animations: true
+single-use: false
+require-power: INTER_DIMENSION
+power-cost: 1
+enable-portal-sickness: true
+portal-sickness-chance: 5.0
+portal-sickness-warping: DAMAGE_ON_TELEPORT
+portal-sickness-damage: 5.0
+relinkable-keys: true
+enable-key-items: true
+enable-advancements: false
+show-compass-coordinates: true
+key-recipe:
+  - AIR
+  - IRON_INGOT
+  - AIR
+  - IRON_INGOT
+  - REDSTONE_BLOCK
+  - IRON_INGOT
+  - AIR
+  - IRON_INGOT
+  - AIR
+database:
+  type: sqlite
+  host: "localhost"
+  port: 3306
+  username: "root"
+  password: "password"
+  database-name: "waystones"
