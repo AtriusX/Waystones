@@ -27,7 +27,7 @@ object MaterialTypeAdapter : JsonSerializer<Material>, JsonDeserializer<Material
         val key = json.asString
 
         return entries.firstOrNull {
-            it.key.asString().equals(key, true)
+            it.key.asString().equals(key, ignoreCase = true)
         }
     }
 }

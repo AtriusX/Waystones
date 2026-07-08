@@ -11,6 +11,8 @@ import xyz.atrius.waystones.internal.KotlinPlugin
 import java.io.File
 import java.text.MessageFormat
 import java.util.Locale
+import java.util.concurrent.ConcurrentHashMap
+import org.bukkit.entity.Player
 
 @Single
 class LocalizationManager(
@@ -40,6 +42,10 @@ class LocalizationManager(
     operator fun contains(key: String): Boolean = configs
         .any { (_, v) -> v.getTemplate(key) != null }
 
+    fun translateForPlayer(player: Player, key: String, vararg args: Any?): String {
+        return get(key, *args).format(player)
+    }
+
     private data class LocaleConfig(
         @Provided private val plugin: KotlinPlugin,
         private val locale: Locale,
@@ -49,7 +55,7 @@ class LocalizationManager(
             "locale-${locale.toLanguageTag()}.yml"
         )
         private val config: YamlConfiguration = YamlConfiguration()
-        private val cachedFormats: HashMap<String, MessageFormat> = hashMapOf()
+        private val cachedFormats: ConcurrentHashMap<String, MessageFormat> = ConcurrentHashMap()
 
         init {
             plugin.saveResource(file.name, true)
@@ -62,7 +68,7 @@ class LocalizationManager(
         }
 
         fun getTemplate(key: String): MessageFormat? {
-            if (key in cachedFormats) {
+            if (cachedFormats.containsKey(key)) {
                 return cachedFormats[key]
             }
 

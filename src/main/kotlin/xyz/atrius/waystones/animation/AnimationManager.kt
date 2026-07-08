@@ -20,7 +20,7 @@ class AnimationManager(
 
     private val animations = hashMapOf<Player, TeleportEffect>()
 
-    fun register(effect: TeleportEffect, player: Player, to: Location, onComplete: () -> Unit = {}) = effect.run {
+    fun register(effect: TeleportEffect, player: Player, to: Location, onComplete: () -> Unit = {}): Int = effect.run {
         effect.start()
         animations[player] = effect
         plugin.scheduleRepeatingAutoCancelTask(

@@ -24,21 +24,23 @@ class SimpleTeleportEffect(
     private val localization: LocalizationManager,
 ) : TeleportEffect {
 
+    companion object {
+        private const val TICKS_PER_SECOND = 20.0
+        private const val PARTICLE_MULTIPLIER = 2
+        private const val BASE_SMOKE_COUNT = 250
+        private const val END_SMOKE_COUNT = 400
+    }
+
     private val bar = BossBar.bossBar(
         Component.text("Wait Time"),
         1f,
         BossBar.Color.RED,
         BossBar.Overlay.PROGRESS
     )
-    private val bossBarColors = listOf(
-        BossBar.Color.GREEN,
-        BossBar.Color.RED,
-        BossBar.Color.RED,
-    )
-    private val textColors = listOf(
-        NamedTextColor.GREEN,
-        NamedTextColor.RED,
-        NamedTextColor.DARK_RED,
+    private val colorPairs = listOf(
+        BossBar.Color.GREEN to NamedTextColor.GREEN,
+        BossBar.Color.RED to NamedTextColor.RED,
+        BossBar.Color.RED to NamedTextColor.DARK_RED,
     )
 
     override fun start() {
@@ -48,27 +50,27 @@ class SimpleTeleportEffect(
 
     override fun animation(timer: Long, max: Long) {
         val player = warp.player
-        val seconds = ceil(timer / 20.0).toInt()
+        val seconds = ceil(timer / TICKS_PER_SECOND).toInt()
         val progress = timer.toFloat() / waitTime.value().toFloat()
-        val color = (progress * bossBarColors.size)
+        val colorIndex = (progress * colorPairs.size)
             .toInt()
-            .coerceIn(0, bossBarColors.size - 1)
+            .coerceIn(0, colorPairs.size - 1)
+        val (barColor, textColor) = colorPairs[colorIndex]
         val waitMessage = localization["warp-wait", warp.name, seconds]
             .format(player)
             .let(Component::text)
-            .color(textColors[color])
+            .color(textColor)
 
         bar
             .name(waitMessage)
             .progress(progress)
-            .color(bossBarColors[color])
-        // Play warp animation if enabled
+            .color(barColor)
         if (!warpAnimations.value()) {
             return
         }
 
         val amp = waitTime.value() - timer + 0.1
-        val ratio = timer * 2 + 1
+        val ratio = timer * PARTICLE_MULTIPLIER + 1
         val period = (System.currentTimeMillis() / 3).toDouble()
         val world = player.world
 
@@ -80,7 +82,7 @@ class SimpleTeleportEffect(
         world.forceParticle(
             particle = Particle.LARGE_SMOKE,
             location = player.location,
-            count = 250 / ratio.toInt(),
+            count = BASE_SMOKE_COUNT / ratio.toInt(),
             offsetX = 0.2,
             offsetY = 0.5,
             offsetZ = 0.2,
@@ -97,13 +99,12 @@ class SimpleTeleportEffect(
         warp.player.world.forceParticle(
             particle = Particle.LARGE_SMOKE,
             location = location.UP.center,
-            count = 400,
+            count = END_SMOKE_COUNT,
             offsetX = 0.2,
             offsetY = 0.5,
             offsetZ = 0.2,
             extra = 0.1
         )
-        // Warp sound effects
         location.playSound(Sound.ENTITY_STRAY_DEATH, 0.5f, 0f)
         location.playSound(Sound.BLOCK_BELL_RESONATE, 1f, 0f)
         location.playSound(Sound.BLOCK_RESPAWN_ANCHOR_DEPLETE)

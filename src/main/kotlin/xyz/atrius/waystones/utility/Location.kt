@@ -42,7 +42,7 @@ val Location.neighbors: List<Location>
 
 // Returns the code of this location
 val Location.locationCode
-    get() = "${world?.name}@$blockX:$blockY:$blockZ"
+    get() = "${world?.name ?: "unknown"}@$blockX:$blockY:$blockZ"
 
 fun Location.rotateY(angle: Double, amp: Double = 1.0) = add(
     Vector(

@@ -30,7 +30,9 @@ open class JsonFile<T : Any>(
             logger.error("Failed to load configuration file: ${e.message}")
         }
 
-        data = gson.fromJson(FileReader(file), type.java)
+        data = FileReader(file).use { reader ->
+            gson.fromJson(reader, type.java)
+        }
         logger.info("Loaded ${file.name} successfully!")
     }
 
