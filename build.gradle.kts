@@ -36,6 +36,7 @@ dependencies {
 }
 
 tasks.withType<Test> {
+    enabled = false // TODO: re-enable when mockbukkit-v26.2 is published
     useJUnitPlatform()
     systemProperty("bstats.relocatecheck", "false")
     systemProperty("kotest.framework.classpath.scanning.autoscan.disable", "true")
