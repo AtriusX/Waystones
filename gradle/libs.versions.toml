@@ -18,7 +18,7 @@ kotest = "5.9.1"
 mockbukkit = "4.113.1"
 
 [libraries]
-paper-api = { module = "io.papermc.paper:paper-api", version = "26.1.2.build.+" }
+paper-api = { module = "io.papermc.paper:paper-api", version = "26.2.build.+" }
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin-annotations = { module = "io.insert-koin:koin-annotations", version.ref = "koin" }
@@ -32,6 +32,7 @@ detekt-ktlint = { module = "dev.detekt:detekt-rules-ktlint-wrapper", version.ref
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 kotest-runner = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
 kotest-datatest = { module = "io.kotest:kotest-framework-datatest", version.ref = "kotest" }
+# TODO: bump to mockbukkit-v26.2 when Maven Central publishes the artifact
 mockbukkit = { module = "org.mockbukkit.mockbukkit:mockbukkit-v26.1.2", version.ref = "mockbukkit" }
 
 [plugins]
