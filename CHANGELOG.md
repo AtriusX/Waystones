@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.4.0](https://github.com/AtriusX/Waystones/compare/v2.3.0...v2.4.0) (2026-10-02)
+
+
+### Feature Changes
+
+* **ownership:** Add schema and config for waystone ownership ([#145](https://github.com/AtriusX/Waystones/issues/145)) ([c97d5f5](https://github.com/AtriusX/Waystones/commit/c97d5f555dac9e6fd2fbfd55e961b0329d719367))
+
+
+### Miscellaneous Changes
+
+* Update publish plugins ([#150](https://github.com/AtriusX/Waystones/issues/150)) ([9df8474](https://github.com/AtriusX/Waystones/commit/9df84749a80bad7cd7375c7540336b9cee3dbfd0))
+
 ## [2.3.0](https://github.com/AtriusX/Waystones/compare/v2.2.2...v2.3.0) (2026-06-02)
 
 
