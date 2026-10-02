@@ -27,6 +27,7 @@ object WaystonesModule {
     fun supportedLocales(): Set<Locale> = setOf(
         Locale.ENGLISH,
         Locale.CHINESE,
+        Locale.forLanguageTag("es"),
     )
 
     @Single
