@@ -22,6 +22,7 @@ import xyz.atrius.waystones.service.KeyService
 import xyz.atrius.waystones.service.TeleportService
 import xyz.atrius.waystones.service.WarpValidationService
 import xyz.atrius.waystones.service.WaystoneService
+import xyz.atrius.waystones.service.XpValidationService
 import xyz.atrius.waystones.utility.cancel
 import xyz.atrius.waystones.utility.foldResult
 import xyz.atrius.waystones.utility.hasMovedBlock
@@ -35,6 +36,7 @@ class WarpEvent(
     private val damageStopsWarping: DamageStopsWarpingProperty,
     private val keyService: KeyService,
     private val waystoneService: WaystoneService,
+    private val xpValidationService: XpValidationService,
     private val advancementManager: AdvancementManager,
     private val secretTunnelAdvancement: SecretTunnelAdvancement,
     private val shootTheMessenger: ShootTheMessengerAdvancement,
@@ -63,6 +65,9 @@ class WarpEvent(
                 player.location.playSound(Sound.ENTITY_ENDER_EYE_DEATH, 1f, 0f)
                 return player.sendActionError(it.message())
             }
+
+        xpValidationService
+            .process(player, key.location, warp.distance)
 
         teleportService.queueEvent(warp, key) {
             advancementManager.awardAdvancement(player, secretTunnelAdvancement)
