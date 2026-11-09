@@ -8,5 +8,5 @@ data class Display(
     val announceToChat: Boolean = true,
     val hidden: Boolean = false,
     val frame: AdvancementType? = null,
-    val background: String = "minecraft:block/lodestone_top",
+    val background: String? = null,
 )

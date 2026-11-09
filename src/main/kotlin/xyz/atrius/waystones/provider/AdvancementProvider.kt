@@ -19,18 +19,25 @@ open class AdvancementProvider(
 ) {
 
     val asAdvancement: Advancement by lazy {
+        val parent = parent
+            ?.namespacedKey()
+            ?.asString()
         val display = Display(
             title = Text(title.format(null)),
             description = Text(description.format(null)),
             icon = Icon(item),
             frame = type,
+            // Parents can only exist on advancement roots now, avoid assigning
+            // backgrounds to children to prevent loading issues at runtime.
+            background = when (parent) {
+                null -> "minecraft:block/lodestone_top"
+                else -> null
+            },
         )
 
         Advancement(
             display = display,
-            parent = parent
-                ?.namespacedKey()
-                ?.asString(),
+            parent = parent,
         )
     }
 
