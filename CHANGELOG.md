@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.4.1](https://github.com/AtriusX/Waystones/compare/v2.4.0...v2.4.1) (2026-11-09)
+
+
+### Miscellaneous Changes
+
+* Update plugin to support MC version 26.3 ([#152](https://github.com/AtriusX/Waystones/issues/152)) ([60a85a0](https://github.com/AtriusX/Waystones/commit/60a85a021ceaec84cd9acca42646b9953b4719c2))
+
 ## [2.4.0](https://github.com/AtriusX/Waystones/compare/v2.3.0...v2.4.0) (2026-10-02)
 
 
